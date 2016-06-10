@@ -11,3 +11,5 @@ Get the filename associated with a screenshot.
 **Description**
 
 When your application receives a VREvent_RequestScreenshot event, call this function to get the filenames of the screenshot requested.  
+
+Returns the size of buffer required to store the filename, including the terminating null character.
