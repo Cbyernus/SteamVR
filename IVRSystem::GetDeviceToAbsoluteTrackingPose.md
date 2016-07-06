@@ -32,6 +32,7 @@ poses relative to the hardware-specific coordinate system in the driver.
 The number of seconds from now to when the next photons will come out of the HMD can be computed automatically. This assumes that the rendering pipeline doesn't have any extra frames buffering.
 
 Example:
+
 	// for somebody asking for the default figure out the time from now to photons.
 	float fSecondsSinceLastVsync;
 	pVRSystem->GetTimeSinceLastVsync( &fSecondsSinceLastVsync, NULL );
