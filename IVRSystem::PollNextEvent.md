@@ -1,9 +1,10 @@
-`bool PollNextEvent( `[`VREvent_t`](https://github.com/ValveSoftware/openvr/wiki/VREvent_t)` *pEvent )`<br>
-`bool PollNextEventWithPose( TrackingUniverseOrigin eOrigin, vr::`[`VREvent_t`](https://github.com/ValveSoftware/openvr/wiki/VREvent_t)` *pEvent, vr::TrackedDevicePose_t *pTrackedDevicePose )`
+`bool PollNextEvent( `[`VREvent_t`](https://github.com/ValveSoftware/openvr/wiki/VREvent_t)` *pEvent, uint32_t uncbVREvent ) )`<br>
+`bool PollNextEventWithPose( TrackingUniverseOrigin eOrigin, uint32_t uncbVREvent , vr::`[`VREvent_t`](https://github.com/ValveSoftware/openvr/wiki/VREvent_t)` *pEvent, vr::TrackedDevicePose_t *pTrackedDevicePose )`
 
 Returns the next event in the queue.
 
 * [`VREvent_t`](https://github.com/ValveSoftware/openvr/wiki/VREvent_t)` *pEvent` - An event structure to fill with the next event.
+* `uint32_t uncbVREvent` should be the size in bytes of the VREvent_t struct.
 * `TrackingUniverseOrigin eOrigin` - The tracking system to return the event's pose in.
 * `TrackedDevicePose_t *pTrackedDevicePose` - A pose struct to fill with the returned event's pose. Must not be NULL.
 
