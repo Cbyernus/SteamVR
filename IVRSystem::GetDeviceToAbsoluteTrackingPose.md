@@ -6,7 +6,7 @@ Calculates updated poses for all devices.
   * `TrackingUniverseSeated`
   * `TrackingUniverseStanding`
   * `TrackingUniverseRaw`
-* `float fPredictedSecondsToPhotonsFromNow` - Number of seconds from now to predict poses for. Positive numbers are in the future. Pass 0 to get the sate at the instant the function is called. See below for details on how to compute a good value here.
+* `float fPredictedSecondsToPhotonsFromNow` - Number of seconds from now to predict poses for. Positive numbers are in the future. Pass 0 to get the state at the instant the function is called. See below for details on how to compute a good value here.
 
 **Description**
 
