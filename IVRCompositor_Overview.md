@@ -8,7 +8,6 @@ It is recommended that you continue Presenting your application's own window, re
 
 Example:
 
-    SetGraphicsDevice
     while Running:
         WaitGetPoses
         Render Left and Right cameras
@@ -17,7 +16,6 @@ Example:
 
 Alternatively, you may wish to render serially in order to share a single render target across cameras:
 
-    SetGraphicsDevice
     while Running:
         WaitGetPoses
         Render(L)
@@ -41,8 +39,6 @@ When the application exits, or otherwise stops calling Submit for more than 10 f
 The vr::IVRCompositor interface contains the following functions:
 
 ### Initialization ##
-
-[SetGraphicsDevice](https://github.com/ValveSoftware/openvr/wiki/IVRCompositor::SetGraphicsDevice)
 
 [GetLastError](https://github.com/ValveSoftware/openvr/wiki/IVRCompositor::GetLastError)
 
