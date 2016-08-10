@@ -3,7 +3,7 @@
 
 Fills the supplied struct with the current state of the controller.
 
-* `vr::TrackedDeviceIndex_t unControllerDeviceIndex` - The tracked device index of the controller to trigger a haptic pulse on.
+* `vr::TrackedDeviceIndex_t unControllerDeviceIndex` - The tracked device index of the controller to get the state of.
 * `vr::VRControllerState_t *pControllerState` - A struct to fill with the controller state.
 * `TrackingUniverseOrigin eOrigin` - The tracking coordinate system to return the pose in.
 * `TrackedDevicePose_t *pTrackedDevicePose` - A pose struct to fill with the pose of the controller when the last button event occurred.
