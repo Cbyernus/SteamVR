@@ -35,7 +35,7 @@ The API is broken down into six primary interfaces in the vr namespace:
 
 # Other Functions
 
-`bool openvr::VR_IsHmdPresent()`
+`bool vr::VR_IsHmdPresent()`
 
 Returns true if the system believes that an HMD is present on the system. This function is much faster than initializing all of OpenVR just to check for an HMD. Use it when you have a piece of UI that you want to enable only for users with an HMD.
 
