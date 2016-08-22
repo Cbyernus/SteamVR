@@ -52,7 +52,7 @@ The vr::IVRSystem interface contains the following functions:
 * Controller Methods - Methods for interacting with controllers
   * [TriggerHapticPulse](https://github.com/ValveSoftware/openvr/wiki/IVRSystem::TriggerHapticPulse)
   * [GetControllerState](https://github.com/ValveSoftware/openvr/wiki/IVRSystem::GetControllerState)
-  * [GetControllerStateWithPose](https://github.com/ValveSoftware/openvr/wiki/IVRSystem::GetControllerStateWithPose)
+  * [GetControllerStateWithPose](https://github.com/ValveSoftware/openvr/wiki/IVRSystem::GetControllerState)
   * [GetButtonIdNameFromEnum](https://github.com/ValveSoftware/openvr/wiki/IVRSystem::GetButtonIdNameFromEnum)
   * [GetControllerAxisTypeNameFromEnum](https://github.com/ValveSoftware/openvr/wiki/IVRSystem::GetControllerAxisTypeNameFromEnum)
   * [HandleControllerOverlayInteractionAsMouse](https://github.com/ValveSoftware/openvr/wiki/IVRSystem::HandleControllerOverlayInteractionAsMouse)
