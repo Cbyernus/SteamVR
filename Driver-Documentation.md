@@ -2,7 +2,7 @@ Let's say you want to write a new OpenVR driver called "myhmd". To do that you w
 
 1. Add a new directory called "<steam install dir>/SteamApps/common/openvr/drivers/myhmd"
 2. Add a new DLL (or dylib or so) to "drivers/myhmd/bin/win32/driver_myhmd.dll"
-3. Implement the [driver factory function](https://github.com/ValveSoftware/openvr/wiki/Driver-Factory-Fuction) in that DLL.
+3. Implement the [driver factory function](https://github.com/ValveSoftware/openvr/wiki/Driver-Factory-Function) in that DLL.
 4. Add an implementation of [`vr::IClientTrackedDeviceProvider`](https://github.com/ValveSoftware/openvr/wiki/IClientTrackedDeviceProvider_Overview) to the DLL and return it from the factory. This interface is used in vrclient.dll for HMD presence checks and various other client-side operations.
 5. Add an implementation of [`vr::IServerTrackedDeviceProvider`](https://github.com/ValveSoftware/openvr/wiki/IServerTrackedDeviceProvider_Overview) and have that return implementations of [`vr::ITrackedDeviceServerDriver`](https://github.com/ValveSoftware/openvr/wiki/vr::ITrackedDeviceServerDriver-Overview) for each tracked device.
 
