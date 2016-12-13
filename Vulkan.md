@@ -44,3 +44,18 @@ When any Vulkan Texture_t is passed to the runtime (through **IVRCompositor::Sub
 ## Image layout
 
 Any Vulkan image represented by **m_nImage** should be in the **VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL** layout when passed to the SteamVR runtime, and will still be in that state when the submission work has finished executing.
+
+## Image Formats
+
+The following image formats are currently supported for the **m_nFormat** of Vulkan Texture_t (through **IVRCompositor::Submit** or otherwise):
+
+```c++
+VK_FORMAT_R8G8B8A8_UNORM
+VK_FORMAT_R8G8B8A8_SRGB
+VK_FORMAT_B8G8R8A8_UNORM
+VK_FORMAT_B8G8R8A8_SRGB
+VK_FORMAT_R32G32B32A32_SFLOAT
+VK_FORMAT_R32G32B32_SFLOAT
+VK_FORMAT_R16G16B16A16_SFLOAT
+VK_FORMAT_A2R10G10B10_UINT_PACK32
+```
