@@ -26,8 +26,6 @@ The vr::IVROverlay interface provides the following functions:
   * [GetOverlayColor](https://github.com/ValveSoftware/openvr/wiki/IVROverlay::SetOverlayColor)
   * [SetOverlayAlpha](https://github.com/ValveSoftware/openvr/wiki/IVROverlay::SetOverlayAlpha)
   * [GetOverlayAlpha](https://github.com/ValveSoftware/openvr/wiki/IVROverlay::SetOverlayAlpha)
-  * [SetOverlayGamma](https://github.com/ValveSoftware/openvr/wiki/IVROverlay::SetOverlayGamma)
-  * [GetOverlayGamma](https://github.com/ValveSoftware/openvr/wiki/IVROverlay::SetOverlayGamma)
   * [SetOverlayWidthInMeters](https://github.com/ValveSoftware/openvr/wiki/IVROverlay::SetOverlayWidthInMeters)
   * [GetOverlayWidthInMeters](https://github.com/ValveSoftware/openvr/wiki/IVROverlay::SetOverlayWidthInMeters)
   * [SetOverlayAutoCurveDistanceRangeInMeters](https://github.com/ValveSoftware/openvr/wiki/IVROverlay::SetOverlayAutoCurveDistanceRangeInMeters)
