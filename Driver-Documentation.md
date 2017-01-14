@@ -1,11 +1,10 @@
-Let's say you want to write a new OpenVR driver called "myhmd". To do that you will need to following the steps below.
+Let's say you want to write a new OpenVR driver called "mydriver". To do that you will need to following the steps below.
 
-1. Add a new directory called "<steam install dir>/SteamApps/common/openvr/drivers/myhmd"
-2. Add a new DLL (or dylib or so) to "drivers/myhmd/bin/win32/driver_myhmd.dll"
+1. Put all the files for your driver under a directory. Let's say that directory is "<install dir>/mydriver"
+2. Add a new DLL to "mydriver/bin/win64/driver_mydriver.dll" (For Linux and OSX use the appropriate platform directory and the appropriate shared library extension.)
 3. Implement the [driver factory function](https://github.com/ValveSoftware/openvr/wiki/Driver-Factory-Function) in that DLL.
-4. Add an implementation of [`vr::IClientTrackedDeviceProvider`](https://github.com/ValveSoftware/openvr/wiki/IClientTrackedDeviceProvider_Overview) to the DLL and return it from the factory. This interface is used in vrclient.dll for HMD presence checks and various other client-side operations.
+4. Add an implementation of [`vr::IClientTrackedDeviceProvider`](https://github.com/ValveSoftware/openvr/wiki/IClientTrackedDeviceProvider_Overview) to the DLL and return it from the factory. This provider will be phased out in the next SDK udpate, but for now you need it.
 5. Add an implementation of [`vr::IServerTrackedDeviceProvider`](https://github.com/ValveSoftware/openvr/wiki/IServerTrackedDeviceProvider_Overview) and have that return implementations of [`vr::ITrackedDeviceServerDriver`](https://github.com/ValveSoftware/openvr/wiki/vr::ITrackedDeviceServerDriver-Overview) for each tracked device.
+6. Add a [driver manifest file](https://github.com/ValveSoftware/openvr/wiki/DriverManifest) to "<installdir>/mydriver"
+7. Run: vrpathreg adddriver "<installdir>/mydriver"
 
-If you want your new driver to work from 64 bit apps, you will also need a 64-bit DLL in "drivers/myhmd/bin/win64/driver_myhmd.dll" that implements all the same things. Same thing for other platforms. 
-
-**WARNING:** The driver interface is still under active development and vrserver does not guarantee backward compatibility with old versions of the interface. At this point don't ship driver binaries and expect them to continue to work going forward.
