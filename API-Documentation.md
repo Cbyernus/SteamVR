@@ -49,7 +49,7 @@ Returns true if the OpenVR runtime is installed on the system.
 
 `char *vr::VR_RuntimePath()`
 
-Returns true if the OpenVR runtime is installed on the system.
+Returns where the OpenVR runtime is installed.
 
 
 `const char *VR_GetVRInitErrorAsSymbol( vr::EVRInitError error );`
