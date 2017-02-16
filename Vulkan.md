@@ -59,3 +59,8 @@ VK_FORMAT_R32G32B32_SFLOAT
 VK_FORMAT_R16G16B16A16_SFLOAT
 VK_FORMAT_A2R10G10B10_UINT_PACK32
 ```
+
+## Example Code
+An example of using Vulkan with SteamVR on Windows/Linux can be found here: [[https://github.com/danginsburg/VulkanSamples/blob/master/demos/cube_openvr.cpp]].  The full repository containing the example is here: https://github.com/danginsburg/VulkanSamples/.
+
+The example was based on modifying the cube demo in the LunarG VulkanSamples.  It demonstrates initializing OpenVR, querying OpenVR for required Vulkan device/instance extensions, drawing each eye using a matrix tracked from the HMD, and submitting the Vulkan image to the OpenVR compositor.  
