@@ -45,6 +45,10 @@ When any Vulkan Texture_t is passed to the runtime (through **IVRCompositor::Sub
 
 Any Vulkan image represented by **m_nImage** should be in the **VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL** layout when passed to the SteamVR runtime, and will still be in that state when the submission work has finished executing.
 
+## Image usage flags
+
+Any Vulkan image represented by **m_nImage** must have been created with at least the following VkImageUsageFlags: **VK_IMAGE_USAGE_TRANSFER_SRC_BIT** | **VK_IMAGE_USAGE_SAMPLED_BIT**.
+
 ## Image Formats
 
 The following image formats are currently supported for the **m_nFormat** of Vulkan Texture_t (through **IVRCompositor::Submit** or otherwise):
