@@ -24,23 +24,4 @@ The D3D12 **m_pResource** should be transitioned to the resource state **D3D12_R
 
 ## Example Code
 
-The following snippet of code demonstrates how to submit an image to the compositor in SteamVR using DirectX12:
-
-```c++
-ComPtr<ID3D12Resource> m_eyeTexture;
-ComPtr<ID3D12CommandQueue> m_commandQueue;
-
-//..
-vr::D3D12TextureData_t d3d12Texture;
-d3d12Texture.m_pResource = m_eyeTexture.Get();
-d3d12Texture.m_pCommandQueue = m_commandQueue.Get();
-d3d12Texture.m_nNodeMask = 0;
-vr::Texture_t leftEyeTexture = { ( void * ) &d3d12Texture, vr::TextureType_DirectX12, vr::ColorSpace_Gamma };
-vr::VRTextureBounds_t bounds;
-bounds.uMin = 0.0f;
-bounds.uMax = 1.0f;
-bounds.vMin = 0.0f;
-bounds.vMax = 1.0f;
-vr::VRCompositor()->Submit( vr::Eye_Left, &leftEyeTexture, &bounds, vr::Submit_Default );	
-
-```
+An example of using DirectX12 with SteamVR on Windows (Visual Studio 2015+) can be found in the SDK [[https://github.com/ValveSoftware/openvr/tree/master/samples/hellovr_dx12]].  
