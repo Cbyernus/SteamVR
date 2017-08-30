@@ -39,7 +39,13 @@ struct VRVulkanTextureData_t
 
 ## Concurrency
 
-When any Vulkan Texture_t is passed to the runtime (through **IVRCompositor::Submit** or otherwise), the runtime will schedule work to the Vulkan queue represented by **m_pQueue**. As such, no other thread of your application should try to access that queue until the call returns.
+Vulkan requires that only a single thread access a VkQueue at a time.  When any Vulkan Texture_t is passed to the runtime (through **IVRCompositor::Submit** or otherwise), the runtime will schedule work to the Vulkan queue represented by **m_pQueue**. As such, no other thread of your application should try to access that queue until the call returns.
+
+In addition to **IVRCompositor::Submit**, the following functions may also access the queue:
+ * **IVRCompositor::PostPresentHandoff**
+ * **IVRCompositor::WaitGetPoses** (does not need to access the queue if using Explicit Timing and PostPresentHandoff, see [Explicit Timing](#explicit-timing))
+ * **IVRCompositor::SubmitExplicitTimingData** (see [Explicit Timing](#explicit-timing))
+
 
 ## Image layout
 
@@ -63,6 +69,15 @@ VK_FORMAT_R32G32B32_SFLOAT
 VK_FORMAT_R16G16B16A16_SFLOAT
 VK_FORMAT_A2R10G10B10_UINT_PACK32
 ```
+
+## Explicit Timing
+Vulkan applications can enable explicit timing mode by calling **IVRCompositor::SetExplicitTimingMode**.  There are two purposes for SetExplicitTimingMode:
+1. To get a more accurate GPU timestamp for when the frame begins.
+2. (Optional) To avoid having WaitGetPoses access the Vulkan queue so that the queue can be accessed from another thread while WaitGetPoses is executing.
+
+More accurate GPU timestamp for the start of the frame is achieved by the application calling **IVRCompositor::SubmitExplicitTimingData** immediately before its first submission to the Vulkan queue for the frame.  This is more accurate because normally this GPU timestamp is recorded during WaitGetPoses.  In D3D11, WaitGetPoses queues a GPU timestamp write, but it does not actually get submitted to the GPU until the application performs it next flush.  By using SubmitExplicitTimingData, the timestamp is recorded at the same place for Vulkan as it is for D3D11, resulting in a more accurate GPU time measurement for the frame.
+
+Avoiding WaitGetPoses accessing the Vulkan queue can be achieved using SetExplicitTimingMode as well.  If this is desired, the application must call PostPresentHandoff itself prior to WaitGetPoses.  If SetExplicitTimingMode is true and the application calls PostPresentHandoff, then WaitGetPoses is guaranteed not to access the queue.  Note that PostPresentHandoff and SubmitExplicitTimingData will access the queue, so only WaitGetPoses becomes safe for accessing the queue from another thread.
 
 ## Example Code
 An example of using Vulkan with SteamVR on Windows/Linux can be found in the SDK [[https://github.com/ValveSoftware/openvr/tree/master/samples/hellovr_vulkan]].  
