@@ -95,8 +95,8 @@ A real application is likely to have more rendering work to do and thus may want
 * Build rendering command buffers for the next frame prior to calling **IVRCompositor::WaitGetPoses** (or simultaneously on other threads).
 * After **IVRCompositor::WaitGetPoses** returns, update the transforms in the previously recorded command buffers with the latest poses.  For example, this could be done by using vkCmdCopyBuffer to copy new poses into the uniform buffer locations that were pointed to in the previously recorded command buffer.  The uniform update command buffer(s) would then be submitted prior to submitting the rendering command buffers.  Another option would be to have the uniform buffers be located in persistently mapped buffers and to update the buffer data with new poses prior to submission.
 * Just before calling the first **vkQueueSubmit** for the frame, call **IVRCompositor::SubmitExplicitTimingData** to mark the beginning of GPU work for the frame.
-* Submit the rendering work for the frame using **vkQueueSubmit**
-* Submit left and right eye using **IVRCompositor::Submit**
+* Submit the rendering work for the frame using **vkQueueSubmit**.
+* Submit left and right eye using **IVRCompositor::Submit**.
 * After presenting the companion window, call **IVRCompositor::PostPresentHandoff**.  Note that this call is optional, but may be useful if there is additional work the application wants to do prior to waiting for new poses.  If it is not called, it will be implicitly called by **IVRCompositor::WaitGetPoses**.
 * Go back to the first step and start building command buffers again for the next frame.
 
