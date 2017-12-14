@@ -80,4 +80,23 @@ More accurate GPU timestamp for the start of the frame is achieved by the applic
 Avoiding WaitGetPoses accessing the Vulkan queue can be achieved using SetExplicitTimingMode as well.  If this is desired, the application must call PostPresentHandoff itself prior to WaitGetPoses.  If SetExplicitTimingMode is true and the application calls PostPresentHandoff, then WaitGetPoses is guaranteed not to access the queue.  Note that PostPresentHandoff and SubmitExplicitTimingData will access the queue, so only WaitGetPoses becomes safe for accessing the queue from another thread.
 
 ## Example Code
-An example of using Vulkan with SteamVR on Windows/Linux can be found in the SDK [[https://github.com/ValveSoftware/openvr/tree/master/samples/hellovr_vulkan]].  
+A simple example of using Vulkan with SteamVR on Windows/Linux can be found in the SDK [[https://github.com/ValveSoftware/openvr/tree/master/samples/hellovr_vulkan]].  Please note that the example does not use [Explicit Timing](#explicit-timing) and is quite simplified compared to what a real application is likely to do.  This is because the rendering command buffer in the example application can be built in a very small amount of CPU time whereas a real application will have much more rendering work to generate.  In the example code, the sequence of timing in the frame is as follows:
+
+* **IVRCompositor::WaitGetPoses** is called after presenting the companion window which implicitly calls **IVRCompositor::PostPresentHandoff** and updates the latest poses.  
+* The application builds a command buffer that renders the left and right eye to two separate framebuffers.  The matrices for the HMD and other tracked devices from the most recent call to **IVRCompositor::WaitGetPoses** are used.  The command buffer also contains commands to render to the companion window.
+* The command buffer is submitted to the Vulkan queue using vkQueueSubmit.
+* The left eye texture is submitted using **IVRCompositor::Submit**.
+* The right eye texture is submitted using **IVRCompositor::Submit**.
+* The application presents the companion window using **vkQueuePresentKHR** .
+* Then the application goes back to the first step and repeats for the next frame.
+
+A real application is likely to have more rendering work to do and thus may want to have command buffers for the frame ready prior to **IVRCompositor::WaitGetPoses** returning.  Such an application will also need to use [Explicit Timing](#explicit-timing) to account for the GPU time gap between **IVRCompositor::WaitGetPoses** returning and GPU work for the frame starting.  A real application would enable [Explicit Timing](#explicit-timing) using **IVRCompositor::SetExplicitTimingMode** at startup and its update loop might look something like this:
+
+* Build rendering command buffers for the next frame prior to calling **IVRCompositor::WaitGetPoses**.
+* After **IVRCompositor::WaitGetPoses** returns, update the transforms in the previously recorded command buffers with the latest poses.  For example, this could be done by using vkCmdCopyBuffer to copy new poses into the uniform buffer locations that were pointed to in the previously recorded command buffer.  The uniform update command buffer(s) would then be submitted prior to submitting the rendering command buffers.  Another option would be to have the uniform buffers be located in persistently mapped buffers and to update the buffer data with new poses prior to submission.
+* Just before calling the first **vkQueueSubmit** for the frame, call **IVRCompositor::SubmitExplicitTimingData** to mark the beginning of GPU work for the frame.
+* Submit the rendering work for the frame using **vkQueueSubmit**
+* Submit left and right eye using **IVRCompositor::Submit**
+* After presenting the companion window, call **IVRCompositor::PostPresentHandoff**.  Note that this call is optional, but may be useful if there is additional work the application wants to do prior to waiting for new poses.  If it is not called, it will be implicitly called by **IVRCompositor::WaitGetPoses**.
+* Go back to the first step and start building command buffers again for the next frame.
+
