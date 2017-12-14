@@ -92,7 +92,7 @@ A simple example of using Vulkan with SteamVR on Windows/Linux can be found in t
 
 A real application is likely to have more rendering work to do and thus may want to have command buffers for the frame ready prior to **IVRCompositor::WaitGetPoses** returning.  Such an application will also need to use [Explicit Timing](#explicit-timing) to account for the GPU time gap between **IVRCompositor::WaitGetPoses** returning and GPU work for the frame starting.  A real application would enable [Explicit Timing](#explicit-timing) using **IVRCompositor::SetExplicitTimingMode** at startup and its update loop might look something like this:
 
-* Build rendering command buffers for the next frame prior to calling **IVRCompositor::WaitGetPoses**.
+* Build rendering command buffers for the next frame prior to calling **IVRCompositor::WaitGetPoses** (or simultaneously on other threads).
 * After **IVRCompositor::WaitGetPoses** returns, update the transforms in the previously recorded command buffers with the latest poses.  For example, this could be done by using vkCmdCopyBuffer to copy new poses into the uniform buffer locations that were pointed to in the previously recorded command buffer.  The uniform update command buffer(s) would then be submitted prior to submitting the rendering command buffers.  Another option would be to have the uniform buffers be located in persistently mapped buffers and to update the buffer data with new poses prior to submission.
 * Just before calling the first **vkQueueSubmit** for the frame, call **IVRCompositor::SubmitExplicitTimingData** to mark the beginning of GPU work for the frame.
 * Submit the rendering work for the frame using **vkQueueSubmit**
