@@ -6,7 +6,7 @@ Many functions in IVRSystem use a tracked device index to identify a specific de
 
     typedef uint32_t TrackedDeviceIndex_t;
     static const uint32_t k_unTrackedDeviceIndexInvalid = 0xFFFFFFFF;
-    static const uint32_t k_unMaxTrackedDeviceCount = 16;
+    static const uint32_t k_unMaxTrackedDeviceCount = 64;
     static const uint32_t k_unTrackedDeviceIndex_Hmd = 0;
 
 There will never be more than k_unMaxTrackedDeviceCount devices active in the system at any given time. Their indices will be 0 (for the HMD) and 1-15 for the other devices. 
