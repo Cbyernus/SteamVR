@@ -8,3 +8,5 @@ Let's say you want to write a new OpenVR driver called "mydriver". To do that yo
 6. Add a [driver manifest file](https://github.com/ValveSoftware/openvr/wiki/DriverManifest) to "<installdir>/mydriver"
 7. Run: vrpathreg adddriver "<installdir>/mydriver"
 
+For devices with buttons, triggers, joysticks, and other kinds of input controls, please refer to the [`vr::IVRDriverInput`](https://github.com/ValveSoftware/openvr/wiki/IVRDriverInput-Overview) API.
+
