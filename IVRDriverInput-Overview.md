@@ -6,6 +6,58 @@ Devices should also refrain from simulating one kind of input with another (for 
 
 The component path /input/system/click is a special case that is used to summon or dismiss the SteamVR dashboard. The value of this component will not be available to applications.
 
+**`EVRInputError CreateBooleanComponent( PropertyContainerHandle_t ulContainer, const char *pchName, VRInputComponentHandle_t *pHandle )`**
+
+Creates an input component to represent a single boolean value on a controller or other tracked device. Returns VRInputError_None and sets the value pointed to by pHandle to a valid component handle on success. After creating a component the driver can update it with repeated calls to UpdateBooleanComponent.
+
+* ulContainer - The property container handle of the device that is the parent of this component.
+* pchName - The name of the component. All names should be in the form "/input/<control name>/<event name>". See below for examples.
+* pHandle - Points to the handle value to set with the new component's handle.
+
+
+
+**`EVRInputError CreateScalarComponent( PropertyContainerHandle_t ulContainer, const char *pchName, VRInputComponentHandle_t *pHandle, EVRScalarType eType, EVRScalarUnits eUnits )`**
+
+Creates an input component to represent a single scalar value on a controller or other tracked device. Returns VRInputError_None and sets the value pointed to by pHandle to a valid component handle on success. After creating a component the driver can update it with repeated calls to UpdateScalarComponent.
+
+* ulContainer - The property container handle of the device that is the parent of this component.
+* pchName - The name of the component. All names should be in the form "/input/<control name>/<value name>". See below for examples.
+* pHandle - Points to the handle value to set with the new component's handle.
+* eType - This parameter must be one of:
+  * VRScalarType_Absolute - The scalar values are updated with values on an absolute scale. Joysticks, trackpads, and triggers are all examples of absolute scalar values.
+  * VRScalarType_Relative - The scalar values are updated with incremental values since the last update. Mice and trackballs are examples of relative scalar values.
+* eUnits - Specifies the unit of measurement for the scalar values. Must be one of:
+  * VRScalarUnits_NormalizedOneSided - Scalar values range from 0 to 1 inclusively. Triggers and throttles generally use this value.
+  * VRScalarUnits_NormalizedTwoSided - Scalar values range from -1 to 1 inclusively. Joysticks and trackpads generally use this value.
+
+
+**`EVRInputError CreateHapticComponent( PropertyContainerHandle_t ulContainer, const char *pchName, VRInputComponentHandle_t *pHandle )`**
+
+Creates an output component to represent a single haptic on a controller or other tracked device. Returns VRInputError_None and sets the value pointed to by pHandle to a valid component handle on success. 
+
+Note: Applications that use the current haptic API will always target the first haptic component created on a given tracked device. Future APIs will support multiple haptic components per device.
+
+* ulContainer - The property container handle of the device that is the parent of this component.
+* pchName - The name of the component. All names should be in the form "/output/<haptic name>". See below for examples.
+* pHandle - Points to the handle value to set with the new component's handle.
+
+
+**`EVRInputError UpdateBooleanComponent( VRInputComponentHandle_t ulComponent, bool bNewValue, double fTimeOffset )`**
+
+Updates the value of a boolean component. This should be called whenever the current state of an input component changes.
+
+* ulComponent - The component handle of the component to update.
+* bNewValue - The new boolean value of the component.
+* fTimeOffset - The time of the state change in the component relative to now. Negative times are in the past and positive times are in the future. This time offset should include transmission latency from the physical hardware.
+
+**`EVRInputError UpdateScalarComponent( VRInputComponentHandle_t ulComponent, float fNewValue, double fTimeOffset )`**
+
+Updates the value of a scalar component. This should be called whenever the current state of an input component changes.
+
+* ulComponent - The component handle of the component to update.
+* fNewValue - The new scalar value of the component.
+* fTimeOffset - The time of the state change in the component relative to now. Negative times are in the past and positive times are in the future. This time offset should include transmission latency from the physical hardware.
+
 **Existing input component paths**
 
 Vive controller:
@@ -18,6 +70,7 @@ Vive controller:
 * /input/trackpad/y
 * /input/trackpad/click
 * /input/trackpad/touch
+* /output/haptic
 
 Touch controller:
 * /input/system/click
@@ -38,6 +91,7 @@ Touch controller:
 * /input/joystick/y
 * /input/joystick/click
 * /input/joystick/touch
+* /output/haptic
 
 XInput-style controllers:
 * /input/a/click
@@ -61,58 +115,6 @@ XInput-style controllers:
 * /input/trigger_right/value
 * /input shoulder_left/click
 * /input shoulder_right/click
-
-**`EVRInputError CreateBooleanComponent( PropertyContainerHandle_t ulContainer, const char *pchName, VRInputComponentHandle_t *pHandle )`**
-
-Creates an input component to represent a single boolean value on a controller or other tracked device. Returns VRInputError_None and sets the value pointed to by pHandle to a valid component handle on success. After creating a component the driver can update it with repeated calls to UpdateBooleanComponent.
-
-* ulContainer - The property container handle of the device that is the parent of this component.
-* pchName - The name of the component. All names should be in the form "/input/<control name>/<event name>".
-* pHandle - Points to the handle value to set with the new component's handle.
-
-
-
-**`EVRInputError CreateScalarComponent( PropertyContainerHandle_t ulContainer, const char *pchName, VRInputComponentHandle_t *pHandle, EVRScalarType eType, EVRScalarUnits eUnits )`**
-
-Creates an input component to represent a single scalar value on a controller or other tracked device. Returns VRInputError_None and sets the value pointed to by pHandle to a valid component handle on success. After creating a component the driver can update it with repeated calls to UpdateScalarComponent.
-
-* ulContainer - The property container handle of the device that is the parent of this component.
-* pchName - The name of the component. All names should be in the form "/input/<control name>/<value name>".
-* pHandle - Points to the handle value to set with the new component's handle.
-* eType - This parameter must be one of:
-  * VRScalarType_Absolute - The scalar values are updated with values on an absolute scale. Joysticks, trackpads, and triggers are all examples of absolute scalar values.
-  * VRScalarType_Relative - The scalar values are updated with incremental values since the last update. Mice and trackballs are examples of relative scalar values.
-* eUnits - Specifies the unit of measurement for the scalar values. Must be one of:
-  * VRScalarUnits_NormalizedOneSided - Scalar values range from 0 to 1 inclusively. Triggers and throttles generally use this value.
-  * VRScalarUnits_NormalizedTwoSided - Scalar values range from -1 to 1 inclusively. Joysticks and trackpads generally use this value.
-
-
-**`EVRInputError CreateHapticComponent( PropertyContainerHandle_t ulContainer, const char *pchName, VRInputComponentHandle_t *pHandle )`**
-
-Creates an output component to represent a single haptic on a controller or other tracked device. Returns VRInputError_None and sets the value pointed to by pHandle to a valid component handle on success. 
-
-Note: Applications that use the current haptic API will always target the first haptic component created on a given tracked device. Future APIs will support multiple haptic components per device.
-
-* ulContainer - The property container handle of the device that is the parent of this component.
-* pchName - The name of the component. All names should be in the form "/output/<haptic name>".
-* pHandle - Points to the handle value to set with the new component's handle.
-
-
-**`EVRInputError UpdateBooleanComponent( VRInputComponentHandle_t ulComponent, bool bNewValue, double fTimeOffset )`**
-
-Updates the value of a boolean component. This should be called whenever the current state of an input component changes.
-
-* ulComponent - The component handle of the component to update.
-* bNewValue - The new boolean value of the component.
-* fTimeOffset - The time of the state change in the component relative to now. Negative times are in the past and positive times are in the future. This time offset should include transmission latency from the physical hardware.
-
-**`EVRInputError UpdateScalarComponent( VRInputComponentHandle_t ulComponent, float fNewValue, double fTimeOffset )`**
-
-Updates the value of a scalar component. This should be called whenever the current state of an input component changes.
-
-* ulComponent - The component handle of the component to update.
-* fNewValue - The new scalar value of the component.
-* fTimeOffset - The time of the state change in the component relative to now. Negative times are in the past and positive times are in the future. This time offset should include transmission latency from the physical hardware.
 
 
 
