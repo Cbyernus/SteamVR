@@ -35,7 +35,7 @@ Creates an input component to represent a single scalar value on a controller or
 
 Creates an output component to represent a single haptic on a controller or other tracked device. Returns VRInputError_None and sets the value pointed to by pHandle to a valid component handle on success. 
 
-When the application requests a haptic event, the driver will receive an event of type `VREvent_Input_HapticVibration` and the details of the haptic event will be in the `haptic` member of the event data union.
+When the application requests a haptic event, the driver will receive an event of type `VREvent_Input_HapticVibration` and the details of the haptic event will be in the `hapticVibration` member of the event data union.
 
 Note: Applications that use the current haptic API will always target the first haptic component created on a given tracked device. Future APIs will support multiple haptic components per device.
 
