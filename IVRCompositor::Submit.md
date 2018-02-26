@@ -3,4 +3,4 @@ Updated scene texture to display. If pBounds is NULL the entire texture will be 
     OpenGL dirty state:
         glBindTexture
 
-	virtual void Submit( Hmd_Eye eEye, void* pTexture, Compositor_TextureBounds* pBounds ) = 0;
+	virtual EVRCompositorError Submit( EVREye eEye, Texture_t* pTexture, VRTextureBounds_t* pBounds = 0, EVRSubmitFlags nSubmitFlags = Submit_Default ) = 0;
