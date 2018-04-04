@@ -108,3 +108,5 @@ Its format is:
   }
 ]
 ```
+
+The language tag is the ISO-639-1 + ISO-3166-1 alpha-2 of the locale that part of the localization file is for. The localization file can contain any number of locales.
