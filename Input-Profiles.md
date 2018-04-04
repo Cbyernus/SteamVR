@@ -72,8 +72,8 @@ Controller types should be ASCII and short. This is not the human-readable name,
 * trackpad - The input is a trackpad. It supports these components:
   * /input/_trackpadname_/x
   * /input/_trackpadname_/y
+  * /input/_trackpadname_/touch
   * /input/_trackpadname_/click - Optional.
-  * /input/_trackpadname_/touch - Optional.
 * trigger - The input is a trigger (or an analog grip button.) It supports these components:
   * /input/_trigger name_/value
   * /input/_trigger name_/click - Optional
