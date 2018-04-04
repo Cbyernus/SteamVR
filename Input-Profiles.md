@@ -95,3 +95,16 @@ Controller types should be ASCII and short. This is not the human-readable name,
 
 # Input Profile Localization
 
+Input source names and controller type strings can be translated into a user's native language with a driver-provided localization file. This file lives in "_driver install dir_/resources/localization/localization.json".
+
+Its format is:
+
+```json
+[
+  {
+    "language_tag": "en_US",
+    "my_controller_type" : "My Controller Type",
+    "/input/button_name" : "Awesome Button"
+  }
+]
+```
