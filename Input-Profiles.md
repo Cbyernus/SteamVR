@@ -1,10 +1,13 @@
-SteamVR uses driver-provided Input Profile JSON files to control how application actions are bound to the input state in the driver. There is one of these files for each type of device. They generally live in "<driver dir>/resources/input/<device_type>_profile.json". The vive_controller_profile.json file in <steamvr>/drivers/resources/input is a good example to look at.
+# What is the Input Profile
+
+SteamVR uses driver-provided Input Profile JSON files to control how application actions are bound to the input state in the driver. There is one of these files for each type of device. They generally live in "_driver dir_/resources/input/<device_type>_profile.json". The vive_controller_profile.json file in _steamvr install dir_/drivers/resources/input is a good example to look at.
 
 The driver identifies which file to load via the Prop_InputProfilePath_String property on each device. This string usually takes the form {drivername}/input/filename_profile.json, which will automatically expand {drivername} to the install path of that driver. You can have as many of these files as you need for your driver.
 
 Generally drivers should provide input profiles for each controller and HMD exposed by that driver. SteamVR will generate an approximate profile for devices that don't have a profile provided, but a driver can do a better job than SteamVR itself.
 
-The file looks like this:
+# Input Profile Format
+
 ```
 {
   "jsonid" : "input_profile",
@@ -89,3 +92,6 @@ Controller types should be ASCII and short. This is not the human-readable name,
 **binding_image_point** is the 2D position on the unscaled image that should be highlighted for this source.
 
 **order** is an optional setting that allows the input profile to control the order of the input sources in the UI.
+
+# Input Profile Localization
+
