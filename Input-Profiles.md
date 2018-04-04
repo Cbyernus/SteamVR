@@ -9,7 +9,7 @@ The file looks like this:
 {
   "jsonid" : "input_profile",
   "controller_type": "<controller type>",
-  "legacy_binding" :  "<legacy_binding_file>",
+  "legacy_binding" :  "<legacy binding file>",
   "input_bindingui_mode" : "<UI mode>",
   "input_bindingui_left" :
   {
