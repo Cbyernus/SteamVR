@@ -37,26 +37,26 @@ The file looks like this:
 }
 ```
 
-<controller type> is the key that's used to store bindings per-app for this controller. Including your driver name or brand name in the controller type is a good idea so it doesn't collide with controller types from other drivers. Some examples of controller types:
+**controller type** is the key that's used to store bindings per-app for this controller. Including your driver name or brand name in the controller type is a good idea so it doesn't collide with controller types from other drivers. Some examples of controller types:
 
 * vive
 * vive_pro
 * vive_controller
 * gamepad
 
-<legacy binding file> is the path to the binding file to use for legacy apps whenever this controller is active. It is the same format as other binding files, and can be built with the binding UI and then exported. (The binding UI isn't actually available yet as of this writing, but it's coming soon.)  These paths are usually driver relative and take this form: {drivername}/input/mycontroller_legacy_bindings.json.
+**legacy binding file** is the path to the binding file to use for legacy apps whenever this controller is active. It is the same format as other binding files, and can be built with the binding UI and then exported. (The binding UI isn't actually available yet as of this writing, but it's coming soon.)  These paths are usually driver relative and take this form: {drivername}/input/mycontroller_legacy_bindings.json.
 
-<UI mode> - This is one of:
+**UI mode** - This is one of:
 
 * hmd - The device is an HMD and wants the UI to be in HMD mode
 * single_device - The device should be on a page by itself
 * controller_handed - The device is in the right and/or left hand and should be shown in a pair in the UI.
 
-<image path> - This is the path to the driver-relative SVG or PNG file that the binding UI should show for this device. This is generally of the form {drivername}/input/mycontroller.svg.  
+**image path** - This is the path to the driver-relative SVG or PNG file that the binding UI should show for this device. This is generally of the form {drivername}/input/mycontroller.svg.  
 
-<input source path> - There is one input source specified for each input on the device. Individual components are grouped into input sources to allow the user to manipulate them as a group. For example, the input source /input/trigger contains the input components /input/trigger/value and optionally /input/trigger/click, and /input/trigger/touch.
+**input source path** - There is one input source specified for each input on the device. Individual components are grouped into input sources to allow the user to manipulate them as a group. For example, the input source /input/trigger contains the input components /input/trigger/value and optionally /input/trigger/click, and /input/trigger/touch.
 
-<input source type> - Each input source has a type. The available types are:
+**input source type** - Each input source has a type. The available types are:
 * joystick - The input is a joystick or thumbstick. Supports these components:
   * /input/<joystickname>/x
   * /input/<joystickname>/y
@@ -82,6 +82,6 @@ The file looks like this:
   * /pose/<component name>/
 
 
-binding_image_point is the 2D position on the provided image that should be highlighted for this source.
+**binding_image_point** is the 2D position on the provided image that should be highlighted for this source.
 
-order is an optional setting that allows the input profile to control the order of the input sources in the UI.
+**order** is an optional setting that allows the input profile to control the order of the input sources in the UI.
