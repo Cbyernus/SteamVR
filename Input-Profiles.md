@@ -44,6 +44,8 @@ The file looks like this:
 * vive_controller
 * gamepad
 
+Controller types should be ASCII and short. This is not the human-readable name, it is the internal name that will be stored in data and log files.
+
 **legacy binding file** is the path to the binding file to use for legacy apps whenever this controller is active. It is the same format as other binding files, and can be built with the binding UI and then exported. (The binding UI isn't actually available yet as of this writing, but it's coming soon.)  These paths are usually driver relative and take this form: {drivername}/input/mycontroller_legacy_bindings.json.
 
 **UI mode** - This is one of:
@@ -54,34 +56,36 @@ The file looks like this:
 
 **image path** - This is the path to the driver-relative SVG or PNG file that the binding UI should show for this device. This is generally of the form {drivername}/input/mycontroller.svg.  
 
+**transform** - This string is passed to the CSS transform field in the binding UI.
+
 **input source path** - There is one input source specified for each input on the device. Individual components are grouped into input sources to allow the user to manipulate them as a group. For example, the input source /input/trigger contains the input components /input/trigger/value and optionally /input/trigger/click, and /input/trigger/touch.
 
 **input source type** - Each input source has a type. The available types are:
 * joystick - The input is a joystick or thumbstick. Supports these components:
-  * /input/<joystickname>/x
-  * /input/<joystickname>/y
-  * /input/<joystickname>/click - Optional. If there is no click component the joystick won't support binding to click.
-  * /input/<joystickname>/touch - Optional. If there is no touch component the joystick won't support binding to touch.
+  * /input/_joystickname_/x
+  * /input/_joystickname_/y
+  * /input/_joystickname_/click - Optional. If there is no click component the joystick won't support binding to click.
+  * /input/_joystickname_/touch - Optional. If there is no touch component the joystick won't support binding to touch.
 * trackpad - The input is a trackpad. It supports these components:
-  * /input/<trackpadname>/x
-  * /input/<trackpadname>/y
-  * /input/<trackpadname>/click
-  * /input/<trackpadname>/touch
+  * /input/_trackpadname_/x
+  * /input/_trackpadname_/y
+  * /input/_trackpadname_/click
+  * /input/_trackpadname_/touch
 * trigger - The input is a trigger (or an analog grip button.) It supports these components:
-  * /input/<trigger name>/value
-  * /input/<trigger name>/click - Optional
-  * /input/<trigger name>/touch - Optional
+  * /input/_trigger name_/value
+  * /input/_trigger name_/click - Optional
+  * /input/_trigger name_/touch - Optional
 * button - The input is a button. It supports these components:
-  * /input/<trigger name>/click
-  * /input/<trigger name>/touch - Optional
+  * /input/_trigger name_/click
+  * /input/_trigger name_/touch - Optional
 * skeleton - The input is a skeletal animation source
-  * /input/<component name>/
+  * /input/_component name_/
 * haptic - The input is a haptic component
-  * /output/<component name>/
+  * /output/_component name_/
 * pose - The input is a pose component. These are created automatically from the components in the device's rendermodel.
-  * /pose/<component name>/
+  * /pose/_component name_/
 
 
-**binding_image_point** is the 2D position on the provided image that should be highlighted for this source.
+**binding_image_point** is the 2D position on the unscaled image that should be highlighted for this source.
 
 **order** is an optional setting that allows the input profile to control the order of the input sources in the UI.
