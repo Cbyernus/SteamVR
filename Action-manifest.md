@@ -81,38 +81,37 @@ If the path to the action manifest is also set in the Steam Partner site, the tw
 }
 ```
 
-**default_bindings** - This array contains the list of binding files to load for this application. 
+## Default_bindings
+This array contains the list of binding files to load for this application. 
 
 **controller_type** - This is the name of the controller type that this binding file is for. Common controller types are:
 * vive_controller
 * oculus_touch
 * holographic_controller
 * gamepad
+Controller types are defined by controller device vendors. For your Application you should attempt to author a binding for common controllers being used.
 
-**binding_url** - The URL or relative file path of the binding config file for this controller type. Relative paths are relative to the action manifest JSON file itself, so files in the same directory only need to provide a filename.
+**binding_url** - The URL or relative file path of the binding config file for this controller type. Relative paths are relative to the action manifest JSON file itself, so files in the same directory only need to provide a filename. Relative paths may not contain ".." , you must load your binding from the same directory as your action file or a sub-directory.
 
 ## Actions
-**actions** - This array contains a list of all actions used by the application. Actions can be listed in any order.
+This array contains a list of all actions used by the application. Actions can be listed in any order.
 
-**name** - The path to an action. Paths take the form /actions/_actionsetname_/in/_actionname_ for input actions or /actions/_actionsetname_/out/_actionname_ for output actions (like haptics.) This path is passed to `IVRInput::
+**name** - The path to an action. Paths take the form /actions/_actionsetname_/in/_actionname_ for input actions or /actions/_actionsetname_/out/_actionname_ for output actions (like haptics.) This path is passed to `IVRInput::GetActionHandle`
 
-**requirement** - The degree to which the user should be prompted to bind this action in the UI. This must be one of:
-
+**requirement** - The degree to which the user should be prompted to bind this action in the binding editor. This must be one of:
 * mandatory - The action must be bound or the binding file cannot be saved. Use this sparingly.
 * suggested - The user will get a warning if this action is not bound. This is the default if no requirement is specified.
-* optional - The user can bind this action, but will not be warned if it is not bound. This is often used for actions that are not bound on all hardware.
+* optional - The user can bind this action, but will not be warned if it is not bound. This is often used for actions that are cannot be bound on all hardware, or actions of a secondary nature.
 
 **type** - The type of the action. This must be one of:
-
 * boolean - The action is a simple on/off event like pulling a trigger or pressing a switch.
-* vector1, vector2, vector3 - The action is a 1, 2, or 3 dimensional float. These are used for throttles, smooth motion, etc.
-* vibration - The action is a output haptic vibration. Include one of these per type of haptic output in your application so they can be bound to different output devices if the user has them available.
+* vector1, vector2, vector3 - The action is a 1, 2, or 3 dimensional float. These are used for throttles, smooth motion, position on a trackpad surface, etc.
+* vibration - The action is a output haptic vibration. Include one of these per type of haptic output in your application so they can be bound to different output devices if the user has them available. Examples include haptics due to firing a gun (that would usually be bound directly to a controller) or haptics from getting shot (which could be bound to a feedback vest worn on the chest).
 * pose - The action is the 6-DOF position and orientation of a device tracked by the tracking system. 
 * skeleton - The action is used to retrieve bone transform data from controllers that support skeletal animation. Actions of type Skeleton also need to set the **skeleton** parameter to identify which skeleton they are expecting. The supported skeletons are /skeleton/hand/left and /skeleton/hand/right.
 
 ## Action Sets
-
-**action_sets** - This array contains information about each action set that is used to drive the binding UI.
+This array contains information about each action set that is used to drive the binding editor.
 
 **name** - The path of the action set. Action set names are of the form /actions/_action set name_
 
@@ -123,8 +122,7 @@ If the path to the action manifest is also set in the Steam Partner site, the tw
 
 
 ## Localization
-
-**localization** - This array contains localized strings for action and action set names for any number of locales.
+This array contains localized strings for action and action set names for any number of locales. Steam supports over 25 languages, users have come to expect that Applications present details in their native language. 
 
 **language_tag** - The language tag is the ISO-639-1 + ISO-3166-1 alpha-2 code for the locale that this section of the action manifest file refers to.
 
