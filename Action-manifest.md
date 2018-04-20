@@ -34,7 +34,7 @@ If the path to the action manifest is also set in the Steam Partner site, the tw
       "type": "boolean"
     },
     {
-      "name": "/actions/driving/out/SpeedBump"
+      "name": "/actions/driving/out/SpeedBump",
       "type": "vibration"
     },
     {
