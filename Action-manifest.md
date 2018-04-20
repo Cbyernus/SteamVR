@@ -9,9 +9,9 @@ OpenVR uses a JSON file called the "action manifest" to allow developers to prov
 * Default binding files for each controller type
 * Localized strings for each action set and action name
 
-This file can be located anywhere on disk under the application's install directory. The application tells OpenVR where the file is with the `IVRInput::SetApplicationManifestPath()` function. The full path to the file must be provided; relative paths are not accepted. 
+This file can be located anywhere on disk under the application's install directory. The application tells OpenVR where the file is with the `IVRInput::SetActionManifestPath()` function. The full path to the file must be provided; relative paths are not accepted. 
 
-If the path to the action manifest is also set in the Steam Partner site, the two paths must match. If there is a mismatch, the path provided in the partner site is used, and the call to `IVRInput::SetApplicationManifestPath` returns `VRInputError_MismatchedActionManifest`.
+If the path to the action manifest is also set in the Steam Partner site, the two paths must match. If there is a mismatch, the path provided in the partner site is used, and the call to `IVRInput::SetActionManifestPath` returns `VRInputError_MismatchedActionManifest`.
 
 # Action manifest file format
 ```JSON
