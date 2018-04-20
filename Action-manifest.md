@@ -16,12 +16,12 @@ If the path to the action manifest is also set in the Steam Partner site, the tw
 # Action manifest file format
 ```JSON
 {
-      "default_bindings": [
-        {
-          "controller_type": "some_controller",
-          "binding_url": "mygame_bindings_some_controller.json"
-        }
-      ], 
+  "default_bindings": [
+   {
+      "controller_type": "some_controller",
+      "binding_url": "mygame_bindings_some_controller.json"
+   }
+  ], 
   "actions": [
     {
       "name": "/actions/main/in/OpenInventory",
@@ -62,22 +62,22 @@ If the path to the action manifest is also set in the Steam Partner site, the tw
       "usage": "single"
     }
   ],
-    "localization" : [
-        {
-            "language_tag": "en",
+  "localization" : [
+   {
+       "language_tag": "en",
 
-            "/actions/main" : "My Game Actions",
-            "/actions/driving" : "Driving",
+        "/actions/main" : "My Game Actions",
+        "/actions/driving" : "Driving",
 
-            "/actions/main/in/OpenInventory" : "Open Inventory",
-            "/actions/main/in/RightHand" : "Right Hand",
-            "/actions/main/in/RightHand_Anim" : "Right Hand Animation",
+        "/actions/main/in/OpenInventory" : "Open Inventory",
+        "/actions/main/in/RightHand" : "Right Hand",
+        "/actions/main/in/RightHand_Anim" : "Right Hand Animation",
 
-            "/actions/driving/in/HonkHorn" : "Honk Horn",
-            "/actions/driving/out/SpeedBump" : "Hit Speed Bump",
-            "/actions/driving/in/Throttle" : "Throttle"
-        }
-    ]
+        "/actions/driving/in/HonkHorn" : "Honk Horn",
+        "/actions/driving/out/SpeedBump" : "Hit Speed Bump",
+        "/actions/driving/in/Throttle" : "Throttle"
+    }
+  ]
 }
 ```
 
