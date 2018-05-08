@@ -6,6 +6,8 @@ Devices should also refrain from simulating one kind of input with another (for 
 
 The component path /input/system/click is a special case that is used to summon or dismiss the SteamVR dashboard. The value of this component will not be available to applications.
 
+Drivers should provide an [Input Profile](https://github.com/ValveSoftware/openvr/wiki/Input-Profiles) for each type of controller they describe. This file describes how the rest of the input system will interact with that device.
+
 **`EVRInputError CreateBooleanComponent( PropertyContainerHandle_t ulContainer, const char *pchName, VRInputComponentHandle_t *pHandle )`**
 
 Creates an input component to represent a single boolean value on a controller or other tracked device. Returns VRInputError_None and sets the value pointed to by pHandle to a valid component handle on success. After creating a component the driver can update it with repeated calls to UpdateBooleanComponent.
