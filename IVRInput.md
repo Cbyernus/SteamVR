@@ -33,25 +33,84 @@ This call must be made before the first call to `IVRInput::UpdateActionState` or
 * `pchActionManifestPath` - Absolute path to the action manifest file to use for this application. See [action manifest file](https://github.com/ValveSoftware/openvr/wiki/Action-manifest) documentation for the format of these files.
 
 
+`EVRInputError IVRInput::GetActionSetHandle( const char *pchActionSetName, VRActionSetHandle_t *pHandle )`
 
-		/** Returns a handle for an action set. This handle is used for all performance-sensitive calls. */
-		virtual EVRInputError GetActionSetHandle( const char *pchActionSetName, VRActionSetHandle_t *pHandle ) = 0;
+Returns a handle for an action set. This handle is used for all performance-sensitive calls.
 
-		/** Returns a handle for an action. This handle is used for all performance-sensitive calls. */
-		virtual EVRInputError GetActionHandle( const char *pchActionName, VRActionHandle_t *pHandle ) = 0;
+For best performance, applications should call this function once per handle.
 
-		/** Returns a handle for any path in the input system. E.g. /user/hand/right */
-		virtual EVRInputError GetInputSourceHandle( const char *pchInputSourcePath, VRInputValueHandle_t  *pHandle ) = 0;
+* `pchActionSetName` - The path to the action set. This is generally of the form /actions/action_set_name
+* `pHandle` - A pointer to an action set variable to fill with the handle.
 
-		// --------------- Reading action state ------------------- //
+`EVRInputError IVRInput::GetActionHandle( const char *pchActionName, VRActionHandle_t *pHandle )`
 
-		/** Reads the current state into all actions. After this call, the results of Get*Action calls 
-		* will be the same until the next call to UpdateActionState. */
-		virtual EVRInputError UpdateActionState( VR_ARRAY_COUNT( unSetCount ) VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount ) = 0;
+Returns a handle for an action. This handle is used for all performance-sensitive calls.
 
-		/** Reads the state of a digital action given its handle. This will return VRInputError_WrongType if the type of
-		* action is something other than digital */
-		virtual EVRInputError GetDigitalActionData( VRActionHandle_t action, InputDigitalActionData_t *pActionData, uint32_t unActionDataSize ) = 0;
+For best performance, applications should call this function once per handle.
+
+* `pchActionName` - The path to the action. This is generally of the form /actions/action_set_name/in/action_name or /actions/action_set_name/out/action_name.
+* `pHandle` - A pointer to an action handle variable to fill with the handle.
+
+`EVRInputError IVRInput::GetInputSourceHandle( const char *pchInputSourcePath, VRInputValueHandle_t  *pHandle )`
+
+Returns a handle for an input source. This handle is used for all performance-sensitive calls.
+
+For best performance, applications should call this function once per handle.
+
+* `pchInputSourcePath` - The path to the input source. Common input sources are /user/head, /user/hand/left, /user/hand/right, and /user/gamepad.
+* `pHandle` - A pointer to an input source handle variable to fill with the handle.
+
+`EVRInputError IVRInput::UpdateActionState( VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount )`
+
+Reads the current state into all actions. After this call, the results of Get*ActionData calls will be the same until the next call to UpdateActionState. Applications should call this function once per frame.
+
+* `pSets` - A pointer to an array of one or more VRActiveActionSet_t structures that the application would like to be active this frame.
+* `unSizeofVRSelectedActionSet_t` - This parameter should be sizeof(VRActiveActionSet_t).
+* `unSetCount` - The number of action VRActiveActionSet_t structs in the array.
+
+```
+struct VRActiveActionSet_t
+{
+	VRActionSetHandle_t ulActionSet;
+	VRInputValueHandle_t ulRestrictedToDevice;
+	VRActionSetHandle_t ulSecondaryActionSet;
+};
+```
+
+This structure describes one active action set for a given frame.
+
+* `ulActionSet` - The handle of an action set to activate.
+* `ulRestrictedToDevice` - The device to restrict `ulActionSet` to. This is generally k_ulInvalidInputValueHandle. If it set, it could be the handle for /user/hand/left or /user/hand/right.
+* `ulSecondaryActionSet` - If ulRestrictedToDevice is set, this is the alternate action set to use for all other devices in the system.
+
+`EVRInputError IVRInput::GetDigitalActionData( VRActionHandle_t action, InputDigitalActionData_t *pActionData, uint32_t unActionDataSize )`
+
+Reads the state of a digital action given its handle. This will return VRInputError_WrongType if the type of
+action is something other than digital.
+
+* `action` - The handle of the action to retrieve state for
+* `pActionData` - Pointer to an InputDigitalActionData_t struct. 
+* `unActionDataSize` - This must be sizeof(InputDigitalActionData_t)
+
+
+```
+struct InputDigitalActionData_t
+{
+	bool bActive;
+	VRInputValueHandle_t activeOrigin;
+	bool bState;
+	bool bChanged;
+	float fUpdateTime;
+};
+```
+
+* `bActive` - This action is bound to an input source that is present in the system and is in an action set that is active.
+* `activeOrigin` - The input source that this action state was generated by. If this action is bound to multiple inputs, this will be the input that changed most recently.
+* `bState` - The current state of this digital action. True means the user wants to perform this action.
+* `bChanged` - If this field is true, the digital action's state value has changed since the previous frame. As a result, applications can use this to detect rising edges (bState && bChanged) or falling edges (!bState && bChanged) to avoid duplicate activations on steady states.
+* `fUpdateTime` - The time relative to now when the action was last changed. This can be passed to GetPoseActionData to get the pose of a user's hand at the time they pressed or released an input control.
+
+
 
 		/** Reads the state of an analog action given its handle. This will return VRInputError_WrongType if the type of
 		* action is something other than analog */
