@@ -1,6 +1,6 @@
 # Input Overview
 
-To read controller input state in OpenVR, an application provides a list of the "actions" that represent the operations a user can perform in the application. SteamVR then binds those actions to input components provided for the input devices that the user is using. Application developers can provide default bindings for any controller types they like. Users are able to modify those bindings or create new bindings for new devices. Users can also select bindings that were shared by other users.
+To read controller input state in OpenVR, an application provides a list of the "actions" that represent the operations a user can perform in the application. SteamVR then binds those actions to actual inputs on a game/vr controller, or more specifically input components provided for the input devices that the user is using. Application developers can provide default bindings for any controller types they like. Users are able to modify those bindings or create new bindings for new devices. Users can also select bindings that were shared by other users.
 
 # Getting Started
 
@@ -14,11 +14,11 @@ To use the IVRInput API in an application, a developer should take the following
 5. Add a call to `vr::VRInput()->UpdateActionState()` at the top of the application's input processing code before reading any action state.
 6. Add calls to `vr::VRInput()->Get*ActionData()` for each action used by the application. Make the results from those calls perform the action in the application.
 7. Run the application.
-7. Click "Controller Binding" under Settings and find your application as the top under the running application. Make some bindings using the UI and then click "export" at the bottom of the screen. Your bindings will be exported to <my documents>/steamvr/input/exports.
-8. Move your exported binding into your application's directory. It doesn't matter where they are, but usually putting them next to the action manifest file is a good choice.
-9. Edit the action manifest and add a `default_bindings` section that refers to your default binding file. 
-10. Repeat 7-9 for other controller types you want to provide default bindings for.
-10. Include your action manifest and all your default binding files in your app when it releases.
+8. Click "Controller Binding" under Settings and find your application as the top under the running application. Make some bindings using the UI and then click "export" at the bottom of the screen. Your bindings will be exported to <my documents>/steamvr/input/exports.
+9. Move your exported binding into your application's directory. It doesn't matter where they are, but usually putting them next to the action manifest file is a good choice.
+10. Edit the action manifest and add a `default_bindings` section that refers to your default binding file. 
+11. Repeat 8-10 for other controller types you want to provide default bindings for.
+12. Include your action manifest and all your default binding files in your app when it releases.
 
 # API Documentation
 
@@ -37,7 +37,7 @@ This call must be made before the first call to `IVRInput::UpdateActionState` or
 
 Returns a handle for an action set. This handle is used for all performance-sensitive calls.
 
-For best performance, applications should call this function once per handle.
+For best performance, applications should call this function once per action set name and save the returned handle for later use.
 
 * `pchActionSetName` - The path to the action set. This is generally of the form /actions/action_set_name
 * `pHandle` - A pointer to an action set variable to fill with the handle.
@@ -46,7 +46,7 @@ For best performance, applications should call this function once per handle.
 
 Returns a handle for an action. This handle is used for all performance-sensitive calls.
 
-For best performance, applications should call this function once per handle.
+For best performance, applications should call this function once per action name and save the returned handle for later use.
 
 * `pchActionName` - The path to the action. This is generally of the form /actions/action_set_name/in/action_name or /actions/action_set_name/out/action_name.
 * `pHandle` - A pointer to an action handle variable to fill with the handle.
@@ -55,14 +55,14 @@ For best performance, applications should call this function once per handle.
 
 Returns a handle for an input source. This handle is used for all performance-sensitive calls.
 
-For best performance, applications should call this function once per handle.
+For best performance, applications should call this function once per input source path they use.
 
 * `pchInputSourcePath` - The path to the input source. Common input sources are /user/head, /user/hand/left, /user/hand/right, and /user/gamepad.
 * `pHandle` - A pointer to an input source handle variable to fill with the handle.
 
 `EVRInputError IVRInput::UpdateActionState( VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount )`
 
-Reads the current state into all actions. After this call, the results of Get*ActionData calls will be the same until the next call to UpdateActionState. Applications should call this function once per frame.
+Reads the current state into all actions. After this call, the results of Get*ActionData calls will be the same until the next call to UpdateActionState. Applications should typically call this function once per frame.
 
 * `pSets` - A pointer to an array of one or more VRActiveActionSet_t structures that the application would like to be active this frame.
 * `unSizeofVRSelectedActionSet_t` - This parameter should be sizeof(VRActiveActionSet_t).
@@ -80,7 +80,7 @@ struct VRActiveActionSet_t
 This structure describes one active action set for a given frame.
 
 * `ulActionSet` - The handle of an action set to activate.
-* `ulRestrictedToDevice` - The device to restrict `ulActionSet` to. This is generally k_ulInvalidInputValueHandle. If it set, it could be the handle for /user/hand/left or /user/hand/right.
+* `ulRestrictedToDevice` - The device to restrict `ulActionSet` to. This is generally k_ulInvalidInputValueHandle. If it set, it could be the handle for /user/hand/left or /user/hand/right. This lets you bind different action sets to individual controllers (hands).
 * `ulSecondaryActionSet` - If ulRestrictedToDevice is set, this is the alternate action set to use for all other devices in the system.
 
 `EVRInputError IVRInput::GetDigitalActionData( VRActionHandle_t action, InputDigitalActionData_t *pActionData, uint32_t unActionDataSize )`
@@ -104,7 +104,7 @@ struct InputDigitalActionData_t
 };
 ```
 
-* `bActive` - This action is bound to an input source that is present in the system and is in an action set that is active.
+* `bActive` - Is set to True if this action is bound to an input source that is present in the system and is in an action set that is active from the last UpdateActionState call.
 * `activeOrigin` - The input source that this action state was generated by. If this action is bound to multiple inputs, this will be the input that changed most recently.
 * `bState` - The current state of this digital action. True means the user wants to perform this action.
 * `bChanged` - If this field is true, the digital action's state value has changed since the previous frame. As a result, applications can use this to detect rising edges (bState && bChanged) or falling edges (!bState && bChanged) to avoid duplicate activations on steady states.
@@ -132,7 +132,7 @@ struct InputAnalogActionData_t
 };
 ```
 
-* `bActive` - This action is bound to an input source that is present in the system and is in an action set that is active.
+* `bActive` - Is set to True if this action is bound to an input source that is present in the system and is in an action set that is active from the last UpdateActionState call.
 * `activeOrigin` - The input source that this action state was generated by. If this action is bound to multiple inputs, this will be the input that changed most recently.
 * `x, y, z` - The current state of this axis of the analog action. x is valid for vector1, vector2, and vector3 actions. y is valid for vector2, and vector3 actions. z is valid for vector3 actions.
 * `deltaX, deltaY, deltaZ` - The change in this axis for this action since the previous frame.
@@ -160,7 +160,7 @@ struct InputPoseActionData_t
 };
 ```
 
-* `bActive` - This action is bound to an input source that is present in the system and is in an action set that is active.
+* `bActive` - Is set to True if this action is bound to an input source that is present in the system and is in an action set that is active from the last UpdateActionState call.
 * `activeOrigin` - The input source that this action state was generated by. If this action is bound to multiple inputs, this will be the input that changed most recently.
 * `pose` - The pose of the action.
 
@@ -170,7 +170,7 @@ EVRInputError IVRInput::GetSkeletalActionDataCompressed( VRActionHandle_t action
 EVRInputError UncompressSkeletalActionData( void *pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace *peBoneParent, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount )
 ```
 
-These functions are still experimental and should not be called.
+These functions are still experimental and should not be called at this time.
 
 ```EVRInputError TriggerHapticVibrationAction( VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude )```
 
