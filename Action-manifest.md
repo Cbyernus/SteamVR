@@ -89,6 +89,7 @@ This array contains the list of binding files to load for this application.
 * oculus_touch
 * holographic_controller
 * gamepad
+
 Controller types are defined by controller device vendors. For your Application you should attempt to author a binding for common controllers being used.
 
 **binding_url** - The URL or relative file path of the binding config file for this controller type. Relative paths are relative to the action manifest JSON file itself, so files in the same directory only need to provide a filename. Relative paths may not contain ".." , you must load your binding from the same directory as your action file or a sub-directory.
