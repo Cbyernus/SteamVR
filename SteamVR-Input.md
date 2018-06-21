@@ -207,14 +207,23 @@ Retrieve the bone transform data
 
 Retrieve the bone transforms as a compressed binary blob.
 
-* `action` - 
-* `eBoneTransformSpace
-* `eMotionRange
-* `pvCompressedData
-* `unCompressedSize
-* `punRequiredCompressedSize
-* `ulRestrictToDevice
+* `action` - The handle of the skeletal action to retrieve the bone data for
+* `eBoneTransformSpace' - The coordinate space that each bone transform should be returned in. See `GetSkeletalBoneData()` for details
+* `eMotionRange` - The desired range of motion of the animation.  See `GetSkeletalBoneData()` for details
+* `pvCompressedData` - Pointer to a buffer where the compressed data should be placed
+* `unCompressedSize' - The size of the buffer pointed to by pvCompressedData
+* `punRequiredCompressedSize` - The size of the compressed data.  If this is less than unCompressedSize the function will return an error and no transforms will be written
+* `ulRestrictToDevice` - If the action can be bound to more than one device, this should be the device to restrict the query to
 
+`EVRInputError DecompressSkeletalBoneData( void *pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace *peBoneTransformSpace, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount )`
+
+Turn a compressed blob back into bone transforms
+
+* `pvCompressedBuffer` - Pointer to a buffer holding the compressed data
+* `unCompressedBufferSize` - The size of the buffer pointed to by pvCompressedBuffer
+* `peBoneTransformSpace` - Pointer to EVRSkeletalTransformSpace enum.  The function will write the coordinate space of the compressed buffer here
+* `pTransformArray` - Pointer to the array of `vr::VRBoneTransform_t` that the function should put the bone transforms in
+* `unTransformArrayCount` - The number of elements in `pTransformArray`.  If there are not enough elements, the function will return an error
 
 ```EVRInputError TriggerHapticVibrationAction( VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude )```
 
