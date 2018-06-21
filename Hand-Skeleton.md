@@ -102,7 +102,11 @@ The skeleton has 5 auxiliary bones ('aux bones' for short) for helping in the co
 
 Normally, blending between two or more animations is done in the parent space of each bone.  A side effect the skeleton's construction as a forward kinematic chain is that the path that the end of a chain takes as it is blended from one pose to another can be an ark that is hard to predict.  Even when blending between two poses where the finger tips are in the same location in world space, there is no guarantee that the finger tips will still be in that location when the poses are blended 50/50.  
 
+![Bad Blend](https://steamcdn-a.akamaihd.net/steamcommunity/public/images/clans/5519564/8bb9d7b3709b1e90334ee23caddf0a265d3d91a9.gif)
+
 But since the aux bones are children of the root, and the root does not move from the origin of the blend space, blending them results in predictable, linear motion between the being and end positions.  A 50/50 blend between two poses that have the aux bones in the same location will result in a pose with them at that same location.  This make them ideal when you want to keep track of where the ends of the fingers should be through multiple complicated blends, because then you can use them as IK targets to fix up the location of the finger tips after the blends.  
+
+![Blend with aux bones and IK](https://steamcdn-a.akamaihd.net/steamcommunity/public/images/clans/5519564/61dbb63bcf87b07a8f29eddf06f333bc62a85e1c.gif)
 
 ### Aux Bones as IK Targets
 So if the aux bones are ideal as IK target, why not put them at the finger tips?  Simple: because then we can use two-bone IK to solve each finger instead of 3-bone IK.  
