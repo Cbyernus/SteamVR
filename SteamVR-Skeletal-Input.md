@@ -26,7 +26,9 @@ To retrieve the bone transforms, call `vr::VRInput()->GetSkeletalBoneData()` wit
 ### Retrieving a Compressed Pose
 Instead of using `vr::VRInput()->GetSkeletalBoneData()` to retrieve the full bone transforms, can instead call `vr::VRInput()->GetSkeletalBoneDataCompressed()` to retrieve a compressed binary blob suitable for networking.  Note that variable compression is used, so the size of the buffer will fluctuate as the hand pose changes.  Once you have transmitted the compressed buffer to a remote client, the bone transforms can be retrieve by passing the buffer to `vr::VRInput()->DecompressSkeletalBoneData()`.  Note that the remote client may not have the same type of controller as the client that sent the buffer, so the compression and decompression is designed to be used independ of any particular driver.  
 
+# API Documentation
+Detailed documentation on the Skeletal Input API can be found with the SteamVR Input API documentation [here](https://github.com/ValveSoftware/openvr/wiki/SteamVR-Input#api-documentation).  
+
 # Skeleton Definition
 
 
-# API Documentation
