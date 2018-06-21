@@ -19,16 +19,18 @@ Next, you need to add a binding for this action to each controller.  You can do 
 Call `vr::VRInput()->GetActionSetHandle()` as described in the [SteamVR Input](https://github.com/ValveSoftware/openvr/wiki/SteamVR-Input) documentation to get a handle to the skeletal action that you defined in the manifest.  This will later be used to retrieve the skeletal pose associated with the action.  
 
 ### Retrieving the Pose
-Each frame your application should already be calling `vr::VRInput()->UpdateActionState()` to update the status of all the actions that have been defined in your action manifest.  This will update the skeletal input too.  To retrieve the pose, first call `vr::VRInput()->GetSkeletalActionData()` with the 'VRActionHandle_t' for your skeletal action and a pointer to a `InputSkeletalActionData_t` object for the function to fill in.  If `InputSkeletalActionData_t.bActive` is true, that means there is bone transform data that is ready.  
+Each frame your application should already be calling `vr::VRInput()->UpdateActionState()` to update the status of all the actions that have been defined in your action manifest.  This will update the skeletal input too.  To retrieve the pose, first call `vr::VRInput()->GetSkeletalActionData()` with the 'VRActionHandle_t' for your skeletal action and a pointer to a `InputSkeletalActionData_t` object.  If `InputSkeletalActionData_t.bActive` is true, that means there is bone transform data that is ready.  `InputSkeletalActionData_t.boneCount` will contain the number of bones in the skeleton; you will need an array of at least this many `vr::VRBoneTransform_t` to hold the bone transforms.  
 
 To retrieve the bone transforms, call `vr::VRInput()->GetSkeletalBoneData()` with the options for the format you want to receive the data in and buffer to place the transform in.  
 
 ### Retrieving a Compressed Pose
 Instead of using `vr::VRInput()->GetSkeletalBoneData()` to retrieve the full bone transforms, can instead call `vr::VRInput()->GetSkeletalBoneDataCompressed()` to retrieve a compressed binary blob suitable for networking.  Note that variable compression is used, so the size of the buffer will fluctuate as the hand pose changes.  Once you have transmitted the compressed buffer to a remote client, the bone transforms can be retrieve by passing the buffer to `vr::VRInput()->DecompressSkeletalBoneData()`.  Note that the remote client may not have the same type of controller as the client that sent the buffer, so the compression and decompression is designed to be used independ of any particular driver.  
 
+### Placing the Skeleton in the World
+The root bone transform provided by the API will always be in relation to an offset an the input device, and not a positioned in the VR space.  To get the location in VR space to place the skeleton so that it matches the location of the user's hand, you must retrieve it from the API the same way that you retrieve the locations of the controllers themselves, using `vr::VRInput()->GetPoseActionData()`, and passing in the value `InputSkeletalActionData_t.activeOrigin` that you received from calling `GetSkeletalActionData()`.  
+
 # API Documentation
 Detailed documentation on the Skeletal Input API can be found with the SteamVR Input API documentation [here](https://github.com/ValveSoftware/openvr/wiki/SteamVR-Input#api-documentation).  
 
-# Skeleton Definition
 
 
