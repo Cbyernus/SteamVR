@@ -8,6 +8,7 @@ Both left and right hand skeletons have the following properties:
 * The system is designed to avoid any kind of scale; animating scaling can be complicated in real-time engines and is not supported in some cases.  The API only return translations and rotations of bones
 * No twist bones
 * There are several helper bones, but that are not intended to be directly involved in skinning your hand mesh
+* Bones are ordered such that the parent is always before the child
 
 
 # Bone Structure
@@ -61,5 +62,36 @@ enum HandSkeletonBone : BoneIndex_t
 
 The currently supported skeletons are `/skeleton/hand/left` and `/skeleton/hand/right`.  
 
+# Bone Categories
 
-# Hierarchy
+The bones in the skeleton fall in several categories based on their intended usage
+
+## Skinning Bones
+![Skinning Bones](https://steamcdn-a.akamaihd.net/steamcommunity/public/images/clans/5519564/4f43dd2e086c01eeb10fa3ab66d0179a8d1374cf.png)
+
+These are the primary bones used for animating the hand.  Any hand mesh should be skinned to these bones, so that their animation is what drives the deformation of the mesh
+
+## Finger Tip Bones
+![Finger Tip Bones](https://steamcdn-a.akamaihd.net/steamcommunity/public/images/clans/5519564/3aa4db234eaf611623b436524267818df894e41b.png)
+
+These bones are on the end of each digit.  They are not skinned to the hand mesh and so do not contribute to the motion that the user will see in your app, and should not have any animation on them.  Their purpose is purely convenience.  Its common in VR apps to want to know where the tip of the user's fingers are, for interaction with objects in the world, gestures, pointing, etc.  But without these bones the last animated bone in each hand is the knuckle, which does not line up with where the visual mesh of the finger ends.  Having finger tip bones is an easy way for gameplay code to know where the fingers end.  
+
+## Auxiliary Bones
+![Helper Bones](https://steamcdn-a.akamaihd.net/steamcommunity/public/images/clans/5519564/f10ef747fef0b0139abca23533507d95918cb7c6.png)
+
+The skeleton has 5 auxiliary bones ('aux bones' for short) for helping in the construction of hand poses.  These bones have the same position and rotation and rotation as the last knuckle bone in each finger, but are direct children of the root bone.  This gives them several benefits: predictability in blending, and as a convenient IK target.  
+
+### Aux Bone Blending
+
+Normally, blending between two or more animations is done in the parent space of each bone.  A side effect the skeleton's construction as a forward kinematic chain is that the path that the end of a chain takes as it is blended from one pose to another can be an ark that is hard to predict.  Even when blending between two poses where the finger tips are in the same location in world space, there is no guarantee that the finger tips will still be in that location when the poses are blended 50/50.  
+
+But since the aux bones are children of the root, and the root does not move from the origin of the blend space, blending them results in predictable, linear motion between the being and end positions.  A 50/50 blend between two poses that have the aux bones in the same location will result in a pose with them at that same location.  This make them ideal when you want to keep track of where the ends of the fingers should be through multiple complicated blends, because then you can use them as IK targets to fix up the location of the finger tips after the blends.  
+
+### Aux Bones as IK Targets
+So if the aux bones are ideal as IK target, why not put them at the finger tips?  Simple: because then we can use two-bone IK to solve each finger instead of 3-bone IK.  
+
+Two-bone IK is a feature that already exists in many game engines, and is relatively easy to implement in those that don't.  It is straightforward to define the limits on the degrees of freedom, has a single solution in the case of hinge joints like fingers.  The predictability in the results from a two-bone IK solve make it easier to tune to get the visual results you want.
+
+Three-bone IK however is not as widely supported, nor trivial to implement.  Three-bone IK solves can have many valid results, and what you get can depend on which algorithm you choose and what your starting pose is.  This complexity and unpredictability make them difficult to work with.  
+
+So, the aux bones track the position and rotation of the last knuckle of each hand rather than the finger tips, so that two-bone IK can be used to solve for the rotations of the first and second knuckle, and the world-space rotation of the third knuckle can simply be copied from the aux bone itself.  
