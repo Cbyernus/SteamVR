@@ -34,5 +34,6 @@ The root bone transform provided by the API will always be in relation to an off
 # API Documentation
 Detailed documentation on the Skeletal Input API can be found with the SteamVR Input API documentation [here](https://github.com/ValveSoftware/openvr/wiki/SteamVR-Input#api-documentation).  
 
-
+# Skeleton Definition
+Detailed information on the skeleton used by the Skeletal Input system can be found here: [Hand Skeleton](https://github.com/ValveSoftware/openvr/wiki/Hand-Skeleton)
 
