@@ -11,6 +11,23 @@ Both left and right hand skeletons have the following properties:
 * Bones are ordered such that the parent is always before the child
 
 
+# Files
+Reference files for the skeleton are provided with the installation of SteamVR as both GLTF and FBX files.  The skeletons with an example mesh are located here:
+```
+Steam\steamapps\common\SteamVR\resources\rendermodels\vr_glove\vr_glove_left_model.fbx
+Steam\steamapps\common\SteamVR\resources\rendermodels\vr_glove\vr_glove_left_model.glb
+Steam\steamapps\common\SteamVR\resources\rendermodels\vr_glove\vr_glove_right_model.fbx
+Steam\steamapps\common\SteamVR\resources\rendermodels\vr_glove\vr_glove_right_model.glb
+```
+
+Files with just the skeleton (no mesh) are here:
+```
+Steam\steamapps\common\SteamVR\resources\skeletons\vr_glove_left_skeleton.fbx
+Steam\steamapps\common\SteamVR\resources\skeletons\vr_glove_left_skeleton.glb
+Steam\steamapps\common\SteamVR\resources\skeletons\vr_glove_right_skeleton.fbx
+Steam\steamapps\common\SteamVR\resources\skeletons\vr_glove_right_skeleton.glb
+```
+
 # Bone Structure
 Both left and right hand skeletons have 31 bones, which are arranged as seen here
 
