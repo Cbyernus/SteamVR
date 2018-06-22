@@ -1,6 +1,6 @@
 # Overview
 
-If you are developing an OpenVR driver for a device that is capable of detecting what the user's hand is doing, either implicitly or explicitly, you can provide that information to applications as a stream of skeletal animation through the [IVRDriverInput](https://github.com/ValveSoftware/openvr/wiki/IVRDriverInput-Overview)API.  This page walks through how to use the part of the API that is specific to skeletal animation, and discusses some of the things to consider when implementing this functionality.
+If you are developing an OpenVR driver for a device that is capable of detecting what the user's hand is doing, either implicitly or explicitly, you can provide that information to applications as a stream of skeletal animation through the [IVRDriverInput](https://github.com/ValveSoftware/openvr/wiki/IVRDriverInput-Overview) API.  This page walks through how to use the part of the API that is specific to skeletal animation, and discusses some of the things to consider when implementing this functionality.
 
 # API Documentation
 ### CreateSkeletonComponent
@@ -12,7 +12,7 @@ Creates a input component to represent skeletal data from the controller or trac
 * `ulContainer` - The property container handle of the device that is the parent of this component.
 * `pchName` - The name of the component. Valid choices for this option are in the list of Skeletal Input Paths below.  
 * `pchSkeletonPath` - The path to the skeleton to use.  Valid choices for this are option are in the list of Skeleton Paths below.  
-* `pchBasePosePath` - Relative path to where in shared memory the skeletal data should get stored.  Should be /pose/raw
+* `pchBasePosePath` - The path of the location on the controller model that the skeleton should use as its origin
 * `pGripLimitTransforms` - Array of `vr::VRBoneTransform_t` containing the parent-space transforms for the grip limit pose.  The size should match the number of bones in the skeleton that was specified in pchSkeletonPath.  If this is null, then the system will will the default fist pose as the grip limit.  More info on grip limits below.  
 * `unGripLimitTransformCount` - The number of elements in pGripLimitTransforms
 * `pHandle` - Pointer to the where the handle for the newly created component should be written
@@ -50,6 +50,27 @@ These are the paths for the currently supported skeletons
 
 Once your driver has been set up and you have the pointer to the `vr::IVRDriverInput` object, the first thing you will need to do is create a skeletal component using `vr::IVRDriverInput::CreateSkeletonComponent`.  This function will tell the system that you wish to provide animation data, specify which skeleton you'll be providing data for, and it will give you a handle you can use later when providing the system with animation data.  
 
+```
+// Get a pointer to the driver input object.  You should have already done this when setting up support for the 
+// rest of the input from your device
+vr::IVRDriverInput* pDriverInput = ...;
 
+// Get the number of bones from the spec of the skeleton you plan to use
+const uint32_t nBoneCount = 31;
+
+vr::VRBoneTransform_t gripLimitTransforms[nBoneCount];
+
+// Create the grip limit pose as appropriate for your device
+YourCreateGripLimitFunction(gripLimitTransforms, nBoneCount);
+
+vr::VRInputComponentHandle_t ulSkelelComponentHandle;
+
+vr::EVRInputError err = m_pDriverInput->CreateSkeletonComponent( ulPropertyContainer, pComponentName, pSkeletonPath, "/pose/raw", gripLimitTransforms, nBoneCount , &ulSkelelComponentHandle);
+if ( err != vr::VRInputError_None )
+{
+    // Handle failure case
+    LogError( "CreateSkeletonComponent failed.  Error: %i\n", err );
+}
+```
 
 
