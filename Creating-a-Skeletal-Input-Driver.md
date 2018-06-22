@@ -1,3 +1,55 @@
 # Overview
 
+If you are developing an OpenVR driver for a device that is capable of detecting what the user's hand is doing, either implicitly or explicitly, you can provide that information to applications as a stream of skeletal animation through the [IVRDriverInput](https://github.com/ValveSoftware/openvr/wiki/IVRDriverInput-Overview)API.  This page walks through how to use the part of the API that is specific to skeletal animation, and discusses some of the things to consider when implementing this functionality.
+
+# API Documentation
+### CreateSkeletonComponent
+```
+EVRInputError vr::IVRDriverInput::CreateSkeletonComponent( PropertyContainerHandle_t ulContainer, const char *pchName, const char *pchSkeletonPath, const char *pchBasePosePath, const VRBoneTransform_t *pGripLimitTransforms, uint32_t unGripLimitTransformCount, VRInputComponentHandle_t *pHandle )
+```
+Creates a input component to represent skeletal data from the controller or tracked device.  Returns VRInputError_None and sets the value pointed to by pHandle to a valid component handle on success. After creating a component the driver can update it with repeated calls to UpdateSkeletalComponent.
+
+* `ulContainer` - The property container handle of the device that is the parent of this component.
+* `pchName` - The name of the component. Valid choices for this option are in the list of Skeletal Input Paths below.  
+* `pchSkeletonPath` - The path to the skeleton to use.  Valid choices for this are option are in the list of Skeleton Paths below.  
+* `pchBasePosePath` - Relative path to where in shared memory the skeletal data should get stored.  Should be /pose/raw
+* `pGripLimitTransforms` - Array of `vr::VRBoneTransform_t` containing the parent-space transforms for the grip limit pose.  The size should match the number of bones in the skeleton that was specified in pchSkeletonPath.  If this is null, then the system will will the default fist pose as the grip limit.  More info on grip limits below.  
+* `unGripLimitTransformCount` - The number of elements in pGripLimitTransforms
+* `pHandle` - Pointer to the where the handle for the newly created component should be written
+
+
+### UpdateSkeletonComponent
+```
+EVRInputError vr::IVRDriverInput::UpdateSkeletonComponent( VRInputComponentHandle_t ulComponent, EVRSkeletalMotionRange eMotionRange, const VRBoneTransform_t *pTransforms, uint32_t unTransformCount )
+```
+Updates the pose of a skeletal component to be the values in the given list of transforms.  Returns VRInputError_None on success.  
+
+* `ulComponent` - Handle for the skeletal component to update
+* `eMotionRange` - Which skeletal data stream you are providing data for.  More info on this below.  Options are:
+    * `VRSkeletalMotionRange_WithController` - The range of motion of the skeleton takes into account any physical limits imposed by the controller itself.  This will tend to be the most accurate pose compared to the user's actual hand pose, but might not allow a closed fist for example
+    * `VRSkeletalMotionRange_WithoutController` - Retarget the range of motion provided by the input device to make the hand appear to move as if it was not holding a controller.  eg: map "hand grasping controller" to "closed fist"
+* `pTransforms` - Array of bone transforms in parent space for the currently detected pose of the user's hand
+* `unTransformCount` - The number of transforms in pTransforms.  Must match the number of bones in the skeleton that is used by this skeletal component, otherwise it will return an error
+
+### Skeletal Input Paths
+These are the available choices names for skeletal components
+```
+/input/skeleton/right
+/input/skeleton/left
+```
+
+### Skeleton Paths
+These are the paths for the currently supported skeletons
+```
+/skeleton/hand/right
+/skeleton/hand/left
+```
+
+
+# Getting Started
+
+Once your driver has been set up and you have the pointer to the `vr::IVRDriverInput` object, the first thing you will need to do is create a skeletal component using `vr::IVRDriverInput::CreateSkeletonComponent`.  This function will tell the system that you wish to provide animation data, specify which skeleton you'll be providing data for, and it will give you a handle you can use later when providing the system with animation data.  
+
+
+
 
