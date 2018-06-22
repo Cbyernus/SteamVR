@@ -10,3 +10,4 @@ Let's say you want to write a new OpenVR driver called "mydriver". To do that yo
 
 For devices with buttons, triggers, joysticks, and other kinds of input controls, please refer to the [`vr::IVRDriverInput`](https://github.com/ValveSoftware/openvr/wiki/IVRDriverInput-Overview) API.
 
+For devices that wish to provide animation data through the Skeletal Input system, please refer to the [Skeletal Input Driver](https://github.com/ValveSoftware/openvr/wiki/Creating-a-Skeletal-Input-Driver) documentation.  
