@@ -55,6 +55,9 @@ Once your driver has been set up and you have the pointer to the `vr::IVRDriverI
 // rest of the input from your device
 vr::IVRDriverInput* pDriverInput = ...;
 
+// The object you made to contain the properties of your device
+vr::PropertyContainerHandle_t ulPropertyContainer = ...;
+
 // Get the number of bones from the spec of the skeleton you plan to use
 const uint32_t nBoneCount = 31;
 
@@ -63,8 +66,8 @@ vr::VRBoneTransform_t gripLimitTransforms[nBoneCount];
 // Create the grip limit pose as appropriate for your device
 YourCreateGripLimitFunction(gripLimitTransforms, nBoneCount);
 
+// Create the skeletal component and save the handle for later use
 vr::VRInputComponentHandle_t ulSkelelComponentHandle;
-
 vr::EVRInputError err = m_pDriverInput->CreateSkeletonComponent( ulPropertyContainer, pComponentName, pSkeletonPath, "/pose/raw", gripLimitTransforms, nBoneCount , &ulSkelelComponentHandle);
 if ( err != vr::VRInputError_None )
 {
