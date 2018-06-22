@@ -51,8 +51,7 @@ These are the paths for the currently supported skeletons
 Once your driver has been set up and you have the pointer to the `vr::IVRDriverInput` object, the first thing you will need to do is create a skeletal component using `vr::IVRDriverInput::CreateSkeletonComponent`.  This function will tell the system that you wish to provide animation data, specify which skeleton you'll be providing data for, and it will give you a handle you can use later when providing the system with animation data.  
 
 ```
-// Get a pointer to the driver input object.  You should have already done this when setting up support for the 
-// rest of the input from your device
+// Get a pointer to the driver input object.  
 vr::IVRDriverInput* pDriverInput = ...;
 
 // The object you made to contain the properties of your device
@@ -61,9 +60,8 @@ vr::PropertyContainerHandle_t ulPropertyContainer = ...;
 // Get the number of bones from the spec of the skeleton you plan to use
 const uint32_t nBoneCount = 31;
 
-vr::VRBoneTransform_t gripLimitTransforms[nBoneCount];
-
 // Create the grip limit pose as appropriate for your device
+vr::VRBoneTransform_t gripLimitTransforms[nBoneCount];
 YourCreateGripLimitFunction(gripLimitTransforms, nBoneCount);
 
 // Create the skeletal component and save the handle for later use
