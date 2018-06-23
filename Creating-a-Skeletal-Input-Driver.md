@@ -64,9 +64,28 @@ const uint32_t nBoneCount = 31;
 vr::VRBoneTransform_t gripLimitTransforms[nBoneCount];
 YourCreateGripLimitFunction(gripLimitTransforms, nBoneCount);
 
+// Choose the component name and skeleton path
+const char* pComponentName;
+const char* pSkeletonPath;
+if ( IsLeftHand() )
+{
+    pComponentName = "/input/skeleton/left";
+    pSkeletonPath = "/skeleton/hand/left";
+}
+else
+{
+    pComponentName = "/input/skeleton/right";
+    pSkeletonPath = "/skeleton/hand/right";
+}
+
+// Pick the locator on your controller that will act as the skeleton's origin.  
+// If your implementation involves artist-created poses, be sure that they are made
+// relative to this position
+const char* pBasePosePath = "/pose/raw";
+
 // Create the skeletal component and save the handle for later use
-vr::VRInputComponentHandle_t ulSkelelComponentHandle;
-vr::EVRInputError err = m_pDriverInput->CreateSkeletonComponent( ulPropertyContainer, pComponentName, pSkeletonPath, "/pose/raw", gripLimitTransforms, nBoneCount , &ulSkelelComponentHandle);
+vr::VRInputComponentHandle_t ulSkeletalComponentHandle;
+vr::EVRInputError err = m_pDriverInput->CreateSkeletonComponent( ulPropertyContainer, pComponentName, pSkeletonPath, pBasePosePath, gripLimitTransforms, nBoneCount , &ulSkeletalComponentHandle);
 if ( err != vr::VRInputError_None )
 {
     // Handle failure case
@@ -74,4 +93,37 @@ if ( err != vr::VRInputError_None )
 }
 ```
 
+Once you've created the component and gotten a handle to it, its up to your driver to provide it with an updated skeletal pose on a regular basis, ideally 90 times a second like the display rate so that the animation is smooth and responsive.  
 
+To update the pose, call `vr::IVRDriverInput::UpdateSkeletonComponent()`.  You'll need to do this twice for each update: once for the WithController animation, and once for the WithoutController animation.  
+
+```
+
+vr::VRBoneTransform_t boneTransforms[nBoneCount];
+
+// Perform whatever logic is necessary to convert your device's input into a skeletal pose,
+// first to create a pose "With Controller", that is as close to the pose of the user's real
+// hand as possible
+GetMyAmazingDeviceAnimation(boneTransforms, nBoneCount);
+
+// Then update the WithController pose on the component with those transforms
+vr::EVRInputError err = pDriverInput->UpdateSkeletonComponent( m_ulSkeletalComponentHandle, vr::VRSkeletalMotionRange_WithController, boneTransforms, nBoneCount );
+if ( err != vr::VRInputError_None )
+{
+    // Handle failure case
+    LogError( "UpdateSkeletonComponentfailed.  Error: %i\n", err );
+}
+
+// Then create a pose "Without a Controller", that maps the detected range of motion your controller
+// can detect to a full range of motion as if the user's hand was empty.  Note that for some devices,
+// this is the same pose as the last one
+GetMyAmazingEmptyHandAnimation(boneTransforms, nBoneCount);
+
+// Then update the WithoutController pose on the component 
+err = pDriverInput->UpdateSkeletonComponent( m_ulSkeletalComponentHandle, vr::VRSkeletalMotionRange_WithoutController, boneTransforms, nBoneCount );
+if ( err != vr::VRInputError_None )
+{
+    // Handle failure case
+    LogError( "UpdateSkeletonComponentfailed.  Error: %i\n", err );
+}
+```
