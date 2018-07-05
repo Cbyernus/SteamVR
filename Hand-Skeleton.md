@@ -28,6 +28,19 @@ Steam\steamapps\common\SteamVR\resources\skeletons\vr_glove_right_skeleton.fbx
 Steam\steamapps\common\SteamVR\resources\skeletons\vr_glove_right_skeleton.glb
 ```
 
+# Units and Coordinate System
+The skeletal data from the Skeletal Input API is all in SteamVR's units and coordinate system, which is:
+* Meters
+* Right Handed
+* +Y is up
+* +X is to the right
+* -Z is forward
+
+The bind pose of the hand has the hand pointing forward (-Z) with the palms facing inward (-X for the right hand, +X for the left).
+
+![](https://steamcdn-a.akamaihd.net/steamcommunity/public/images/clans/5519564/05e70a1061cd053b2dbb5be5ce19bfac067f5d84.png) ![](https://steamcdn-a.akamaihd.net/steamcommunity/public/images/clans/5519564/e1ac5db914d9fb3ae884e3d6f72162bdb231a049.png)
+
+
 # Bone Structure
 Both left and right hand skeletons have 31 bones, which are arranged as seen here
 
