@@ -189,7 +189,7 @@ struct InputSkeletalActionData_t
 
 `EVRInputError GetSkeletalBoneData( VRActionHandle_t action, EVRSkeletalTransformSpace eBoneTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount, VRInputValueHandle_t ulRestrictToDevice )`
 
-Retrieve the bone transform data
+Retrieve the bone transform data.  The bones will be in SteamVR's units and coordinate system; see [Hand Skeleton](https://github.com/ValveSoftware/openvr/wiki/Hand-Skeleton) for more info. 
 
 * `action` - The handle of the skeletal action to retrieve the bone transforms for
 * `eBoneTransformSpace` - The coordinate space that each bone transform should be returned in.  This can be:
