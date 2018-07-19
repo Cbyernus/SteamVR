@@ -110,3 +110,18 @@ Its format is:
 ```
 
 The language tag is the ISO-639-1 + ISO-3166-1 alpha-2 of the locale that part of the localization file is for. The localization file can contain any number of locales. The _my controller type_ field in this example should be the same name you used for the **controller type** field above.
+
+# Pose components
+
+Unlike scalar, boolean, and skeletal components, pose components are defined implicitly by the render model provided by the driver for the device in question. See <steamvr>/resources/rendermodels/vr_controller_vive_1_5/vr_controller_vive_1_5.json for an example:
+```
+        "tip": {
+            "component_local" : {
+                "origin": [0.0, -0.01, -0.007],
+                "rotate_xyz" : [1.282,0.0,0.0]
+            }
+        },
+```
+Every render model component that does not specify a "filename" field will be added as a component automatically when the tracked device is activated. To expose the pose in the binding UI, add a "pose" input source with the name /pose/<component name> (so /pose/tip in the above example.) You can control what render model is used by your device by setting the Prop_RenderModelName_String property on the device.
+
+All tracked devices also get two pose components registered regardless of what render model they use: /pose/raw and /pose/tip. By default, both are set to the unaltered pose of the device. If you provide /pose/tip in your rendermodel you should set it to the position and rotation that are appropriate for pointing (i.e. with a laser pointer) with your controller.
