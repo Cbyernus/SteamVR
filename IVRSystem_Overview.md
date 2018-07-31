@@ -15,7 +15,9 @@ Each tracked device has a class that is one of:
 * TrackedDeviceClass_Invalid - There is no device at this index
 * TrackedDeviceClass_HMD - The device at this index is an HMD
 * TrackedDeviceClass_Controller - The device is a controller
+* TrackedDeviceClass_GenericTracker - The device is a tracker
 * TrackedDeviceClass_TrackingReference - The device is a camera, Lighthouse base station, or other device that supplies tracking ground truth.
+* TrackedDeviceClass_DisplayRedirect - Accessories that aren't necessarily tracked themselves, but may redirect video output from other tracked devices
 
 # Interface Functions
 
