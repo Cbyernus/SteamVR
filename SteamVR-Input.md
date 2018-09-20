@@ -237,11 +237,11 @@ Triggers a haptic vibration action.
 
 `EVRInputError GetActionOrigins( VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle,  VRInputValueHandle_t *originsOut, uint32_t originOutCount )`
 
-Retrieves the action sources for an action. This function is not yet implemented.
+Retrieves the action sources for an action. If the action has more origins than will fit in the array, only the number that will fit in the array are returned. If the action has fewer origins, the extra array entries will be set to k_ulInvalidInputValueHandle
 
 `EVRInputError GetOriginLocalizedName( VRInputValueHandle_t origin, char *pchNameArray, uint32_t unNameArraySize )`
 
-Retrieves the localized name of the action source in the current locale. This function is not yet implemented.
+Retrieves the localized name of the action source in the current locale. This is of the form "device controller_type input_source". E.g. "Right Hand Knuckles Controller Trigger".
 
 `EVRInputError GetOriginTrackedDeviceInfo( VRInputValueHandle_t origin, InputOriginInfo_t *pOriginInfo, uint32_t unOriginInfoSize )`
 
@@ -266,9 +266,9 @@ struct InputOriginInfo_t
 
 `EVRInputError ShowActionOrigins( VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle )`
 
-Shows the current binding for the specified action in-headset. This function is not yet implemented.
+Shows the current binding for the specified action in-headset. At the moment this function shows the entire binding UI, but that behavior will likely change down the road.
 
 `EVRInputError ShowBindingsForActionSet( VRActiveActionSet_t *pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight )`
 
-Shows the current binding for the specified action sets in-headset. This function is not yet implemented.
+Shows the current binding for the specified action sets in-headset. At the moment this function shows the entire binding UI, but that behavior will likely change down the road.
 
