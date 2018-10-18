@@ -32,6 +32,7 @@ The API is broken down into six primary interfaces in the vr namespace:
 * [IVROverlay](https://github.com/ValveSoftware/openvr/wiki/IVROverlay_Overview) - Allows an application to render 2D content through the VR compositor.
 * [IVRRenderModels](https://github.com/ValveSoftware/openvr/wiki/IVRRenderModels_Overview) - Allows an application access to render models.
 * [IVRScreenshots](https://github.com/ValveSoftware/openvr/wiki/IVRScreenshots_Overview) - Allows an application to request and submit screenshots.
+* [IVRInput](https://github.com/ValveSoftware/openvr/wiki/SteamVR-Input) - Allows an applications to define and query invokeable actions (and action sets) so that users may create, edit, and share custom bindings with any supported device.
 
 # Other Functions
 
