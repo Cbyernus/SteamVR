@@ -5,7 +5,7 @@ If you are developing an OpenVR driver for a device that is capable of detecting
 # API Documentation
 ### CreateSkeletonComponent
 ```
-EVRInputError vr::IVRDriverInput::CreateSkeletonComponent( PropertyContainerHandle_t ulContainer, const char *pchName, const char *pchSkeletonPath, const char *pchBasePosePath, const VRBoneTransform_t *pGripLimitTransforms, uint32_t unGripLimitTransformCount, VRInputComponentHandle_t *pHandle )
+EVRInputError vr::IVRDriverInput::CreateSkeletonComponent( PropertyContainerHandle_t ulContainer, const char *pchName, const char *pchSkeletonPath, const char *pchBasePosePath, EVRSkeletalTrackingLevel eSkeletalTrackingLevel, const VRBoneTransform_t *pGripLimitTransforms, uint32_t unGripLimitTransformCount, VRInputComponentHandle_t *pHandle )
 ```
 Creates a input component to represent skeletal data from the controller or tracked device.  Returns VRInputError_None and sets the value pointed to by pHandle to a valid component handle on success. After creating a component the driver can update it with repeated calls to UpdateSkeletalComponent.
 
@@ -13,6 +13,7 @@ Creates a input component to represent skeletal data from the controller or trac
 * `pchName` - The name of the component. Valid choices for this option are in the list of Skeletal Input Paths below.  
 * `pchSkeletonPath` - The path to the skeleton to use.  Valid choices for this are option are in the list of Skeleton Paths below.  
 * `pchBasePosePath` - The path of the location on the controller model that the skeleton should use as its origin
+* `eSkeletalTrackingLevel` - This value lets applications understand the capabilities of the controller as far as how it tracks the pose of the user's body.  If the controller supports higher tracking levels, then apps will know that they can take advantage of that functionality.  See [EVRSkeletalTrackingLevel](https://github.com/ValveSoftware/openvr/wiki/SteamVR-Skeletal-Input#evrskeletaltrackinglevel)
 * `pGripLimitTransforms` - Array of `vr::VRBoneTransform_t` containing the parent-space transforms for the grip limit pose.  The size should match the number of bones in the skeleton that was specified in pchSkeletonPath.  If this is null, then the system will will the default fist pose as the grip limit.  More info on grip limits below.  
 * `unGripLimitTransformCount` - The number of elements in pGripLimitTransforms
 * `pHandle` - Pointer to the where the handle for the newly created component should be written
