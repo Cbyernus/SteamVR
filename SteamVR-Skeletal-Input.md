@@ -21,15 +21,15 @@ Next, you need to add a binding for this action to each controller.  You can do 
 Call `vr::VRInput()->GetActionSetHandle()` as described in the [SteamVR Input](https://github.com/ValveSoftware/openvr/wiki/SteamVR-Input) documentation to get a handle to the skeletal action that you defined in the manifest.  This will later be used to retrieve the skeletal pose associated with the action.  
 
 ### Retrieving the Pose
-Each frame your application should already be calling `vr::VRInput()->UpdateActionState()` to update the status of all the actions that have been defined in your action manifest.  This will update the skeletal input too.  To retrieve the pose, first call `vr::VRInput()->GetSkeletalActionData()` with the 'VRActionHandle_t' for your skeletal action and a pointer to a `InputSkeletalActionData_t` object.  If `InputSkeletalActionData_t.bActive` is true, that means there is bone transform data that is ready.  `InputSkeletalActionData_t.boneCount` will contain the number of bones in the skeleton; you will need an array of at least this many `vr::VRBoneTransform_t` to hold the bone transforms.  
+Each frame your application should already be calling `vr::VRInput()->UpdateActionState()` to update the status of all the actions that have been defined in your action manifest.  This will update the skeletal input too.  To retrieve the pose, first call [vr::VRInput()->GetSkeletalActionData()](#GetSkeletalActionData) with the 'VRActionHandle_t' for your skeletal action and a pointer to a [InputSkeletalActionData_t](#nputSkeletalActionData_t) object.  If `InputSkeletalActionData_t.bActive` is true, that means there is bone transform data that is ready.  `InputSkeletalActionData_t.boneCount` will contain the number of bones in the skeleton; you will need an array of at least this many `vr::VRBoneTransform_t` to hold the bone transforms.  
 
-To retrieve the bone transforms, call `vr::VRInput()->GetSkeletalBoneData()` with the options for the format you want to receive the data in and buffer to place the transform in.  
+To retrieve the bone transforms, call [vr::VRInput()->GetSkeletalBoneData()](#GetSkeletalBoneData) with the options for the format you want to receive the data in and buffer to place the transform in.  
 
 ### Retrieving a Compressed Pose
-Instead of using `vr::VRInput()->GetSkeletalBoneData()` to retrieve the full bone transforms, you can instead call `vr::VRInput()->GetSkeletalBoneDataCompressed()` to retrieve a compressed binary blob suitable for networking.  Note that variable compression is used, so the size of the buffer will fluctuate as the hand pose changes.  Once you have transmitted the compressed buffer to a remote client, the bone transforms can be retrieved by passing the buffer to `vr::VRInput()->DecompressSkeletalBoneData()`.  Note that the remote client may not have the same type of controller as the client that sent the buffer, so the compression and decompression is designed to be used independent of any particular driver.  
+Instead of using [vr::VRInput()->GetSkeletalBoneData()](#GetSkeletalBoneData) to retrieve the full bone transforms, you can instead call [vr::VRInput()->GetSkeletalBoneDataCompressed()](#GetSkeletalBoneDataCompressed) to retrieve a compressed binary blob suitable for networking.  Note that variable compression is used, so the size of the buffer will fluctuate as the hand pose changes.  Once you have transmitted the compressed buffer to a remote client, the bone transforms can be retrieved by passing the buffer to [vr::VRInput()->DecompressSkeletalBoneData()](#DecompressSkeletalBoneData).  Note that the remote client may not have the same type of controller as the client that sent the buffer, so the compression and decompression is designed to be used independent of any particular driver.  
 
 ### Placing the Skeleton in the World
-The root bone transform provided by the API will always be in relation to an offset on the input device, and not a position in the VR space.  To get the location in VR space to place the skeleton so that it matches the location of the user's hand, you must retrieve it from the API the same way that you retrieve the locations of the controllers themselves, using `vr::VRInput()->GetPoseActionData()`, and passing in the value `InputSkeletalActionData_t.activeOrigin` that you received from calling `GetSkeletalActionData()`.  
+The root bone transform provided by the API will always be in relation to an offset on the input device, and not a position in the VR space.  To get the location in VR space to place the skeleton so that it matches the location of the user's hand, you must retrieve it from the API the same way that you retrieve the locations of the controllers themselves, using `vr::VRInput()->GetPoseActionData()`, and passing in the value `InputSkeletalActionData_t.activeOrigin` that you received from calling [GetSkeletalActionData()](#GetSkeletalActionData).  
 
 # Skeleton Definition
 Detailed information on the skeleton used by the Skeletal Input system can be found here: [Hand Skeleton](https://github.com/ValveSoftware/openvr/wiki/Hand-Skeleton)
@@ -44,31 +44,38 @@ Options for the coordinate space that bone transforms should be provided in
 
 
 ### EVRSkeletalMotionRange
+Drivers for controllers that support skeletal input are required to provide two streams of animation data: the pose of the user's hand as accurately as it can track it, and the pose of the user's hand as if they were not holding the controller.  
 * `VRSkeletalMotionRange_WithController`: The range of motion of the skeleton takes into account any physical limits imposed by the controller itself.  This will tend to be the most accurate pose compared to the user's actual hand pose, but might not allow a closed fist for example
 * `VRSkeletalMotionRange_WithoutController`: Retarget the range of motion provided by the input device to make the hand appear to move as if it was not holding a controller.  eg: map "hand grasping controller" to "closed fist"
 
 
 ### EVRSkeletalReferencePose
-* `VRSkeletalReferencePose_BindPose`
-* `VRSkeletalReferencePose_OpenHand`
-* `VRSkeletalReferencePose_Fist`
-* `VRSkeletalReferencePose_GripLimit`
+Enumerates several static poses that the system can provide.  Applications can use these poses as reference for skinning, range of motion, and for blending with other animations.  Used with [GetSkeletalReferenceTransforms()](#GetSkeletalReferenceTransforms)
+* `VRSkeletalReferencePose_BindPose`: The default pose for the skeleton, used for skinning the hand mesh
+* `VRSkeletalReferencePose_OpenHand`: All fingers straight and spread apart
+* `VRSkeletalReferencePose_Fist`: All fingers curled together tightly, thumb wrapped around the fingers
+* `VRSkeletalReferencePose_GripLimit`: The pose of the hand when gripping the current controller
 
 
 ### EVRFinger
+IDs for the fingers of the hand.  See [GetSkeletalSummaryData()](#GetSkeletalSummaryData)
 * `VRFinger_Thumb`
 * `VRFinger_Index`
 * `VRFinger_Middle`
 * `VRFinger_Ring`
 * `VRFinger_Pinky`
 
+
 ### EVRFingerSplay
+IDs for the pairs of adjacent fingers, used to indicate which pairs of fingers are spread apart or close together.  See [GetSkeletalSummaryData()](#GetSkeletalSummaryData)
 * `VRFingerSplay_Thumb_Index`
 * `VRFingerSplay_Index_Middle`
 * `VRFingerSplay_Middle_Ring`
 * `VRFingerSplay_Ring_Pinky`
 
+
 ### EVRSkeletalTrackingLevel
+Enumeration of the categories of tracking fidelity that controllers can support.  See [GetSkeletalTrackingLevel()](#GetSkeletalTrackingLevel)
 * `VRSkeletalTracking_Estimated`: body part location can’t be directly determined by the device. Any skeletal pose provided by the device is estimated by assuming the position required to active buttons, triggers, joysticks, or other input sensors. E.g. Vive Controller, Gamepad
 * `VRSkeletalTracking_Partial`: body part location can be measured directly but with fewer degrees of freedom than the actual body part. Certain body part positions may be unmeasured by the device and estimated from other input data. E.g. Knuckles, gloves that only measure finger curl
 * `VRSkeletalTracking_Full`: body part location can be measured directly throughout the entire range of motion of the body part. E.g. Mocap suit for the full body, gloves that measure rotation of each finger segment
@@ -88,57 +95,111 @@ Contains summary information about the current skeletal pose
 
 ## Functions
 
+
+### GetBoneCount
+```
+EVRInputError GetBoneCount( VRActionHandle_t action, uint32_t* pBoneCount )
+```
+Reads the number of bones in skeleton associated with the given action
+* `action` - The handle of the skeletal action.  
+* `pBoneCount` - Pointer to the unsigned integer to write the number of bones into
+
+
+### GetBoneHierarchy
+```
+EVRInputError GetBoneHierarchy( VRActionHandle_t action, BoneIndex_t* pParentIndices, uint32_t unIndexArayCount )
+```
+Fills the given array with the index of each bone's parent in the skeleton associated with the given action
+* `action` - The handle of the skeletal action
+* `pParentIndices` - Pointer to an array of integers that the function should write the parent indices of each bone into.  This array should be at least as big as the number of bones in the skeleton, which can be retrieved by calling GetBoneCount()
+* `unIndexArayCount` - The number of elements in `pParentIndices`
+
+
+### GetBoneName
+```
+EVRInputError GetBoneName( VRActionHandle_t action, BoneIndex_t nBoneIndex, char* pchBoneName, uint32_t unBufferSize )
+```
+Fills the given buffer with the name of the bone at the given index in the skeleton associated with the given action.  Bone name lengths can be no longer than `k_unMaxBoneNameLength`
+* `action` - The handle of the skeletal action
+* `nBoneIndex` - The index of the bone to retrieve the name of
+* `pchBoneName` - Pointer to a buffer to write the name string into.  The function will fail if the buffer is not big enough to fit the length of the name.  Bone names cannot be longer than `k_unMaxBoneNameLength`
+* `unBufferSize` - The number of elements in the `pchBoneName` buffer
+
+  
+### GetSkeletalReferenceTransforms
+```
+EVRInputError GetSkeletalReferenceTransforms( VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount )
+```
+Fills the given buffer with the transforms for a specific static skeletal reference pose
+* `action` - The handle of the skeletal action
+* `eTransformSpace` - The coordinate space that the bone transforms should be returned in
+* `eReferencePose` - The pose to retrieve
+* `pTransformArray` - Buffer that the transforms of the pose should be written to.  Should have the same number of elements as bones the skeleton
+* `unTransformArrayCount` - The number of elements in the `pTransformArray` array
+
+  
+### GetSkeletalTrackingLevel
+```
+EVRInputError GetSkeletalTrackingLevel( VRActionHandle_t action, EVRSkeletalTrackingLevel* pSkeletalTrackingLevel )
+```
+Reads the level of accuracy to which the controller is able to track the user to recreate a skeletal pose
+* `action` - The handle of the skeletal action
+* `pSkeletalTrackingLevel ` - Pointer to the variable that the tracking level should be written to
+
+  
 ### GetSkeletalActionData
 ```
-EVRInputError GetSkeletalActionData( VRActionHandle_t action, InputSkeletalActionData_t *pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice )
+EVRInputError GetSkeletalActionData( VRActionHandle_t action, InputSkeletalActionData_t *pActionData, uint32_t unActionDataSize )
 ```
-Reads the state of the skeletal action.  
-
+Reads the state of the skeletal action and puts the results in the given action data struct.  
 * `action` - The handle of the skeletal action to check the status of
-* `pActionData` - Pointer to the InputSkeletalActionData_t struct that the function should fill in
-* `unActionDataSize` - The size in bytes of the InputSkeletalActionData_t struct
-* `ulRestrictToDevice` - If the action can be bound to more than one device, this should be the device to restrict the query to
+* `pActionData` - Pointer to the `InputSkeletalActionData_t` struct that the function should fill in
+* `unActionDataSize` - The size in bytes of the `InputSkeletalActionData_t` struct
 
 
 ### GetSkeletalBoneData
 ```
-EVRInputError GetSkeletalBoneData( VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount, VRInputValueHandle_t ulRestrictToDevice )
+EVRInputError GetSkeletalBoneData( VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount )
 ```
 Retrieve the bone transform data.  The bones will be in SteamVR's units and coordinate system; see [Hand Skeleton](https://github.com/ValveSoftware/openvr/wiki/Hand-Skeleton) for more info. 
-
 * `action` - The handle of the skeletal action to retrieve the bone transforms for
 * `eTransformSpace` - The coordinate space that each bone transform should be returned in.  
 * `eMotionRange` - The desired range of motion of the animation.  Can be either:
 * `pTransformArray` - Pointer to the array of `vr::VRBoneTransform_t` that the function should put the bone transforms in
 * `unTransformArrayCount` - The number of elements in `pTransformArray`
-* `ulRestrictToDevice` - If the action can be bound to more than one device, this should be the device to restrict the query to
+
+
+### GetSkeletalSummaryData
+```
+EVRInputError GetSkeletalSummaryData( VRActionHandle_t action, VRSkeletalSummaryData_t * pSkeletalSummaryData )
+```
+Reads summary information about the current pose of the skeleton associated with the given action
+* `action` - The handle of the skeletal action to retrieve the summary data for
+* `pSkeletalSummaryData ` - Pointer to the `VRSkeletalSummaryData_t` struct to write the summary data to
+
 
 ### GetSkeletalBoneDataCompressed
 ```
-EVRInputError GetSkeletalBoneDataCompressed( VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, void *pvCompressedData, uint32_t unCompressedSize, uint32_t *punRequiredCompressedSize, VRInputValueHandle_t ulRestrictToDevice )
+EVRInputError GetSkeletalBoneDataCompressed( VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void *pvCompressedData, uint32_t unCompressedSize, uint32_t *punRequiredCompressedSize )
 ```
-Retrieve the bone transforms as a compressed binary blob.
-
+Reads the state of the skeletal bone data in a compressed form that is suitable for sending over the network. The required buffer size will never exceed ( sizeof(VR_BoneTransform_t)*boneCount + 2).  Usually the size will be much smaller. 
 * `action` - The handle of the skeletal action to retrieve the bone data for
-* `eTransformSpace' - The coordinate space that each bone transform should be returned in. See `GetSkeletalBoneData()` for details
+* `eTransformSpace` - The coordinate space that each bone transform should be returned in. See [GetSkeletalBoneData()](#GetSkeletalBoneData) for details
 * `eMotionRange` - The desired range of motion of the animation.  See `GetSkeletalBoneData()` for details
 * `pvCompressedData` - Pointer to a buffer where the compressed data should be placed
-* `unCompressedSize` - The size of the buffer pointed to by pvCompressedData
+* `unCompressedSize` - The size of the buffer pointed to by `pvCompressedData`
 * `punRequiredCompressedSize` - The size of the compressed data.  If this is less than unCompressedSize the function will return an error and no transforms will be written
-* `ulRestrictToDevice` - If the action can be bound to more than one device, this should be the device to restrict the query to
+
 
 ### DecompressSkeletalBoneData
 ```
-EVRInputError DecompressSkeletalBoneData( void *pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace *peTransformSpace, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount )
+EVRInputError DecompressSkeletalBoneData( const void *pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount )
 ```
 Turn a compressed blob back into bone transforms
 
 * `pvCompressedBuffer` - Pointer to a buffer holding the compressed data
 * `unCompressedBufferSize` - The size of the buffer pointed to by pvCompressedBuffer
-* `peTransformSpace` - Pointer to EVRSkeletalTransformSpace enum.  The function will write the coordinate space of the compressed buffer here
+* `eTransformSpace` - Specifies the coordinate space that the transforms should be returned in
 * `pTransformArray` - Pointer to the array of `vr::VRBoneTransform_t` that the function should put the bone transforms in
 * `unTransformArrayCount` - The number of elements in `pTransformArray`.  If there are not enough elements, the function will return an error
-
-
-
 
