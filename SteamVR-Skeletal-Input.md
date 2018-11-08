@@ -132,8 +132,8 @@ EVRInputError GetSkeletalReferenceTransforms( VRActionHandle_t action, EVRSkelet
 ```
 Fills the given buffer with the transforms for a specific static skeletal reference pose
 * `action` - The handle of the skeletal action
-* `eTransformSpace` - The coordinate space that the bone transforms should be returned in
-* `eReferencePose` - The pose to retrieve
+* `eTransformSpace` - The coordinate space that the bone transforms should be returned in.  See [EVRSkeletalTransformSpace](#EVRSkeletalTransformSpace)
+* `eReferencePose` - The pose to retrieve.  See [EVRSkeletalReferencePose](#EVRSkeletalReferencePose)
 * `pTransformArray` - Buffer that the transforms of the pose should be written to.  Should have the same number of elements as bones the skeleton
 * `unTransformArrayCount` - The number of elements in the `pTransformArray` array
 
@@ -144,7 +144,7 @@ EVRInputError GetSkeletalTrackingLevel( VRActionHandle_t action, EVRSkeletalTrac
 ```
 Reads the level of accuracy to which the controller is able to track the user to recreate a skeletal pose
 * `action` - The handle of the skeletal action
-* `pSkeletalTrackingLevel ` - Pointer to the variable that the tracking level should be written to
+* `pSkeletalTrackingLevel ` - Pointer to the variable that the tracking level should be written to.  See [EVRSkeletalTrackingLevel](#EVRSkeletalTrackingLevel)
 
   
 ### GetSkeletalActionData
@@ -163,8 +163,8 @@ EVRInputError GetSkeletalBoneData( VRActionHandle_t action, EVRSkeletalTransform
 ```
 Retrieve the bone transform data.  The bones will be in SteamVR's units and coordinate system; see [Hand Skeleton](https://github.com/ValveSoftware/openvr/wiki/Hand-Skeleton) for more info. 
 * `action` - The handle of the skeletal action to retrieve the bone transforms for
-* `eTransformSpace` - The coordinate space that each bone transform should be returned in.  
-* `eMotionRange` - The desired range of motion of the animation.  Can be either:
+* `eTransformSpace` - The coordinate space that each bone transform should be returned in.  See [EVRSkeletalTransformSpace](#EVRSkeletalTransformSpace)
+* `eMotionRange` - The desired range of motion of the animation.  See [EVRSkeletalMotionRange](#EVRSkeletalMotionRange)
 * `pTransformArray` - Pointer to the array of `vr::VRBoneTransform_t` that the function should put the bone transforms in
 * `unTransformArrayCount` - The number of elements in `pTransformArray`
 
@@ -175,7 +175,7 @@ EVRInputError GetSkeletalSummaryData( VRActionHandle_t action, VRSkeletalSummary
 ```
 Reads summary information about the current pose of the skeleton associated with the given action
 * `action` - The handle of the skeletal action to retrieve the summary data for
-* `pSkeletalSummaryData ` - Pointer to the `VRSkeletalSummaryData_t` struct to write the summary data to
+* `pSkeletalSummaryData ` - Pointer to the [VRSkeletalSummaryData_t](#VRSkeletalSummaryData_t) struct to write the summary data to
 
 
 ### GetSkeletalBoneDataCompressed
@@ -184,8 +184,7 @@ EVRInputError GetSkeletalBoneDataCompressed( VRActionHandle_t action, EVRSkeleta
 ```
 Reads the state of the skeletal bone data in a compressed form that is suitable for sending over the network. The required buffer size will never exceed ( sizeof(VR_BoneTransform_t)*boneCount + 2).  Usually the size will be much smaller. 
 * `action` - The handle of the skeletal action to retrieve the bone data for
-* `eTransformSpace` - The coordinate space that each bone transform should be returned in. See [GetSkeletalBoneData()](#GetSkeletalBoneData) for details
-* `eMotionRange` - The desired range of motion of the animation.  See `GetSkeletalBoneData()` for details
+* `eMotionRange` - The desired range of motion of the animation.  See [EVRSkeletalMotionRange](#EVRSkeletalMotionRange)
 * `pvCompressedData` - Pointer to a buffer where the compressed data should be placed
 * `unCompressedSize` - The size of the buffer pointed to by `pvCompressedData`
 * `punRequiredCompressedSize` - The size of the compressed data.  If this is less than unCompressedSize the function will return an error and no transforms will be written
@@ -196,10 +195,9 @@ Reads the state of the skeletal bone data in a compressed form that is suitable 
 EVRInputError DecompressSkeletalBoneData( const void *pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t *pTransformArray, uint32_t unTransformArrayCount )
 ```
 Turn a compressed blob back into bone transforms
-
 * `pvCompressedBuffer` - Pointer to a buffer holding the compressed data
 * `unCompressedBufferSize` - The size of the buffer pointed to by pvCompressedBuffer
-* `eTransformSpace` - Specifies the coordinate space that the transforms should be returned in
+* `eTransformSpace` - Specifies the coordinate space that the transforms should be returned in.  See [EVRSkeletalTransformSpace](#EVRSkeletalTransformSpace)
 * `pTransformArray` - Pointer to the array of `vr::VRBoneTransform_t` that the function should put the bone transforms in
 * `unTransformArrayCount` - The number of elements in `pTransformArray`.  If there are not enough elements, the function will return an error
 
