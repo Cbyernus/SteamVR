@@ -75,7 +75,8 @@ IDs for the pairs of adjacent fingers, used to indicate which pairs of fingers a
 
 
 ### EVRSkeletalTrackingLevel
-Enumeration of the categories of tracking fidelity that controllers can support.  See [GetSkeletalTrackingLevel()](#GetSkeletalTrackingLevel)
+Definition of a standard set of tracking levels that can be used to categorize the capabilities of current and future input devices. Developers of drivers for input hardware can specify the tracking level that their hardware supports so that app developers have a better idea what level of fidelity to expect from the skeletal animation data. Developers can then optionally enable and disable certain features based on the capabilities of the hardware in use.  
+See also: [GetSkeletalTrackingLevel()](#GetSkeletalTrackingLevel)
 * `VRSkeletalTracking_Estimated`: body part location can’t be directly determined by the device. Any skeletal pose provided by the device is estimated by assuming the position required to active buttons, triggers, joysticks, or other input sensors. E.g. Vive Controller, Gamepad
 * `VRSkeletalTracking_Partial`: body part location can be measured directly but with fewer degrees of freedom than the actual body part. Certain body part positions may be unmeasured by the device and estimated from other input data. E.g. Knuckles, gloves that only measure finger curl
 * `VRSkeletalTracking_Full`: body part location can be measured directly throughout the entire range of motion of the body part. E.g. Mocap suit for the full body, gloves that measure rotation of each finger segment
