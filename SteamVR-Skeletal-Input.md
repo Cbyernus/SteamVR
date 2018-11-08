@@ -39,22 +39,22 @@ Detailed information on the skeleton used by the Skeletal Input system can be fo
 ## Enums
 ### EVRSkeletalTransformSpace
 Options for the coordinate space that bone transforms should be provided in
-* `VRSkeletalTransformSpace_Model`: The bone transforms have been fully concatenated with their parent bones, and are all in same the coordinate space as the model which they would animate
-* `VRSkeletalTransformSpace_Parent`: The bone transforms are in the local coordinate space of their parent bone
+* `VRSkeletalTransformSpace_Model` - The bone transforms have been fully concatenated with their parent bones, and are all in same the coordinate space as the model which they would animate
+* `VRSkeletalTransformSpace_Parent` - The bone transforms are in the local coordinate space of their parent bone
 
 
 ### EVRSkeletalMotionRange
 Drivers for controllers that support skeletal input are required to provide two streams of animation data: the pose of the user's hand as accurately as it can track it, and the pose of the user's hand as if they were not holding the controller.  
-* `VRSkeletalMotionRange_WithController`: The range of motion of the skeleton takes into account any physical limits imposed by the controller itself.  This will tend to be the most accurate pose compared to the user's actual hand pose, but might not allow a closed fist for example
-* `VRSkeletalMotionRange_WithoutController`: Retarget the range of motion provided by the input device to make the hand appear to move as if it was not holding a controller.  eg: map "hand grasping controller" to "closed fist"
+* `VRSkeletalMotionRange_WithController` - The range of motion of the skeleton takes into account any physical limits imposed by the controller itself.  This will tend to be the most accurate pose compared to the user's actual hand pose, but might not allow a closed fist for example
+* `VRSkeletalMotionRange_WithoutController` - Retarget the range of motion provided by the input device to make the hand appear to move as if it was not holding a controller.  eg: map "hand grasping controller" to "closed fist"
 
 
 ### EVRSkeletalReferencePose
 Enumerates several static poses that the system can provide.  Applications can use these poses as reference for skinning, range of motion, and for blending with other animations.  Used with [GetSkeletalReferenceTransforms()](#GetSkeletalReferenceTransforms)
-* `VRSkeletalReferencePose_BindPose`: The default pose for the skeleton, used for skinning the hand mesh
-* `VRSkeletalReferencePose_OpenHand`: All fingers straight and spread apart
-* `VRSkeletalReferencePose_Fist`: All fingers curled together tightly, thumb wrapped around the fingers
-* `VRSkeletalReferencePose_GripLimit`: The pose of the hand when gripping the current controller
+* `VRSkeletalReferencePose_BindPose` - The default pose for the skeleton, used for skinning the hand mesh
+* `VRSkeletalReferencePose_OpenHand` - All fingers straight and spread apart
+* `VRSkeletalReferencePose_Fist` - All fingers curled together tightly, thumb wrapped around the fingers
+* `VRSkeletalReferencePose_GripLimit` - The pose of the hand when gripping the current controller
 
 
 ### EVRFinger
@@ -77,21 +77,21 @@ IDs for the pairs of adjacent fingers, used to indicate which pairs of fingers a
 ### EVRSkeletalTrackingLevel
 Definition of a standard set of tracking levels that can be used to categorize the capabilities of current and future input devices. Developers of drivers for input hardware can specify the tracking level that their hardware supports so that app developers have a better idea what level of fidelity to expect from the skeletal animation data. Developers can then optionally enable and disable certain features based on the capabilities of the hardware in use.  
 See also: [GetSkeletalTrackingLevel()](#GetSkeletalTrackingLevel)
-* `VRSkeletalTracking_Estimated`: body part location can’t be directly determined by the device. Any skeletal pose provided by the device is estimated by assuming the position required to active buttons, triggers, joysticks, or other input sensors. E.g. Vive Controller, Gamepad
-* `VRSkeletalTracking_Partial`: body part location can be measured directly but with fewer degrees of freedom than the actual body part. Certain body part positions may be unmeasured by the device and estimated from other input data. E.g. Knuckles, gloves that only measure finger curl
-* `VRSkeletalTracking_Full`: body part location can be measured directly throughout the entire range of motion of the body part. E.g. Mocap suit for the full body, gloves that measure rotation of each finger segment
+* `VRSkeletalTracking_Estimated` - body part location can’t be directly determined by the device. Any skeletal pose provided by the device is estimated by assuming the position required to active buttons, triggers, joysticks, or other input sensors. E.g. Vive Controller, Gamepad
+* `VRSkeletalTracking_Partial` - body part location can be measured directly but with fewer degrees of freedom than the actual body part. Certain body part positions may be unmeasured by the device and estimated from other input data. E.g. Knuckles, gloves that only measure finger curl
+* `VRSkeletalTracking_Full` - body part location can be measured directly throughout the entire range of motion of the body part. E.g. Mocap suit for the full body, gloves that measure rotation of each finger segment
 
 ## Structs
 
 ### InputSkeletalActionData_t
-* `bool bActive`: Whether or not this action is bound to an input source that is present in the system and is in an action set that is active from the last UpdateActionState call.
-* `VRInputValueHandle_t activeOrigin`: The input source that this action state was generated by.  If this action is bound to multiple inputs, this will be the input that changed most recently.
+* `bool bActive` - Whether or not this action is bound to an input source that is present in the system and is in an action set that is active from the last UpdateActionState call.
+* `VRInputValueHandle_t activeOrigin` - The input source that this action state was generated by.  If this action is bound to multiple inputs, this will be the input that changed most recently.
 
 
 ### VRSkeletalSummaryData_t
 Contains summary information about the current skeletal pose
-* `float flFingerCurl[ VRFinger_Count ]`: The amount that each finger is 'curled' inwards towards the palm.  In the case of the thumb, this represents how much the thumb is wrapped around the fist.  0 means straight, 1 means fully curled
-* `float flFingerSplay[ VRFingerSplay_Count ]`: The amount that each pair of adjacent fingers are separated.  0 means the digits are touching, 1 means they are fully separated.
+* `float flFingerCurl[ VRFinger_Count ]` - The amount that each finger is 'curled' inwards towards the palm.  In the case of the thumb, this represents how much the thumb is wrapped around the fist.  0 means straight, 1 means fully curled
+* `float flFingerSplay[ VRFingerSplay_Count ]` - The amount that each pair of adjacent fingers are separated.  0 means the digits are touching, 1 means they are fully separated.
 
 
 ## Functions
