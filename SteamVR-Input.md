@@ -14,8 +14,8 @@ To use the IVRInput API in an application, a developer should take the following
 5. Add a call to `vr::VRInput()->UpdateActionState()` at the top of the application's input processing code before reading any action state.
 6. Add calls to `vr::VRInput()->Get*ActionData()` for each action used by the application. Make the results from those calls perform the action in the application.
 7. Run the application.
-8. Click "Controller Binding" under Settings and find your application as the top under the running application. Make some bindings using the UI and then click "export" at the bottom of the screen. Your bindings will be exported to <my documents>/steamvr/input/exports.
-9. Move your exported binding into your application's directory. It doesn't matter where they are, but usually putting them next to the action manifest file is a good choice.
+8. From the SteamVR menu, Select "Devices"->"Controller Input Binding" and select your application, which should be listed as the current one. The system should list "No Bindings Found", but will allow you to create a new one for editing.
+9. Make some bindings using the UI and then click "Replace Default Binding" at the bottom of the screen. The changes will be saved out to the folder where the action manifest JSON file was placed. Usually putting the bindings next to the action manifest file is he best choice.
 10. Edit the action manifest and add a `default_bindings` section that refers to your default binding file. 
 11. Repeat 8-10 for other controller types you want to provide default bindings for.
 12. Include your action manifest and all your default binding files in your app when it releases.
