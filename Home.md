@@ -1,3 +1,4 @@
-hackerone.com/sameerphad72
-hackerone.com/sameerphad
-#Tested_By_@sameerphad72
+
+[Application API Documentation](https://github.com/ValveSoftware/openvr/wiki/API-Documentation)
+
+[Driver Development Documentation](https://github.com/ValveSoftware/openvr/wiki/Driver-Documentation)
