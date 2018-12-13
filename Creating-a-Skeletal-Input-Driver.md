@@ -4,7 +4,7 @@ If you are developing an OpenVR driver for a device that is capable of detecting
 
 
 # Grip Limit Pose
-One of the pieces of data that the driver API requires when creating a skeletal component is a grip limit pose.  This is the pose of the hand skeleton (provided as an array of `vr::VRBoneTransform_t' in each bone's parent space) as if it is holding the controller.  The pose is used as a reference both by OpenVR and by applications about how far the user is able to close their hand while holding the controller.  If your input device is not held in the hand or does not limit the range of motion of the user's hand at all, you can pass NULL for the grip limit pose array and the system will know to use the default fist pose when applications request the grip limit.  
+One of the pieces of data that the driver API requires when creating a skeletal component is a grip limit pose.  This is the pose of the hand skeleton (provided as an array of `vr::VRBoneTransform_t` in each bone's parent space) as if it is holding the controller.  The pose is used as a reference both by OpenVR and by applications about how far the user is able to close their hand while holding the controller.  If your input device is not held in the hand or does not limit the range of motion of the user's hand at all, you can pass NULL for the grip limit pose array and the system will know to use the default fist pose when applications request the grip limit.  
 
 # API Documentation
 ### CreateSkeletonComponent
