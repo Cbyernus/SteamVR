@@ -3,6 +3,11 @@ The OpenVR API provides a game with a way to interact with Virtual Reality displ
 
 The API is implemented as a set of C++ interface classes full of pure virtual functions. When an application initializes the system it will return the interface that matches the header in the SDK used by that application. Once a version of an interface is published, it will be supported in all future versions, so the application will not need to update to a new SDK to move forward to new hardware and other features.
 
+OpenVR is divided into 2 layers: application and driver.
+OpenVR for application talks to SteamVR. SteamVR then talks to OpenVR driver.
+One big example of an application is a game engine like Unity. You can also build a small application that just shows where the headset is.
+A driver is a software for VR hardware devices.
+
 # Initialization and Cleanup
 
 Because the OpenVR API causes the game to connect to any attached VR hardware, it is not initialized automatically. To initialize the API and get access to the vr::IVRSystem interface call the vr::VR_Init function. To close down your connection to the hardware and release your vr::IVRSystem interface, call vr::VR_Shutdown.
