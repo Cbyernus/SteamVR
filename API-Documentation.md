@@ -6,7 +6,7 @@ The API is implemented as a set of C++ interface classes full of pure virtual fu
 OpenVR is divided into 2 layers: application and driver.
 OpenVR for application talks to SteamVR. SteamVR then talks to OpenVR driver.
 One big example of an application is a game engine like Unity. You can also build a small application that just prints where the headset is into the console.
-An OpenVR driver is a software that integrates VR devices into SteamVR system. You would want to build a driver when you create new hardware (or virtual hardware) like a headset or controller.
+An OpenVR driver is a software that integrates VR devices into SteamVR system. You would want to write a driver when you create new hardware (or virtual hardware) like a headset or controller.
 
 # Initialization and Cleanup
 
