@@ -5,7 +5,7 @@ The API is implemented as a set of C++ interface classes full of pure virtual fu
 
 # Practical Example
 OpenVR is divided into 2 layers: application and driver.
-OpenVR for application talks to SteamVR. SteamVR then talks to OpenVR driver. So OpenVR application works at a higher level than a OpenVR driver.
+OpenVR for application talks to SteamVR. SteamVR then talks to OpenVR driver. So OpenVR application works at a higher level than an OpenVR driver.
 
 One big example of an application is a game engine like Unity. You can also build a small application that just prints the position of the headset to the console. Most of the API documentation in this wiki is about building OpenVR application. An application usually starts with calling `vr::VR_Init()` function.
 
