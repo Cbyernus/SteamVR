@@ -7,9 +7,9 @@ SteamVR has introduced beta support for a “TrackingOverrides” section within
     "activateMultipleDrivers" : true
 },
 "TrackingOverrides" : {
-    "/devices/my_driver/1234" : "/user/head"
+    "/devices/mydrivername/1234" : "/user/head"
 },
-"my_driver" : {
+"driver_mydrivername" : {
     "enable" : true,
 },
 ```
