@@ -1,6 +1,8 @@
 # Overview
 The OpenVR API provides a game with a way to interact with Virtual Reality displays without relying on a specific hardware vendor's SDK. It can be updated independently of the game to add support for new hardware or software updates. 
 
+This means that you uses only one API to access headset position whether the user uses Oculus, Mixed Reality, or Vive headset.
+
 The API is implemented as a set of C++ interface classes full of pure virtual functions. When an application initializes the system it will return the interface that matches the header in the SDK used by that application. Once a version of an interface is published, it will be supported in all future versions, so the application will not need to update to a new SDK to move forward to new hardware and other features.
 
 ## Concrete practical example
@@ -8,7 +10,7 @@ OpenVR is divided into 2 layers: application and driver.
 OpenVR for application talks to SteamVR. SteamVR then talks to OpenVR driver. So OpenVR application works at a higher level than an OpenVR driver.
 
 ### OpenVR Application
-One real-world example of an application is a game engine like Unity. Unity uses OpenVR to get the position of the headset and apply that to the main camera without the need to care which headset you are using. Unity then sends the camera image to OpenVR. OpenVR does some operation on the image and then display to the real headset monitor.
+One real-world example of an application is a game engine like Unity. Unity uses OpenVR to get the position of the headset and apply that to the main camera without the need to care which brand of headset you are using. Unity then sends the camera image to OpenVR. OpenVR does some operation on the image and then display to the real headset monitor.
 
 For a simple example, you can also build a small application that just prints the position of the headset to the console. Most of the API documentation in this wiki is about building OpenVR application. An application usually starts with calling `vr::VR_Init()` function from `openvr.h`.
 
