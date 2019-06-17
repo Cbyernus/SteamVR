@@ -12,7 +12,7 @@ One real-world example of an application is a game engine like Unity. Unity uses
 
 For a simple example, you can also build a small application that just prints the position of the headset to the console. Most of the API documentation in this wiki is about building OpenVR application. An application usually starts with calling `vr::VR_Init()` function from `openvr.h`.
 
-## OpenVR Driver
+### OpenVR Driver
 An OpenVR driver is a software that introduces VR devices into SteamVR system. You would want to write a driver when you create new hardware (or virtual hardware) like a headset or controller. To write a driver, you should start with writing a `HmdDriverFactory()` function and include  `openvr_driver.h`.
 
 # Initialization and Cleanup
