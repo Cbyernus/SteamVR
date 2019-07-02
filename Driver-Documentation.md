@@ -14,4 +14,5 @@ For devices that wish to provide animation data through the Skeletal Input syste
 
 Other driver documentation:
 * [Device Sleep States](https://github.com/ValveSoftware/openvr/wiki/Device-sleep-states)
+* [Driver Direct Mode](https://github.com/ValveSoftware/openvr/wiki/Driver-direct-mode)
 
