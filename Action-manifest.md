@@ -127,5 +127,5 @@ This array contains localized strings for action and action set names for any nu
 
 **language_tag** - The language tag is the ISO-639-1 + ISO-3166-1 alpha-2 code for the locale that this section of the action manifest file refers to.
 
-All localization entries use the path of the action or action set as the key and the localized string as the value. These strings will be shown to the user instead of the action or action set name whenever the user is using that language. If the user's language is not present, English strings will be used. Steam supports over 25 languages, users have come to expect that Applications present details in their native language.
+All localization entries use the path of the action or action set as the key and the localized string as the value. These strings will be shown to the user instead of the action or action set name whenever the user is using that language. If the user's language is not present, English strings will be used. Steam supports over 25 languages, users have come to expect that Applications present details in their native language
 
