@@ -64,7 +64,7 @@ If the path to the action manifest is also set in the Steam Partner site, the tw
   ],
   "localization" : [
    {
-       "language_tag": "en",
+       "language_tag": "en_us",
 
         "/actions/main" : "My Game Actions",
         "/actions/driving" : "Driving",
