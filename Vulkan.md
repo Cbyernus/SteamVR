@@ -20,7 +20,7 @@ The SteamVR runtime will use the application's graphics queue to transmit textur
 
 The extensions to enable need to match the SteamVR runtime software and will change as SteamVR gets updated, so your application needs to make sure to call this at runtime and use the output result to enable extensions at instance and device creation time. **This is important, as just copying the result of these calls once into your application will cause it to break in the future when SteamVR gets updated with a newer version of its Vulkan submission code**.
 
-**Note:** The extension list reported in pchValue is guaranteed to be available for pPhysicalDevice. The application *must* provide all extensions reported at device creation time, and *must not* re-filter the output.
+**Note:** The extension list reported in `pchValue` is guaranteed to be available for `pPhysicalDevice`. The application *must* provide all extensions reported at device creation time, and *must not* re-filter the output.
 
 ## Image description
 
