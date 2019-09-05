@@ -22,7 +22,7 @@ If your application is distributed on Steam, you should let Steam know where the
 If your application is distributed outside of Steam, you can set the action manifest path in the entry for your application in a .vrmanifest file:
 > `"action_manifest_path": "TheLab\\win64\\actions.json"`
 
-In this case, the slashes can go either way. Relative paths are relative to the directory that contains the .vrmanifest file itself. Absolute paths are also accepted here.
+In this case, both forward and backward slashes are accepted. Relative paths are relative to the directory that contains the .vrmanifest file itself. Absolute paths are also accepted here.
 
 
 # Action manifest file format
