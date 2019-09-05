@@ -13,6 +13,18 @@ This file can be located anywhere on disk under the application's install direct
 
 If the path to the action manifest is also set in the Steam Partner site, the two paths must match. If there is a mismatch, the path provided in the partner site is used, and the call to `IVRInput::SetActionManifestPath` returns `VRInputError_MismatchedActionManifest`. In this mismatch case the manifest path defined by the Steam Partner site will be used by the Application.
 
+# Telling SteamVR about your action manifest when the app isn't running
+
+While you application is running and has called `vr::VRInput()->SetApplicationManifestPath(...)`, SteamVR knows that your application is using the new input system and where the action manifest file is located. At all other times, SteamVR assumes that the application is using the legacy input system unless it is told otherwise. That means users will see one set of bindable actions when the app is running and another when it is not running. To fix this, you need to tell SteamVR where to find the action manifest path for your application.
+
+If your application is distributed on Steam, you should let Steam know where the your action manifest file is. Steam will share that information with SteamVR automatically.  This setting is under Application->Virtual Reality in the Steamworks settings for your application on the Steam partner site. Click the option labelled "This game uses the SteamVR Input System and an action manifest file" option, and then put in the path of your action manifest file relative to your app's install directory.
+
+If your application is distributed outside of Steam, you can set the action manifest path in the entry for your application in a .vrmanifest file:
+> `"action_manifest_path": "TheLab\\win64\\actions.json"`
+
+In this case, the slashes can go either way. Relative paths are relative to the directory that contains the .vrmanifest file itself. Absolute paths are also accepted here.
+
+
 # Action manifest file format
 ```JSON
 {
