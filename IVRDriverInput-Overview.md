@@ -64,6 +64,31 @@ Updates the value of a scalar component. This should be called whenever the curr
 
 **Existing input component paths**
 
+Knuckles Controller (from index_controller_profile.json)
+* /input/a/click
+* /input/a/touch
+* /input/b/click
+* /input/b/touch
+* /input/system/click
+* /input/system/touch
+* /input/trackpad/x
+* /input/trackpad/y
+* /input/trackpad/click
+* /input/trackpad/touch
+* /input/grip/force
+* /input/grip/touch
+* /input/grip/value
+* /input/grip/click
+* /input/trigger/touch
+* /input/trigger/value
+* /input/trigger/click
+* /input/thumbstick/click
+* /input/thumbstick/touch
+* /input/thumbstick/x
+* /input/thumbstick/y
+* /input/pinch/grab
+* /output/haptic
+
 Vive controller:
 * /input/system/click
 * /input/grip/click
