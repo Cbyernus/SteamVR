@@ -64,7 +64,7 @@ Updates the value of a scalar component. This should be called whenever the curr
 
 **Existing input component paths**
 
-Knuckles Controller (from index_controller_profile.json)
+Index Controller (from index_controller_profile.json)
 * /input/a/click
 * /input/a/touch
 * /input/b/click
@@ -73,12 +73,11 @@ Knuckles Controller (from index_controller_profile.json)
 * /input/system/touch
 * /input/trackpad/x
 * /input/trackpad/y
-* /input/trackpad/click
+* /input/trackpad/force
 * /input/trackpad/touch
 * /input/grip/force
 * /input/grip/touch
 * /input/grip/value
-* /input/grip/click
 * /input/trigger/touch
 * /input/trigger/value
 * /input/trigger/click
