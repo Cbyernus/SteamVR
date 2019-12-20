@@ -1,4 +1,4 @@
-#Overview#
+# Overview
 
 The vr::IVRCompositor interfaces provides access to the Compositor subsystem.  The Compositor simplifies the process of displaying images to the user by taking care of distortion, prediction, synchronization and other subtle issues that can be a challenge to get operating properly for a solid VR experience.
 
@@ -26,7 +26,7 @@ Alternatively, you may wish to render serially in order to share a single render
 
 When the application exits, or otherwise stops calling Submit for more than 10 frames in a row, it will fade back to an empty grid scene.  This is to avoid ever leaving the user in an untracked environment so users don't fall over or run into walls.  When all applications have disconnected from the compositor, it will exit automatically after two seconds, unless launched with the --keepalive command line argument.
 
-#Enumerations#
+# Enumerations
 
 [Compositor_DeviceType](https://github.com/ValveSoftware/openvr/wiki/Compositor_DeviceType)
 
@@ -34,15 +34,15 @@ When the application exits, or otherwise stops calling Submit for more than 10 f
 
 [Compositor_TextureBounds](https://github.com/ValveSoftware/openvr/wiki/Compositor_TextureBounds)
 
-#Interfaces#
+# Interfaces
 
 The vr::IVRCompositor interface contains the following functions:
 
-### Initialization ##
+## Initialization
 
 [GetLastError](https://github.com/ValveSoftware/openvr/wiki/IVRCompositor::GetLastError)
 
-### Core Usage ###
+## Core Usage
 
 [WaitGetPoses](https://github.com/ValveSoftware/openvr/wiki/IVRCompositor::WaitGetPoses)
 
@@ -50,7 +50,7 @@ The vr::IVRCompositor interface contains the following functions:
 
 [ClearLastSubmittedFrame](https://github.com/ValveSoftware/openvr/wiki/IVRCompositor::ClearLastSubmittedFrame)
 
-### Accessors ###
+## Accessors
 
 [SetGamma](https://github.com/ValveSoftware/openvr/wiki/IVRCompositor::SetGamma)
 
@@ -68,17 +68,12 @@ The vr::IVRCompositor interface contains the following functions:
 
 [IsFullscreen](https://github.com/ValveSoftware/openvr/wiki/IVRCompositor::IsFullscreen)
 
-### Fade Support ###
+## Fade Support
 
 [FadeToColor](https://github.com/ValveSoftware/openvr/wiki/IVRCompositor::FadeToColor)
 
 [FadeGrid](https://github.com/ValveSoftware/openvr/wiki/IVRCompositor::FadeGrid)
 
-### Focus ###
+## Skinning
 
-[CompositorBringToFront](https://github.com/ValveSoftware/openvr/wiki/IVRCompositor::CompositorBringToFront)
-
-[CompositorGoToBack](https://github.com/ValveSoftware/openvr/wiki/IVRCompositor::CompositorGoToBack)
-
-[CompositorQuit](https://github.com/ValveSoftware/openvr/wiki/IVRCompositor::CompositorQuit)
-
+[CompositorSkinning](https://github.com/ValveSoftware/openvr/wiki/Compositor-Skinning)
