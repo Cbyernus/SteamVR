@@ -10,7 +10,7 @@ OpenVR is divided into 2 layers: **application** and **driver**.
 OpenVR for application talks to SteamVR. SteamVR then talks to OpenVR driver. So OpenVR application works at a higher level than an OpenVR driver. Programmers like you can write OpenVR application or OpenVR driver to communicate with SteamVR (SteamVR is the only closed source app in the pipeline).
 
 ### OpenVR Application
-One real-world example of an application is a game engine like Unity. Unity calls OpenVR API to get the position and orientation of any connected VR headset and apply them to the *Main Camera*. Unity then sends the camera image to OpenVR. OpenVR does some operations on the image and then displays it to the real headset screen. This explains why Unity works with most VR headsets out of the box (if you have SteamVR installed).
+One real-world example of an application is a game engine like Unity. Unity calls OpenVR API to get the position and orientation of any connected VR headset and apply them to the *Main Camera*. Unity then sends the camera image to OpenVR. OpenVR does some operations on the image and then displays it to the real headset screen. This explains why Unity works with most VR headsets out of the box (if you have SteamVR installed) while having zero knowledge of the headset that you are using.
 
 For a simple intuitive experiment, you can also build a small application that just prints the position of the headset to the console (command prompt) continuously. Most of the API documentation in this wiki is about building OpenVR application. An application usually starts with calling `vr::VR_Init()` function from `openvr.h`.
 
