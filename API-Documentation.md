@@ -5,7 +5,7 @@ This means that you can access the position of the headset using only one API ca
 
 The API is implemented as a set of C++ interface classes full of pure virtual functions. When an application initializes the system it will return the interface that matches the header in the SDK used by that application. Once a version of an interface is published, it will be supported in all future versions, so the application will not need to update to a new SDK to move forward to new hardware and other features.
 
-## Concrete practical example
+## Concrete Practical Example
 OpenVR is divided into 2 layers: **application** and **driver**.
 OpenVR for application talks to SteamVR. SteamVR then talks to OpenVR driver. So OpenVR application works at a higher level than an OpenVR driver. Programmers like you can write OpenVR application or OpenVR driver to communicate with SteamVR (SteamVR is the only closed source app in the pipeline).
 
