@@ -7,5 +7,5 @@ Sets the overlay image from a file.
 
 **Description**
 
-Loads the specified file and sets that texture as the contents of the overlay. Textures can be up to 1920x1080 i size. PNG, JPG, and TGA files are supported in 24 or 32 bits.
+Loads the specified file and sets that texture as the contents of the overlay. Textures can be up to 1920x1080 in size. PNG, JPG, and TGA files are supported in 24 or 32 bits.
 
