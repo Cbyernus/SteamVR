@@ -12,10 +12,12 @@ OpenVR for application talks to SteamVR. SteamVR then talks to OpenVR driver. So
 ### OpenVR Application
 One real-world example of an application is a game engine like Unity. Unity calls OpenVR API to get the position and orientation of any attached VR headset and apply them to the *Main Camera*. Unity then sends the camera image to OpenVR. OpenVR does some operations on the image and then displays it to the real headset screen. This explains why Unity works with most VR headsets out of the box (if you have SteamVR installed) while having zero knowledge of the headset that you are using.
 
-For a simple intuitive experiment, you can also build a small application that just prints the position of the headset to the console (command prompt) continuously. Most of the API documentation in this wiki is about building OpenVR application. An application usually starts with calling `vr::VR_Init()` function from `openvr.h`.
+For a simple intuitive experiment, you can build a small application that just prints the position of the headset to the console (command prompt) continuously. Most of the API documentation in this wiki is about building OpenVR application. An application usually starts with calling `vr::VR_Init()` function from `openvr.h`.
 
 ### OpenVR Driver
-An OpenVR driver is a software that introduces VR devices into the SteamVR system. You would want to write a driver when you manufacture new hardware (or virtual hardware) like a headset or a controller. To write a driver, you should start with writing a `HmdDriverFactory()` function and include  `openvr_driver.h`.
+An OpenVR driver is a software that introduces VR devices into the SteamVR system. You would want to write a driver when you manufacture new hardware (or virtual hardware) such as a headset or a controller. To write a driver, you should start with writing a `HmdDriverFactory()` function and include  `openvr_driver.h`.
+
+For a simple intuitive experiment, you can build a small driver that pretends to introduce a new VR headset to the system. Let's call the new headset, "HTC Black" (as opposed to HTC Vive). This headset exists only in the Quantum realm. So you cannot see its existence physically. But you can know that it exists by observing its display via SteamVR's `Display VR View` menu. You can make it such that the headset is easily moved by using arrow keys on your keyboard instead of using the complicated old-school tracking stuff like Valve Lighthouse or 600 cameras. Once you have mastered the art of moving the headset by keyboard, you are now qualified to bring the physical realm of HTC black into existence.
 
 # Initialization and Cleanup
 
