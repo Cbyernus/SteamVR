@@ -101,6 +101,7 @@ This array contains the list of binding files to load for this application.
 * oculus_touch
 * holographic_controller
 * gamepad
+* knuckles
 
 Controller types are defined by controller device vendors. For your Application you should attempt to author a binding for common controllers being used.
 
