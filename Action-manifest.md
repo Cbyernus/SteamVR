@@ -98,10 +98,12 @@ This array contains the list of binding files to load for this application.
 
 **controller_type** - This is the name of the controller type that this binding file is for. Common controller types are:
 * vive_controller
+* vive_cosmos_controller
 * oculus_touch
 * holographic_controller
 * gamepad
 * knuckles
+* knuckles_ev1
 
 Controller types are defined by controller device vendors. For your Application you should attempt to author a binding for common controllers being used.
 
