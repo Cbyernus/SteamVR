@@ -144,3 +144,16 @@ This array contains localized strings for action and action set names for any nu
 
 All localization entries use the path of the action or action set as the key and the localized string as the value. These strings will be shown to the user instead of the action or action set name whenever the user is using that language. If the user's language is not present, English strings will be used. Steam supports over 25 languages, users have come to expect that Applications present details in their native language.
 
+
+## Action Binding Versioning
+
+You can optionally set versions of inputs with:
+
+```
+"version": x,
+"minimum_required_version": y,
+```
+
+Where `x` and `y` are positive Integers.
+
+Once set at the select bindings menu this will display the message `These bindings were made with an older version of <appname> and need to be updated.` There does not appear to be any further interaction from this option, as out of date Binding files can still be used.
