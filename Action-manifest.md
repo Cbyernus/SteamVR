@@ -104,6 +104,7 @@ This array contains the list of binding files to load for this application.
 * gamepad
 * knuckles
 * knuckles_ev1
+* hpmotioncontroller (HP reverb G2 controller?)
 
 Controller types are defined by controller device vendors. For your Application you should attempt to author a binding for common controllers being used.
 
