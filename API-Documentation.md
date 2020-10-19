@@ -14,6 +14,8 @@ One real-world example of an application is a game engine like Unity. Unity call
 
 For a simple intuitive experiment, you can build a small application that just prints the position of the headset to the console (command prompt) continuously. Most of the API documentation in this wiki is about building OpenVR application. An application usually starts with calling `vr::VR_Init()` function from `openvr.h`.
 
+Another kind of application is called **OpenVR Overlay**. This application calls the OpenVR API to draw 2D image at arbitrary 3D coordinate on top of the game. Player can interact with the overlay using the controller buttons. Please see example apps in Steam store e.g. TurnSignal, Virtual Desktop, OVR Toolkit, XS Overlay, etc.
+
 ### OpenVR Driver
 An OpenVR driver is a software that introduces VR devices into the SteamVR system. You would want to write a driver when you manufacture new hardware (or virtual hardware) such as a headset or a controller. To write a driver, you should start with writing a `HmdDriverFactory()` function and include  `openvr_driver.h`.
 
