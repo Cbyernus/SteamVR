@@ -1,4 +1,4 @@
-Every driver dynamic library needs to implement the standard driver factory function and use it to return implementations of the OpenVR driver interfaces.
+Every driver dynamic library needs to implement the standard driver factory function and use it to return implementations of the OpenVR driver interfaces. This function is the entry-point for every driver.
 
 A typical factory function looks like this:
 
@@ -12,6 +12,11 @@ void *HmdDriverFactory( const char *pInterfaceName, int *pReturnCode )
 	{
 		return <global for server driver provider>;
 	}
+	if( 0 == strcmp( IVRWatchdogProvider_Version, pInterfaceName ) )
+	{
+		return &g_watchdogDriverNull;
+	}
+
 
 	if( pReturnCode )
 		*pReturnCode = HmdError_Init_InterfaceNotFound;
