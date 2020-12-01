@@ -12,10 +12,6 @@ void *HmdDriverFactory( const char *pInterfaceName, int *pReturnCode )
 	{
 		return <global for server driver provider>;
 	}
-	if( 0 == strcmp( IClientTrackedDeviceProvider_Version, pInterfaceName ) )
-	{
-		return <global for client driver provider>;
-	}
 
 	if( pReturnCode )
 		*pReturnCode = HmdError_Init_InterfaceNotFound;
