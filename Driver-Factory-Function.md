@@ -14,7 +14,7 @@ void *HmdDriverFactory( const char *pInterfaceName, int *pReturnCode )
 	}
 	if( 0 == strcmp( IVRWatchdogProvider_Version, pInterfaceName ) )
 	{
-		return &g_watchdogDriverNull;
+		return <global for watchdog driver>;
 	}
 
 
@@ -24,3 +24,5 @@ void *HmdDriverFactory( const char *pInterfaceName, int *pReturnCode )
 	return NULL;
 }
 ```
+
+If you wish to implement [IVRWatchdogProvider](https://github.com/ValveSoftware/openvr/wiki/IVRWatchdogProvider), please see the example code in the sample driver.
