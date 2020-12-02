@@ -25,4 +25,4 @@ void *HmdDriverFactory( const char *pInterfaceName, int *pReturnCode )
 }
 ```
 
-If you wish to implement [IVRWatchdogProvider](https://github.com/ValveSoftware/openvr/wiki/IVRWatchdogProvider), please see the example code in the sample driver.
+If you wish to implement [IVRWatchdogProvider](IVRWatchdogProvider_Overview), please see the example code in the sample driver.
