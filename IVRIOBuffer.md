@@ -1,3 +1,5 @@
+# This interface had been deprecated and is no longer recommended for new projects.
+
 The `IVRIOBuffer` interface supports creating, reading from, and writing to a fixed-element-size cross-process, globally-named ring-buffer with extremely low synchronization overhead between multiple readers and a single writer. This interface is useful whenever there is very high-frequency of high-bandwidth data stream where it is acceptable for readers to fall behind and even miss elements in the stream, as this allows the writer to use a ring-buffer instead of an ever-growing buffer, and the writer can avoid writing if there are no readers.
 
 An example of a high-frequency `IVRIOBuffer` stream is `vr::ImuSample_t` data arriving at 1000Hz from an HMD or at 250-500Hz from a tracked controller. In SteamVR, lighthouse-based HMDs and lighthouse-based tracked controllers expose a >= 512-element ring-buffer of IMU `vr::ImuSample_t` data under the name `"/devices/lighthouse/<serial-number>/imu"` with an element size of `sizeof(vr::ImuSample_t)`. A driver or an application can read the IMU data as follows:
