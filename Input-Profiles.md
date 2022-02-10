@@ -8,7 +8,7 @@ Generally drivers should provide input profiles for each controller and HMD expo
 
 # Input Profile Format
 
-```
+```json
 {
   "jsonid" : "input_profile",
   "controller_type": "<controller type>",
@@ -31,12 +31,21 @@ Generally drivers should provide input profiles for each controller and HMD expo
         "order" : 2
     },
     ...
-    "/pose/raw" : {
+    "/pose/raw" : 
+    {
         "type" : "pose",
         "binding_image_point" : [ 14, 16 ]
     },
     ...
-  }
+  },
+  "default_bindings" : 
+  [
+    {
+      "app_key" : "steam.app.1234",
+      "binding_url" : "steam.app.1234_<controller_type>.json"
+    },
+    ...
+  ]
 }
 ```
 
@@ -114,7 +123,7 @@ The language tag is the ISO-639-1 + ISO-3166-1 alpha-2 of the locale that part o
 # Pose components
 
 Unlike scalar, boolean, and skeletal components, pose components are defined implicitly by the render model provided by the driver for the device in question. See <steamvr>/resources/rendermodels/vr_controller_vive_1_5/vr_controller_vive_1_5.json for an example:
-```
+```json
         "tip": {
             "component_local" : {
                 "origin": [0.0, -0.01, -0.007],
@@ -125,3 +134,19 @@ Unlike scalar, boolean, and skeletal components, pose components are defined imp
 Every render model component that does not specify a "filename" field will be added as a component automatically when the tracked device is activated. To expose the pose in the binding UI, add a "pose" input source with the name /pose/<component name> (so /pose/tip in the above example.) You can control what render model is used by your device by setting the Prop_RenderModelName_String property on the device.
 
 All tracked devices also get two pose components registered regardless of what render model they use: /pose/raw and /pose/tip. By default, both are set to the unaltered pose of the device. If you provide /pose/tip in your rendermodel you should set it to the position and rotation that are appropriate for pointing (i.e. with a laser pointer) with your controller.
+
+# Default Bindings
+
+Driver writers may provide a default set of bindings for applications. This is commonly done for applications that were released prior to the controller descripted in the input profile.
+
+The collection of bindings should be provided as an array. Each binding is a pairing of a Steam application key and the associated binding file's name.
+
+**app_key** names the app that the binding will apply to.
+
+**binding_url** is the name of the file that contains the binding. These files are assumed to be in the same directory as the input profile, although a relative path can be used.
+
+There may be multiple sources that provide possible bindings. The system will pick a binding for an application in the following order (where lower numbered items are selected first):
+1. A binding set by the user.
+2. A binding shipped with an application by an application developer.
+3. A binding set on the partner.steamworks site.
+4. A default binding set by the driver writer. This is what is described in this article.
