@@ -6,7 +6,9 @@ Let's say you want to write a new OpenVR driver called "mydriver". To do that yo
 4. ~~Add an implementation of [`vr::IClientTrackedDeviceProvider`](https://github.com/ValveSoftware/openvr/wiki/IClientTrackedDeviceProvider_Overview) to the DLL and return it from the factory. This provider will be phased out in the next SDK udpate, but for now you need it.~~ This was removed in [OpenVR version 1.0.6](https://github.com/ValveSoftware/openvr/commit/70acfe9262290ddb789588a7390e5fc60bb20080#diff-614ced34b3fbb27d875cdae21a8a16e6).
 5. Add an implementation of [`vr::IServerTrackedDeviceProvider`](https://github.com/ValveSoftware/openvr/wiki/IServerTrackedDeviceProvider_Overview) and have that return implementations of [`vr::ITrackedDeviceServerDriver`](https://github.com/ValveSoftware/openvr/wiki/vr::ITrackedDeviceServerDriver-Overview) for each tracked device.
 6. Add a [driver manifest file](https://github.com/ValveSoftware/openvr/wiki/DriverManifest) to "<installdir>/mydriver"
-7. Run: vrpathreg adddriver "<installdir>/mydriver"
+7. Add your driver to SteamVR's config file using vrpathreg. vrpathreg.exe is available in the user's SteamVR install directory. Invoke it with the adddriver command like so: vrpathreg adddriver "<installdir>/mydriver".
+* SteamVR's install directory can be located on Windows using the registry. On Windows 10, use the standard uninstall key: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 250820
+* If you are working directly with Valve to deploy your driver, this step may not be necessary outside of testing. Please ask your Valve contact about this step in relation to the Steam store.
 
 For devices with buttons, triggers, joysticks, and other kinds of input controls, please refer to the [`vr::IVRDriverInput`](https://github.com/ValveSoftware/openvr/wiki/IVRDriverInput-Overview) API.
 
