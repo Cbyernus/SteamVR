@@ -8,12 +8,7 @@ It is advisable to use the built-in SteamVR drivers as references. For example, 
 4. ~~Add an implementation of [`vr::IClientTrackedDeviceProvider`](https://github.com/ValveSoftware/openvr/wiki/IClientTrackedDeviceProvider_Overview) to the DLL and return it from the factory. This provider will be phased out in the next SDK udpate, but for now you need it.~~ This was removed in [OpenVR version 1.0.6](https://github.com/ValveSoftware/openvr/commit/70acfe9262290ddb789588a7390e5fc60bb20080#diff-614ced34b3fbb27d875cdae21a8a16e6).
 5. Add an implementation of [`vr::IServerTrackedDeviceProvider`](https://github.com/ValveSoftware/openvr/wiki/IServerTrackedDeviceProvider_Overview) and have that return implementations of [`vr::ITrackedDeviceServerDriver`](https://github.com/ValveSoftware/openvr/wiki/vr::ITrackedDeviceServerDriver-Overview) for each tracked device.
 6. Add a [driver manifest file](https://github.com/ValveSoftware/openvr/wiki/DriverManifest) to "<installdir>/mydriver"
-7. Add and remove your driver to SteamVR's config file using vrpathreg. vrpathreg.exe is available in the user's SteamVR install directory. Invoke it with the adddriver command like so: 
-vrpathreg adddriver "<installdir>/mydriver". 
-Support the clean removal of your driver by using the 'removedriver' argument, again with your driver path like so: 
-vrpathreg removedriver "<installdir>/mydriver".
-* SteamVR's install directory can be located on Windows using the registry. On Windows 10, use the standard uninstall key: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 250820
-* If you are working directly with Valve to deploy your driver, this step should occur in your installer/uninstaller, not in your driver.
+7. Add and remove your driver to SteamVR's config file using [vrpathreg](https://github.com/ValveSoftware/openvr/wiki/Local-Driver-Registration).
 
 For drivers with status icons, you can add icons files to 'mydriver/resources/icons'. These metadata to map hardware status to the appropriate icon belongs in 'mydriver/resources/driver.vrresources'.
 
