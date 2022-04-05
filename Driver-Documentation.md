@@ -9,6 +9,7 @@ It is advisable to use the built-in SteamVR drivers as references. For example, 
 5. Add an implementation of [`vr::IServerTrackedDeviceProvider`](https://github.com/ValveSoftware/openvr/wiki/IServerTrackedDeviceProvider_Overview) and have that return implementations of [`vr::ITrackedDeviceServerDriver`](https://github.com/ValveSoftware/openvr/wiki/vr::ITrackedDeviceServerDriver-Overview) for each tracked device.
 6. Add a [driver manifest file](https://github.com/ValveSoftware/openvr/wiki/DriverManifest) to "<installdir>/mydriver"
 7. Add and remove your driver to SteamVR's config file using [vrpathreg](https://github.com/ValveSoftware/openvr/wiki/Local-Driver-Registration).
+8. If you are deploying your driver through Steam and do not have an executable to put in your Steam launch options, you can use a Steam URL to launch SteamVR. This way, if a user launches your driver through Steam, it will automatically start SteamVR. The launch option is: `steam://run/250820`
 
 For drivers with status icons, you can add icons files to 'mydriver/resources/icons'. These metadata to map hardware status to the appropriate icon belongs in 'mydriver/resources/driver.vrresources'.
 
