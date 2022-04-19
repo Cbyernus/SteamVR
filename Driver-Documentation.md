@@ -11,13 +11,7 @@ It is advisable to use the built-in SteamVR drivers as references. For example, 
 7. Add and remove your driver to SteamVR's config file using [vrpathreg](https://github.com/ValveSoftware/openvr/wiki/Local-Driver-Registration).
 8. If you are deploying your driver through Steam and do not have an executable to put in your Steam launch options, you can use a Steam URL to launch SteamVR. This way, if a user launches your driver through Steam, it will automatically start SteamVR. The launch option is: `steam://run/250820`
 
-For drivers with status icons, you can add icons files to 'mydriver/resources/icons'. These metadata to map hardware status to the appropriate icon belongs in 'mydriver/resources/driver.vrresources'.
-
-For drivers with custom artwork in the input binding UI, add SVG files to the same folder, 'mydriver/resources/icons'.
-
-For drivers with localized strings, add localization for all languages to 'mydriver/resources/localization/localization.json'. This will affect the strings that are displayed in the UI related to your hardware, for example, in the input binding UI. Generally, you only need to provide translations for the names of your hardware and input paths. If localization is working for some, but not all of your devices, then you may need to explicitly tell OpenVR to use a certain resource namespace. To do this, add a line to the input profile for the device that is not working, "resource_root" : "<root name>", where the <root name> is replaced with the driver's name as written in the .vrdrivermanifest. 
-
-For devices with buttons, triggers, joysticks, and other kinds of input controls, please refer to the [`vr::IVRDriverInput`](https://github.com/ValveSoftware/openvr/wiki/IVRDriverInput-Overview) API.
+For devices with buttons, triggers, joysticks, and other kinds of input controls, please refer to the [`vr::IVRDriverInput`](https://github.com/ValveSoftware/openvr/wiki/IVRDriverInput-Overview) API. Reference the [`Input Profiles`] page for information on icons, images, and localization.
 
 For devices that wish to provide animation data through the Skeletal Input system, please refer to the [Skeletal Input Driver](https://github.com/ValveSoftware/openvr/wiki/Creating-a-Skeletal-Input-Driver) documentation.
 
