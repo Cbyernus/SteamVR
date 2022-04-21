@@ -1,4 +1,4 @@
-_Note: This page is a transplant of the render model documentation that was originally available to lighthouse hardware vendors. It covers the process to create an initial render model from an existing STL file. Once you have finished these steps, please check the Render Model Reference for more detailed information._
+_Note: This page is a transplant of the render model documentation that was originally available to lighthouse hardware vendors. It covers the process to create an initial render model from an existing STL file. Once you have finished these steps, please check the [Render Model Reference](https://github.com/ValveSoftware/openvr/wiki/Render-Model-Reference) for more detailed information._
 
 # Introduction
 
