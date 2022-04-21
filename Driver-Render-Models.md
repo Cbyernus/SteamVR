@@ -1,0 +1,1 @@
+A render model is a 3D model of hardware that SteamVR can provide to applications. This allows applications (and SteamVR itself) to display the correct controllers and other hardware, without needing to know anything about the hardware itself. This provides some future-proofing for new formfactors and devices.
