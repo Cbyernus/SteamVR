@@ -135,6 +135,12 @@ Every render model component that does not specify a "filename" field will be ad
 
 All tracked devices also get two pose components registered regardless of what render model they use: /pose/raw and /pose/tip. By default, both are set to the unaltered pose of the device. If you provide /pose/tip in your rendermodel you should set it to the position and rotation that are appropriate for pointing (i.e. with a laser pointer) with your controller.
 
+# Render Models
+
+A render model is a 3D model of hardware that SteamVR can provide to applications. This allows applications (and SteamVR itself) to display the correct controllers and other hardware, without needing to know anything about the hardware itself. This provides some future-proofing for new formfactors and devices.
+
+Please see the [driver render models](https://github.com/ValveSoftware/openvr/wiki/Driver-Render-Models) page for more information.
+
 # Default Bindings
 
 Driver writers may provide a default set of bindings for applications. This is commonly done for applications that were released prior to the controller descripted in the input profile.
