@@ -60,8 +60,11 @@ documented. These steps could also be performed in other solid modeling software
 
 First, the STL file that defines the controller object is imported into OpenSCAD.
 
-`color("orange")
-import("ref_controller_not_aligned.stl", convexity = 4);`
+```
+scale([0.001, 0.001, 0.001])
+color("orange")
+import("ref_controller_not_aligned.stl", convexity = 4);
+```
 
 ![image](https://user-images.githubusercontent.com/3059423/164533806-d172cbff-bbdc-43fe-bd46-4462e61b018b.png)
 
@@ -69,9 +72,11 @@ import("ref_controller_not_aligned.stl", convexity = 4);`
 The STL file shown above was exported with units of millimeters, but the target units for the render model is
 meters. The scale command is used to convert the millimeters units to meters.
 
-`scale([0.001, 0.001, 0.001])
+```
+scale([0.001, 0.001, 0.001])
 color("orange")
-import("ref_controller_not_aligned.stl", convexity = 4) ;`
+import("ref_controller_not_aligned.stl", convexity = 4) ;
+```
 
 ## Convert the Reference Controller Render Model to STL
 
@@ -81,7 +86,7 @@ highly recommended to align new controller render models to the render model of 
 import the Vive controller model into OpenSCAD, it must be in STL format. Blender may be used to create an
 STL file from the Vive Controller’s OBJ render model.
 
-Render models are stored in this directory, referred to as <rendermodels> elsewhere in this document.
+Render models are stored in this directory, referred to as <rendermodels> elsewhere in this document: 
 `C:\Program Files (x86)\Steam\steamapps\common\SteamVR\resources\rendermodels`
 
 The HTC Vive render model is found in this subdirectory:
@@ -106,8 +111,8 @@ Once the OBJ file is imported, the render model appears at the origin.
 
 ![image](https://user-images.githubusercontent.com/3059423/164534148-4dc80703-d2ce-42b1-8004-3dce66c05de5.png)
 
-`Tip: Blender has many options for zooming. You may find it helpful to turn on “Auto Depth” and “Zoom to
-Mouse Position” in the “Blender User Preferences” dialog on the “Interface” tab.`
+_Tip: Blender has many options for zooming. You may find it helpful to turn on “Auto Depth” and “Zoom to
+Mouse Position” in the “Blender User Preferences” dialog on the “Interface” tab._
 
 ![image](https://user-images.githubusercontent.com/3059423/164534173-7dd90f65-7eeb-4d95-b93a-55b080dc421b.png)
 
@@ -136,11 +141,13 @@ object makes it easier to align the two intersecting objects._
 It is clear from the above illustration that the new object is already very close to the Vive controller. Applying a
 translation to the new object aligns the triggers and a slight rotation around the X axis aligns the handles.
 
-`rotate ([3, 0, 0])
+```
+rotate ([3, 0, 0])
 translate ([0, -0.015, 0.040])
 scale([0.001, 0.001, 0.001])
 color("orange")
-import("ref_controller_not_aligned.stl", convexity = 4) ;`
+import("ref_controller_not_aligned.stl", convexity = 4) ;
+```
 
 ![image](https://user-images.githubusercontent.com/3059423/164534328-bbec0311-ab4a-4756-892f-eef63479bb7b.png)
 
@@ -149,11 +156,13 @@ import("ref_controller_not_aligned.stl", convexity = 4) ;`
 Once the new object is aligned with the Vive render model, the STL file for the render model of the new object
 may be exported. In OpenSCAD, it is easy to single out a geometry by marking it with an exclamation point.
 
-`! rotate ([3, 0, 0])
+```
+! rotate ([3, 0, 0])
 translate ([0, -0.015, 0.040])
 scale([0.001, 0.001, 0.001])
 color("orange")
-import("ref_controller_not_aligned.stl", convexity = 4) ;`
+import("ref_controller_not_aligned.stl", convexity = 4) ;
+```
 
 ![image](https://user-images.githubusercontent.com/3059423/164534370-eef733e7-b90f-4cee-a190-e9320dd76e94.png)
 
@@ -281,9 +290,11 @@ Add a subfolder with the same name as the render model for the new controller:
 `<rendermodels>\ref_controller`
 
 Copy the render model files into the new directory:
-`<rendermodels>\ref_controller\ref_controller.obj
+```
+<rendermodels>\ref_controller\ref_controller.obj
 <rendermodels>\ref_controller\ref_controller.mtl
-<rendermodels>\ref_controller\ref_controller.png`
+<rendermodels>\ref_controller\ref_controller.png
+```
 
 Now that SteamVR™ can find the render model, it is possible to reference the render model from the object’s JSON file.
 
@@ -373,12 +384,14 @@ difference between the two origins. However, that information already exists in 
 render models. We could ask the question, what rotation and translation would be required to align the reference render
 model to the controller object? Reversing the rotation and translation above provides the answer.
 
-`#scale([0.001, 0.001, 0.001])
+```
+#scale([0.001, 0.001, 0.001])
 color("orange")
 import("ref_controller_not_aligned.stl", convexity = 4) ;
 rotate ([-3, 0, 0])
 translate ([0, 0.015, -0.040])
-#color("grey") import("Vive_Controller.stl", conveixty = 4);`
+#color("grey") import("Vive_Controller.stl", conveixty = 4);
+```
 
 ![image](https://user-images.githubusercontent.com/3059423/164535505-44b4edb5-06f2-4bfe-9679-7bdc458a8e76.png)
 
@@ -392,11 +405,13 @@ object’s +Y direction. The value for “plus_z” equals [0, sin(3), cos(3)], 
 0.05233595624, 0.99862953475].
 
 The final head variable for the JSON file:
-`"head": {
+```
+"head": {
 "plus_x": [1, 0, 0],
 "plus_z": [0, 0.05233595624, 0.99862953475] ,
 "position": [0, 0.015, -0.040]
-}`
+}
+```
 
 Once the “head” variable is set, upload the new JSON file to the object using lighthouse_console.
 
@@ -419,24 +434,28 @@ easy to manipulate the controller in VR, evaluate tracking performance and test 
 
 The following OpenSCAD file renders the STL file of a new controller object in the same space as the Vive controller’s
 render model, and aligns the new controller’s render model to the Vive controller’s render model.
-`rotate ([3, 0, 0])
+```
+rotate ([3, 0, 0])
 translate ([0, -0.015, 0.040])
 scale([0.001, 0.001, 0.001])
 color("orange")
 import("ref_controller_not_aligned.stl", convexity = 4) ;
 #color("grey")
-import("Vive_Controller.stl", convexity = 4) ;`
+import("Vive_Controller.stl", convexity = 4) ;
+```
 
 The following OpenSCAD file renders the STL file of a new controller object in the same space as the Vive controller’s
 render model, and aligns the Vive controller’s render model with the new controller’s render model. The values from this
 alignment are used to set the “head” variable in the JSON.
-`#scale([0.001, 0.001, 0.001])
+```
+#scale([0.001, 0.001, 0.001])
 color("orange")
 import("ref_controller_not_aligned.stl", convexity = 4) ;
 rotate ([-3, 0, 0])
 translate ([0, 0.015, -0.040])
 color("grey")
-import("Vive_Controller.stl", convexity = 4) ;`
+import("Vive_Controller.stl", convexity = 4) ;
+```
 
 
 
