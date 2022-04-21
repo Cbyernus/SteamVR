@@ -1,3 +1,5 @@
+_Note: This page is a transplant of the render model documentation that was originally available to lighthouse hardware vendors. It covers the process to create an initial render model from an existing STL file. Once you have finished these steps, please check the Render Model Reference for more detailed information._
+
 # Introduction
 
 A SteamVR™ render model is the 3D model that represents a controller in VR. By default, the JSON file of an object
