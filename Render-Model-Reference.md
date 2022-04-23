@@ -50,17 +50,18 @@ The `components` property is a list your OBJ files and describes how they relate
 
 // These components do not have OBJ files because they are only transforms/locations
 // These locations are exposed to applications through OpenVR interfaces
-"tip": {
+// These poses are documented in ivrrendermodels.h
+"tip": { 
 },
 "base": {
 },
-"gdc2015": {
+"gdc2015": { 
 },
 "handgrip": {
 },
-"grip": {
+"grip": { 
 },
-"openxr_handmodel": {
+"openxr_handmodel": { 
 },
 
 // More basic parts
