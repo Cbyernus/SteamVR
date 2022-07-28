@@ -3,7 +3,7 @@ Be sure to read and follow the instructions on creating [driver render models](h
 ## Render Model Guidelines
 Each render model OBJ file cannot contain more than 65,000 vertices.
 Each render model OBJ file must contain only one object.
-Each movable part, such as buttons, joysticks, and triggers, should be in it's own OBJ file.
+Each movable part, such as buttons, joysticks, and triggers, should be in its own OBJ file.
 Each OBJ should be associated with an MTL material file, and a PNG or TGA texture file.
 Each OBJ should have a correct UV map.
 
