@@ -98,6 +98,7 @@ from a sensor on a particular port, it can use the data in lighthouse_config to 
 specific physical sensor located on the tracked object. SteamVR™ also reads the sensor placement described
 in lighthouse_config to establish the exact sensor geometry for the device. SteamVR™ solves incoming
 tracking data against the known sensor geometry to resolve the current pose of the object.
+
 ![image](https://user-images.githubusercontent.com/3059423/181827611-c08d4311-909b-4071-b5a9-802791bf8398.png)
 
 Example: (Replace ellipsis with arrays described in each member below.)
@@ -117,6 +118,7 @@ system.
 
 Each photodiode is placed on the surface of the object facing outward. Imagine the sensor pictured below faces
 outward at a 45° angle between the -X and +Y axis.
+
 ![image](https://user-images.githubusercontent.com/3059423/181828013-75a75a00-f3cd-49b9-9201-3f2394c0ed31.png)
 
 The unit vector normal to the face of the photodiode points in the direction 135° from the +X axis and 45° from
@@ -249,3 +251,441 @@ Controller: A coordinate [x, y, z] that positions the render model in SteamVR™
 system.
 
 **Note**: _A “plus_y” member is not required, because a right-handed coordinate system is assumed._
+
+**"imu"**
+
+An object containing calibration and orientation data about the IMU. The plus_x, plus_z, and position members
+map the IMU coordinate system into the object’s coordinate system. The acc and gyro members hold
+accelerometer and gyroscope calibration data. For an example, consider the following IMU, placed on a PCB in
+an HMD object.
+
+![image](https://user-images.githubusercontent.com/3059423/181829693-b7846937-f4d4-4f92-a483-e525c91587e7.png)
+
+The datasheet specifies the coordinate system of the IMU. However, that coordinate system is not aligned with
+the coordinate system of the HMD. In fact, all three axes axes need adjustment. The IMU’s +X axis points in the
+HMD’s +Y direction, requiring a plus_x value of [0, 1, 0]. The IMU’s +Z axis points in the HMD’s -Z direction,
+requiring a plus_z value of [0, 0, -1]. The IMU’s Y axis is also different from the HMD, but specifying the X and Z
+axes constrains the Y axis.
+
+![image](https://user-images.githubusercontent.com/3059423/181829741-d705b84f-66f5-41d5-956c-8d2692e64f45.png)
+
+Not only are the axes of the IMU different, but the IMU is not located at the origin of the HMD’s coordinate
+system. The IMU is located in the X/Y plane, meaning that the Z offset is 0 mm, but the X offset is -40 mm and
+the Y offset is +10 mm. Therefore, the required position value is [-0.040, 0.010, 0.0].
+
+The accelerometer and gyroscope have offsets inherent in the device. Accelerometer offsets, for example, may
+start as low as 0.025g. However, they increase during the assembly process, and throughout the life of the part,
+to as high as 0.150g or more. Initial gyroscope offsets are typically 3°/s - 5°/s. The accelerometer and
+gyroscope offsets change over temperature. Accounting for that, SteamVR™ has internal calibration
+mechanisms that constantly trim out the error during use. To ensure that SteamVR™ can converge on the
+actual offsets as quickly as possible, the IMU member of the JSON file holds initial calibration data for offsets
+present at the time of manufacturing. Determining the correct values for these fields is easily accomplished using the software utility described in IMU Calibration. The **IMU calibration** tool outputs a snippet of JSON to
+copy and paste into the IMU member of the JSON file.
+
+IMU Calibrator Output:
+```
+Calibrating to gravity sphere, radius 9.8066
+0.05265 accelerometer fit error (6 sample vectors x 8 subsamples per vector)
+"acc_scale" : [ 0.998, 0.9982, 0.9912 ],
+"acc_bias" : [ 0.04646, -0.04264, -0.2414 ],
+"gyro_scale" : [ 1.0, 1.0, 1.0 ],
+"gyro_bias" : [ 0.06343, 0.01029, -0.02168 ],
+```
+
+Example:
+```
+"imu" : {
+ "acc_scale" : [ 0.998, 0.9982, 0.9912 ],
+ "acc_bias" : [ 0.04646, -0.04264, -0.2414 ],
+ "gyro_scale" : [ 1.0, 1.0, 1.0 ],
+ "gyro_bias" : [ 0.06343, 0.01029, -0.02168 ],
+ "plus_x" : [ 0, 1, 0 ],
+ "plus_z" : [ 0, 0, -1 ],
+ "position" : [ -0.040, 0.010, 0.0 ]
+ }
+```
+
+_“plus_x”_
+
+A unit vector [x, y, z] representing the direction of the IMU’s +X axis in the object’s coordinate system.
+
+_“plus_z”_
+
+A unit vector [x, y, z] representing the direction of the IMU’s +Z axis in the object’s coordinate system.
+
+_“position”_
+
+A coordinate [x, y, z] specifying the center of the IMU’s package in the object’s coordinate system.
+
+**Note**: _A “plus_y” member is not required, because a right-handed coordinate system is assumed._
+
+**"render_model"**
+
+Holds a string value that specifies the name of the subfolder within the SteamVR™ “rendermodels” folder that
+holds the default rendermodel for the object.
+
+Example:
+
+`"render_model" : "ref_controller"`
+
+**“display_edid”**
+
+Description
+
+Example:
+`"display_edid" : [ "", "" ]`
+
+**“direct_mode_edid_vid”**
+
+The integer display EDID vendor ID. This number must be whitelisted by NVIDIA to enable your display to
+operate in direct mode. After that, this value tells SteamVR™ which display to use when displaying VR to the
+HMD. Note that any text prefixes are omitted.
+
+Example:
+
+`"direct_mode_edid_vid" : xxxxx`
+
+**“direct_mode_edid_pid”**
+
+The integer display EDID product ID. This number must be whitelisted by NVIDIA to enable your display to
+operate in direct mode. After that, this value tells SteamVR™ which display to use when displaying VR to the
+HMD. Note that any text prefixes are omitted.
+
+Example:
+
+`"direct_mode_edid_vid" : xxxxx`
+
+*"device"*
+
+Description
+
+Example:
+
+```
+"device" : {
+ "eye_target_height_in_pixels" : 1080,
+ "eye_target_width_in_pixels" : 960,
+ "first_eye" : "eEYE_LEFT",
+ "last_eye" : "eEYE_RIGHT",
+ "num_windows" : 1,
+ "persistence" : 0.01666999980807304,
+ "physical_aspect_x_over_y" : 0.8000000119209290
+ }
+```
+
+_“eye_target_height_in_pixels”_
+
+This value indicates the vertical resolution of each eye’s display in the HMD. When operating out of direct
+mode, SteamVR uses this value along with eye_target_width_in_pixels to determine which display to associate
+with the tracked HMD device.
+
+_“eye_target_width_in_pixels”_
+
+This value indicates the horizontal resolution of each eye’s display in the HMD. Since HMDs split a single
+display output feed into two physical displays, this value should be one half of the width of the display as it
+appears in your operating system’s display settings. In this example, the HMD’s resolution is 1920x1080 split
+between both eyes. When operating out of direct mode, SteamVR uses this value along with
+eye_target_width_in_pixels to determine which display to associate with the tracked HMD device.
+
+_“first_eye”_
+
+Description
+
+_“last_eye”_
+
+Description
+
+_“num_windows”_
+
+Description
+
+_“persistence”_
+
+Description
+
+_“physical_aspect_x_over_y”_
+
+Description
+
+**“lens_separation”**
+
+Description
+
+Example:
+
+`"lens_separation" : 0.06230000033974648`
+
+**“tracking_to_eye_transform”**
+
+The lens calibration information is stored in the HMD JSON file in the block “tracking_to_eye_transform”. This
+block is a two-element array where the two elements are the descriptions for the left and right eyes respectively.
+For each eye’s description there are several sub-blocks, described below.
+
+We assume here that the lens is circularly symmetric and is kept in a fixed position parallel to the display panel.
+We will assume a pixel coordinate system with (0,0) in the top left corner of the display, the +X axis extending to
+the right, and the +Y axis extending down. Let (w,h) be the horizontal and vertical resolution of the display. Note
+that this coordinate system is independent for each eye, not a single coordinate system extending across both
+eyes.
+
+Example: (Replace ellipsis with values described in each member below.)
+```
+"tracking_to_eye_transform" : [
+ {
+ "distortion" : {...},
+ "distortion_blue" : {...},
+ "distortion_red" : {...},
+ "extrinsics" : [...],
+ "grow_for_undistort" : 0.0,
+ "intrinsics" : [...],
+ "undistort_r2_cutoff" : 1.50
+ },
+ {
+ "distortion" : {...},
+ "distortion_blue" : {...},
+ "distortion_red" : {...},
+ "extrinsics" : [...],
+ "grow_for_undistort" : 0.0,
+ "intrinsics" : [...],
+ "undistort_r2_cutoff" : 1.50
+ }
+ ],
+```
+
+_“intrinsics”_
+
+The “intrinsics” block is a 3x3 matrix describing the linear projection that the lens implements after distortion is
+corrected. Five values are populated based on the focal length and the center of projection. These values can
+be calculated as follows.
+
+Let f be the focal length of the HMD lens, measured in pixels. Let (cx
+ ,cy ) be the location on the panel (in pixel
+coordinates) that the HMD lens is centered over. The “intrinsics” block 3x3 matrix is then:
+
+![image](https://user-images.githubusercontent.com/3059423/181830628-6b147b9c-c06b-495f-b3d4-cebbc04cfe04.png)
+
+Example:
+```
+"intrinsics" : [
+ [ 1.250, 0.0, 0.0 ],
+ [ 0.0, 1.0, 0.0 ],
+ [ 0.0, 0.0, -1.0 ]
+ ]
+```
+
+_“distortion”, “distortion_blue”, “distortion_red”_
+
+The “distortion” block is information describing any non-linear distortion in the HMD lens. This includes the lens
+centering information and a polynomial describing the lens distortion. For each eye, there are actually three
+distortion blocks, “distortion”, “distortion_red”, and “distortion_blue”, which provide the distortion information for
+each of the green, red, and blue color channels respectively.
+
+Let (cx , cy ) be the location on the panel (in pixel coordinates) that the HMD lens is centered over, as mentioned
+above. The "center_x" and "center_y" values in the distortion block can be calculated as:
+
+![image](https://user-images.githubusercontent.com/3059423/181830730-eda4fccc-1ae4-4fa7-b9ee-ac6950982a58.png)
+
+Note that the denominator in both cases is (w/2).
+
+The “type” field specifies the mathematical form of the distortion function, and the “coeffs” field specifies
+coefficients for use in that function. Let P be a pixel location on the HMD display panel, and let R be the distance
+in pixels between P and the lens center location P. Let f be the focal length of the HMD lens in pixels, as
+mentioned above. Let be the angle at which pixel P appears through the lens. For a lens with no distortion,
+the relationship between these terms would be:
+
+![image](https://user-images.githubusercontent.com/3059423/181830789-b5c3cb63-7291-457c-96af-ea64aed36b1c.png)
+
+The most common form of distortion function is a function of R (so, radially symmetric) that is applied as a
+multiplicative factor. In order to keep the values in a limited range the input to the function is also normalized,
+currently by dividing by (w/2). For a distortion function D this gives:
+
+![image](https://user-images.githubusercontent.com/3059423/181830832-1df34bf8-4950-4959-a5a2-fb9d52c444e7.png)
+
+We support several different distortion function types and it is fairly simple to add new types. Two common
+examples are: cubic polynomials in the (normalized) radius squared, and rational cubic polynomials in the
+(normalized) radius squared:
+
+![image](https://user-images.githubusercontent.com/3059423/181830868-786d1349-7e8c-4d27-9220-80d2f050c2e0.png)
+
+For the first example the “type” field is DISTORT_POLY3, and for the second it is DISTORT_DPOLY3. In both
+cases the first three elements of the “coeffs” field are populated with C0 ,C1 ,C2
+ and the remaining five elements
+are set to 0.0 (the length of the “coeffs” array is currently fixed at eight elements).
+
+Example:
+```
+"distortion" : {
+ "center_x" : 0.0,
+ "center_y" : 0.0,
+ "coeffs" : [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ],
+ "type" : "DISTORT_DPOLY3"
+ }
+```
+
+_“extrinsics”_
+
+The “extrinsics” block is a 3x4 matrix describing the rotation and translation of the lens+panel system relative to
+the user. For most normal usage this should simply express the relationship between the lens centers due to a
+default stereo separation (IPD). If we let S be the default stereo separation in meters, then this matrix is:
+
+![image](https://user-images.githubusercontent.com/3059423/181830947-ad855aab-faff-48cf-ba17-cb9bf5e2db7b.png)
+
+With the upper-right value being positive for the left eye and negative for the right eye.
+
+Example:
+```
+"extrinsics" : [
+ [ 1.0, 0.0, 0.0, -0.03115000016987324 ],
+ [ 0.0, 1.0, 0.0, 0.0 ],
+ [ 0.0, 0.0, 1.0, 0.0 ]
+ ]
+```
+
+_“grow_for_undistort”_
+
+The “grow_for_undistort” is not a critical parameter and can (for now) be set to 0.6.
+
+Example:
+
+`"grow_for_undistort" : 0.6`
+
+_“undistort_r2_cutoff”_
+
+The “undistort_r2_cutoff” field is not a critical parameter and can (for now) be set to 1.5.
+
+Example:
+
+_"undistort_r2_cutoff" : 1.50_
+
+**“type”**
+
+A string value “Lighthouse_HMD”
+
+This value is always “Lighthouse_HMD,” even when the device_class is set to controller.
+
+Example:
+
+`"type" : "Lighthouse_HMD"`
+
+# Example JSON File
+```
+{
+ "device" : {
+ "eye_target_height_in_pixels" : 1080,
+ "eye_target_width_in_pixels" : 960,
+ "first_eye" : "eEYE_LEFT",
+ "last_eye" : "eEYE_RIGHT",
+ "num_windows" : 1,
+ "persistence" : 0.01666999980807304,
+ "physical_aspect_x_over_y" : 0.8000000119209290
+ },
+ "device_class" : "controller",
+ "device_pid" : 8192,
+ "device_serial_number" : "LHR-F8DE9EBE",
+ "device_vid" : 10462,
+ "display_edid" : [ "", "" ],
+ "lens_separation" : 0.06230000033974648,
+ "lighthouse_config" : {
+ "channelMap" : [ 17, 15, 13, 21, 19 ],
+ "modelNormals" : [
+ [ 0, 0, -1 ],
+ [ -0.13309992849826813, 0.11159992963075638, -0.98479938507080078 ],
+ [ 0.11159992963075638, 0.13309992849826813, -0.98479938507080078 ],
+ [ 0.13309992849826813, -0.11159992963075638, -0.98479938507080078 ],
+ [ -0.11159992963075638, -0.13309992849826813, -0.98479938507080078 ]
+ ],
+ "modelPoints" : [
+ [ -0.0015368221793323755, 0.017447538673877716, -0.0040629836730659008 ],
+ [ -0.046612702310085297, 0.039085414260625839, 0.011825915426015854 ],
+ [ 0.039518974721431732, 0.046799946576356888, 0.011834526434540749 ],
+ [ 0.046315468847751617, -0.038777932524681091, 0.01167147234082222 ],
+ [ -0.03922756016254425, -0.046778313815593719, 0.011606470681726933 ]
+ ]
+ },
+ "manufacturer" : "",
+ "model_number" : "",
+ "render_model" : "lighthouse_ufo",
+ "revision" : 3,
+ "tracking_to_eye_transform" : [
+ {
+ "distortion" : {
+ "center_x" : 0.0,
+ "center_y" : 0.0,
+ "coeffs" : [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ],
+ "type" : "DISTORT_DPOLY3"
+ },
+ "distortion_blue" : {
+ "center_x" : 0.0,
+ "center_y" : 0.0,
+ "coeffs" : [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ],
+ "type" : "DISTORT_DPOLY3"
+ },
+ "distortion_red" : {
+ "center_x" : 0.0,
+ "center_y" : 0.0,
+ "coeffs" : [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ],
+ "type" : "DISTORT_DPOLY3"
+ },
+ "extrinsics" : [
+ [ 1.0, 0.0, 0.0, 0.03115000016987324 ],
+ [ 0.0, 1.0, 0.0, 0.0 ],
+ [ 0.0, 0.0, 1.0, 0.0 ]
+ ],
+ "grow_for_undistort" : 0.0,
+ "intrinsics" : [
+ [ 1.250, 0.0, 0.0 ],
+ [ 0.0, 1.0, 0.0 ],
+ [ 0.0, 0.0, -1.0 ]
+ ],
+ "undistort_r2_cutoff" : 1.50
+ },
+ {
+ "distortion" : {
+ "center_x" : 0.0,
+ "center_y" : 0.0,
+ "coeffs" : [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ],
+ "type" : "DISTORT_DPOLY3"
+ },
+ "distortion_blue" : {
+ "center_x" : 0.0,
+ "center_y" : 0.0,
+ "coeffs" : [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ],
+ "type" : "DISTORT_DPOLY3"
+ },
+ "distortion_red" : {
+ "center_x" : 0.0,
+ "center_y" : 0.0,
+ "coeffs" : [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ],
+ "type" : "DISTORT_DPOLY3"
+ },
+ "extrinsics" : [
+ [ 1.0, 0.0, 0.0, -0.03115000016987324 ],
+ [ 0.0, 1.0, 0.0, 0.0 ],
+ [ 0.0, 0.0, 1.0, 0.0 ]
+ ],
+ "grow_for_undistort" : 0.0,
+ "intrinsics" : [
+ [ 1.250, 0.0, 0.0 ],
+ [ 0.0, 1.0, 0.0 ],
+ [ 0.0, 0.0, -1.0 ]
+ ],
+ "undistort_r2_cutoff" : 1.50
+ }
+ ],
+ "head" : {
+ "plus_x" : [ 1, 0, 0 ],
+ "plus_z" : [ 0, 0, 1 ],
+ "position" : [ 0, 0, 0 ]
+ },
+ "imu" : {
+ "acc_bias" : [ 0, 0, 0 ],
+ "acc_scale" : [ 1, 1, 1 ],
+ "gyro_bias" : [ 0, 0, 0 ],
+ "gyro_scale" : [ 1, 1, 1 ],
+ "plus_x" : [ 0, 1, 0 ],
+ "plus_z" : [ 1, 0, 0 ],
+ "position" : [ 0.0034600000362843275, 0.0013079999480396509,
+0.077326998114585876 ]
+ },
+ "type" : "Lighthouse_HMD"
+}
+```
