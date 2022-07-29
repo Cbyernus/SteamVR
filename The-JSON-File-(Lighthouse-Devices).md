@@ -28,7 +28,7 @@ pairs, which are delimited using commas. Each pair is identified by a string tha
 “name” : value. Valid members of the tracked object JSON file are described below, and a complete JSON file is
 presented at the end of the document as an example.
 
-**tip**: _Free source code editors like Notepad++ understand the JSON format and provide convenience features like syntax highlighting and code folding._
+**Tip**: _Free source code editors like Notepad++ understand the JSON format and provide convenience features like syntax highlighting and code folding._
 
 ## JSON Members
 
@@ -40,7 +40,7 @@ Example:
 
 `"manufacturer" : "Valve`
 
-“model_number”
+**“model_number”**
 A string value representing the model number of the object, assigned by the manufacturer.
 
 Example:
@@ -109,7 +109,6 @@ Example: (Replace ellipsis with arrays described in each member below.)
  "modelPoints" : [...]
  }
 ```
-
 
 _“modelNormals”_
 
