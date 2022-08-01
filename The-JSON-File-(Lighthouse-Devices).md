@@ -1,4 +1,4 @@
-_Note: This page is a transplant of the render model documentation that was originally available to lighthouse hardware vendors. It covers the process to create the JSON file that describes hardware configuration and calibration to the lighthouse driver._
+_Note: This page is a transplant of the JSON file documentation that was originally available to lighthouse hardware vendors. It covers the process to create the JSON file that describes hardware configuration and calibration to the lighthouse driver._
 
 # The JSON File
 
