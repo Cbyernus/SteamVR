@@ -8,7 +8,7 @@ Vrpathreg.exe should be used both during testing and development of drivers, and
 
 ## Issues to Watch Out For:
 
-* Openvr makes no guarantees if the same driver is registered more than once. For example, if an old version of a driver and a new version of a driver are installed to different locations on a system, there is no guarantee around which one will be used at runtime. This can lead to problems where one of the drivers is being automatically updated (for example, by Steam), but he old driver is the one actually used at runtime.
+* Registering the same driver more than once results in undefined behavior. For example, if an old version of a driver and a new version of a driver are installed to different locations on a system, there is no guarantee which one will be used at runtime. This can lead to problems where one of the drivers is being automatically updated (for example, by Steam), but the other driver is the one actually used at runtime.
 
 * To avoid double-registration issues, be sure to check if your driver is already registered when your installer runs. Always use the `finddriver` command to query for your driver (and other known conflicting drivers) before calling `adddriver`.
 
