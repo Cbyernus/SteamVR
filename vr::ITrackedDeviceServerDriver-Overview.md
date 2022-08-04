@@ -28,11 +28,11 @@ A VR Client has made this debug request of the driver. The set of valid requests
 up to the driver and the client to figure out, as is the format of the response. Responses that
 exceed the length of the supplied buffer should be truncated and null terminated.
 
-# Display Methods
+# vr::IVRDisplayComponent Methods
 
 **`void GetWindowBounds( int32_t *pnX, int32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight )`**
 
-Size and position that the window needs to be on the VR display.
+Provides the size and position that the window needs to be on the VR display. Note that the values you return from this function are probably just a composition of the rectangles returned by `GetEyeOutputViewport`.
 
 
 **`bool IsDisplayOnDesktop()`**
@@ -47,31 +47,54 @@ Returns true if the display is real and not a fictional display.
 
 **`void GetRecommendedRenderTargetSize( uint32_t *pnWidth, uint32_t *pnHeight )`**
 
-Suggested size for the intermediate render target that the distortion pulls from.
+Provides the suggested size for the intermediate render target that the distortion pulls from.
+This function allows you to suggest a render resolution to the application to produce a final, crisp image, without unduly burdening the user's GPU.  A very large image will cause poor framerate and an overall bad experience. A small image will result in lower image clarity.
+
+We suggest picking a value that counteracts the pixel compression at the center of your display. This maximizes the detail where the user looks the most, without rendering too many extra pixels. You can estimate the correct value using your own distortion measurements. At the center of the user's field of view, divide a small post-distortion pixel distance by its pre-distortion pixel distance, this will yield a good scaling value. Essentially, we are trying to answer the question, "How many pre-distortion pixels are needed to create one post-distortion pixel." 
+
+For example, if `ComputeDistortion( EVREye_Eye_Left, 0.5f, 0.5f )` returns a green channel U,V of `(0.5, 0.5)`, and `ComputeDistortion( EVREye_Eye_Left, 0.52f, 0.50f )` returns `(0.528, 0.5)`, then the X delta was 0.02 and the U delta was 0.028. 0.028 / 0.02 = 1.4, or a scaling factor of 140%. Therefor, the pnWidth and pnHeight values returned by this function should be 140% of the display panel's actual resolution (assuming the whole panel is used). Note that the scaling may not be identical in both axis, and an exact scaling factor isn't strictly necessary.
+
+These width and height values set the "100%" value in the user's settings menu, so it's nice to pick values that "look reasonable" to the user. Several factors will affect the actual rendered resolution. SteamVR performs a performance benchmark to estimate an appropriate tradeoff between resolution and performance. A user can adjust the resolution in the settings menu. An application can also choose to render at a different resolution. There's no guarantee that the values returned by your driver will actually be used.
 
 
 **`void GetEyeOutputViewport( Hmd_Eye eEye, uint32_t *pnX, uint32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight )`**
 
-Gets the viewport in the frame buffer to draw the output of the distortion into.
+Describes the viewport in the frame buffer to draw the output of the distortion into. Calling this function for each eye and combining all of the rectangles should yield the same area as is returned by `GetWindowBounds`.
 
 
 **`void GetProjectionRaw( Hmd_Eye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom )`**
 
-The components necessary to build your own projection matrix in case your
-application is doing something fancy like infinite Z */
+The components necessary to build an application's projection matrix. The values are the tangents of the angles between the forward vector and the edges of the field of view. For example, if your HMD has an FOV of 90 degrees in the vertical and horizontal axes, then it has a 45 degree angle between the forward vector and each side. The values would be `tan(45 degrees)` which is 1.0,  and their signs would be left and top negative, such that:
+```
+*pfLeft = -1.0;
+*pfRight = 1.0;
+*pfTop = -1.0;
+*pfBottom = 1.0;
+```
+
+When an application submits a frame, it may tell SteamVR about the field of view it used. If the application rendered with a larger FoV than the driver gave through `GetProjectionRaw`, then the image will be cropped to the driver's FoV. If the application rendered with a smaller FoV, then the image will be inset such that 0..1 UV always maps to the driver's `GetProjectionRaw` values. An application can optionally specify the FoV it used by submitting a frame with one of the structures that contains a projection matrix, for example, vr::VRTextureWithDepth_t and vr::VRTextureWithPoseAndDepth_t.
 
 
 **`HmdMatrix34_t GetHeadFromEyePose( Hmd_Eye eEye )`**
 
-Returns the transform from eye space to the head space. Eye space is the per-eye flavor of head
-space that provides stereo disparity. Instead of Model * View * Projection the sequence is Model * View * Eye^-1 * Projection. 
+Returns the transform from eye space to the head space, including adjustments for IPD. Eye space is the per-eye transformation of head space that provides stereo disparity. The head space is the pose from IVRServerDriverHost::TrackedDevicePoseUpdated for the HMD. 
 
-Normally View and Eye^-1 will be multiplied together and treated as View in your application. 
+Instead of Head * View * Projection, the sequence is Head * View * Eye^-1 * Projection. Normally View and Eye^-1 will be multiplied together and treated as View in an application.
 
 
 **`DistortionCoordinates_t ComputeDistortion( Hmd_Eye eEye, float fU, float fV )`**
-Returns the result of the distortion function for the specified eye and input UVs. UVs go from 0,0 in 
-the upper left of that eye's viewport and 1,1 in the lower right of that eye's viewport.
+
+Returns the result of the distortion function for the specified eye and input UVs. UVs go from 0,0 in the upper left of that eye's viewport and 1,1 in the lower right of that eye's viewport.
+
+If the inputs are returned as the outputs, meaning that for each channel X = u and Y = v, the image will not be distorted by the compositor. The rendered image from the application will be mapped to the GetEyeOutputViewport. This should be done when you are writing a Direct Mode Driver, and you are using your own compositor and distortion processing.
+
+### Usage in the context of a VR Game:
+* When SteamVR starts, the compositor will gather distortion data. ComputeDistortion will be called several thousand times to sample the distortion space.
+* The user launches a game...
+* Before the first frame of the game, the game will ask SteamVR what the FoV of the display is. GetProjectionRaw will be used here. Most applications will never query the FoV again.
+* Before the first frame, the game will ask SteamVR what size render target is recommended. GetRecommendedRenderTargetSize will be used here. The user may override the value passed to the game through the SteamVR settings menu, and the game may chose a different render resolution for its own reasons.
+* Each Frame, the game queries for updated pose information for placing cameras in game. The camera pose is created by combining poses from TrackedDevicePoseUpdated and GetHeadFromEyePose. 
+
 
 # Assorted capability methods
 
