@@ -79,7 +79,7 @@ When an application submits a frame, it may tell SteamVR about the field of view
 
 Returns the transform from eye space to the head space, including adjustments for IPD. Eye space is the per-eye transformation of head space that provides stereo disparity. The head space is the pose from IVRServerDriverHost::TrackedDevicePoseUpdated for the HMD. 
 
-Instead of Head * View * Projection, the sequence is Head * View * Eye^-1 * Projection. Normally View and Eye^-1 will be multiplied together and treated as View in an application.
+An application can find the correct position for its virtual cameras using the head tracking pose, head from eye pose, and projection matrices. For example: `LeftCamera = LeftProjectionFromEye * LeftEyeFromHead * HeadFromStanding`. When dealing with matrices, the order in which you write the operands is affected by whether the matrix is written column-major or row-major, and the direction of poses (ie. from/to), so be sure to double check that you have inverted matrices when necessary and that the order of multiplication is correct.
 
 
 **`DistortionCoordinates_t ComputeDistortion( Hmd_Eye eEye, float fU, float fV )`**
