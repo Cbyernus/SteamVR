@@ -117,7 +117,7 @@ Whenever you change the IPD property `Prop_UserIpdMeters_Float`, SteamVR will re
 **Method 2: Call IVRServerDriverHost::SetDisplayEyeToHead**
 The method `IVRServerDriverHost::SetDisplayEyeToHead` allows a driver to provide its own vr::HmdMatrix34_t for the left and right eyes. These matrices will be provided as-is to applications that call GetHeadFromEyePose. Once you call `SetDisplayEyeToHead`, SteamVR will no longer automatically update the HeadFromEyePose based on changes to the property `Prop_UserIpdMeters_Float`, it is now the drivers responsibility to handle all IPD changes. There is no mechanism to re-enable automatic IPD handling.
 
-For futher information about poses and matrices in SteamVR, please see the page [[Matrix Usage Example]([[Matrix Usage Example]])].
+For futher information about poses and matrices in SteamVR, please see the page [Matrix Usage Example]([Matrix Usage Example]).
 
 # Assorted capability methods
 
