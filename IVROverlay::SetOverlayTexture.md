@@ -14,3 +14,14 @@ Sets an existing application-created graphics resource as the texture for the ov
   * ID3D10Texture*
   * ID3D11Texture*
 * API_OpenGL - pTexture must the `GLuint` of the texture
+  * Supported formats on Windows:
+    * Linear:
+      * GL_RGBA16
+      * GL_RGBA16F
+      * GL_RGB16F
+    * sRGB:
+      * GL_RGBA8
+      * GL_SRGB8
+      * GL_SRGB8_ALPHA8
+      * GL_RGB8
+      * GL_RGBA
