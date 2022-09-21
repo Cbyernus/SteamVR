@@ -88,6 +88,14 @@ The `components` property is a list your OBJ files and describes how they relate
     "visibility": {},
 }
 ```
+This table gives the mapping of OpenVR poses in your JSON file to OpenXR poses:
+| OpenVR | OpenXR |
+| ----------- | ----------- |
+| pose/tip | aim/pose |
+| pose/grip | grip/pose |
+| pose/Openxr_handmodel | palm_ext/pose |
+
+This table gives the properties for animating the render model:
 
 | Property | Child Property | Notes |
 | -------- | -------------- | ----- |
