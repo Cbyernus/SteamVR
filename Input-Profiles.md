@@ -156,3 +156,12 @@ There may be multiple sources that provide possible bindings. The system will pi
 2. A binding shipped with an application by an application developer.
 3. A binding set on the partner.steamworks site.
 4. A default binding set by the driver writer. This is what is described in this article.
+
+# Icons
+
+SteamVR renders a small window to the desktop so that users can see the status of their VR system at a glance. Drivers should provide custom icons with silhouettes matching their hardware.
+
+![image](https://user-images.githubusercontent.com/3059423/192383208-e9e0fe02-ad61-4c03-a1cb-65b84c11c9c3.png)
+
+Icons are described in a driver's `driver.vrresources` file in the {drivername}/resources/ directory. A good example can be found in your SteamVR install at <SteamVR>/drivers/indexcontroller/resources/driver.vrresources. The property names in this file come from openvr.h, and all have the substring "NamedIconPath" in them. 
+
