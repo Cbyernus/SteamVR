@@ -60,13 +60,26 @@ The components necessary to build an application's projection matrix. The values
 
 Note that “bottom” and “top” are backwards. “Bottom” is the tan angle from the center of projection to the top (+Y) edge of the display, and “top” is the center of projection to the bottom (-Y) edge of the display.
 
-For example, if your HMD has an FOV of 90 degrees in the vertical and horizontal axes, then it has a 45 degree angle between the forward vector and each side. The values would be `tan(45 degrees)` which is 1.0,  and their signs would be left and top negative, such that:
+In a simple example, if your HMD has an FOV of 90 degrees in the vertical and horizontal axes, then it has a 45 degree angle between the forward vector and each side. The values would be `tan(45 degrees)` which is 1.0,  and their signs would be left and top negative, such that:
 ```
 *pfLeft = -1.0;
 *pfRight = 1.0;
 *pfTop = -1.0;
 *pfBottom = 1.0;
 ```
+
+It is typical for HMDs to want to provide a larger field of view in the periphery of each eye and less in the stereo overlap. In this second example, the lens is mounted off-center of the display panel to create the desired peripheral view angle:
+
+![image](https://user-images.githubusercontent.com/3059423/200420697-43ddd135-c5a8-4e47-b788-e0400bd8cfb5.png)
+
+(The lens is drawn as being symmetrical, but in reality it probably wouldn't be). 
+
+Using the above values, we’d return something like:
+Left = -2.747, Right = 1.732, Top = -1.42, Bottom = 1.42 (assuming the lens is vertically centered, but lower fov).
+
+These are tan angles for the edges of the display as seen through the lens – i.e. measured on the eye side.
+
+Since there is variation in assembly technique, typically these values are calibrated per-unit in the factory. These differences also affect the distortion curves, so those are captured at the same time on a per-unit basis.
 
 When an application submits a frame, it may tell SteamVR about the field of view it used. If the application rendered with a larger FoV than the driver gave through `GetProjectionRaw`, then the image will be cropped to the driver's FoV. If the application rendered with a smaller FoV, then the image will be inset such that 0..1 UV always maps to the driver's `GetProjectionRaw` values. If an application uses an FoV other than the one specified by GetProjectinRaw, it must communicate this via IVRCompositor::Submit by specifying the projection used via vr::VRTextureWithDepth_t or vr::VRTextureWithPoseAndDepth_t. If the application does not, the output will look incorrect in headset as it will be improperly stretched or compressed.
 
