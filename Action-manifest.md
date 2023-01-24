@@ -148,7 +148,7 @@ All localization entries use the path of the action or action set as the key and
 
 ## Action Binding Versioning
 
-You can optionally set versions of inputs with:
+You can optionally set version information with:
 
 ```
 "version": x,
@@ -157,4 +157,6 @@ You can optionally set versions of inputs with:
 
 Where `x` and `y` are positive Integers.
 
-Once set at the select bindings menu this will display the message `These bindings were made with an older version of <appname> and need to be updated.` There does not appear to be any further interaction from this option, as out of date Binding files can still be used.
+If you set the `minimum_required_version` property, you will also need to update the `action_manifest_version` property in each controller's binding file. The controller's `action_manifest_version` is compared to the `minimum_required_version` so that old bindings (such as ones on the Steam workshop) can be rejected.
+
+The action manifests 'version' number is used in the bindings menu to display the message `These bindings were made with an older version of <appname> and need to be updated.`
