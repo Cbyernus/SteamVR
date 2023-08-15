@@ -99,7 +99,7 @@ This table gives the properties for animating the render model:
 
 | Property | Child Property | Notes |
 | -------- | -------------- | ----- |
-| component_local |         | Describes a transform in global coordinate space to a component's location. Useful for tutorials that want to point at the component. |
+| component_local |         | Describes a transform in global coordinate space to a component's location and local space. Useful for tutorials that want to point at the component. |
 |                 | origin  | [x, y, z] - The translation from global to component space |
 |                 | rotate_xyz | [x, y, z] - The rotation from global to component space |
 | motion |                  | How a component moves based on input |
