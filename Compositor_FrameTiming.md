@@ -1,71 +1,65 @@
-Provides a single frame's timing information to the app
+`Compositor_FrameTiming` contains timing information for a single frame.
+
+Frame timing can be retrieved either for a single frame by specifying how many frames ago to retrieve information for through `IVRCompositor::GetFrameTiming`, or for multiple frames from the current frame with `IVRCompositor::GetFrameTimings`.
+
+Information for the last 128 frames are stored. Attempts to pass larger arrays will only be filled up to this limit.
+
+To maintain compatibility with previous versions, `Compositor_FrameTiming` **must** be set to the size of the struct being passed. For C#, this can be done with:
+
+```c#
+(uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(Compositor_FrameTiming));
+```
+
+The following are descriptions for each member of `Compositor_FrameTiming`:
+
+	uint32_t m_nSize - Set to sizeof( Compositor_FrameTiming )
+	uint32_t m_nFrameIndex - Incremented each frame and is the specified index for the frame
+	uint32_t m_nNumFramePresents - Number of times this frame was presented, in case of reprojection
+	uint32_t m_nNumMisPresented - Number of times this frame was presented on a vsync other than it was originally predicted to
+	uint32_t m_nNumDroppedFrames - Number of additional times previous frame was scanned out
+	uint32_t m_nReprojectionFlags - Contains information on reprojection, if applicable. See below for possible options
+
+	double m_flSystemTimeInSeconds - Absolute time reference for comparing frames. This aligns with the vsync that running start is relative to
+
+The following may include work from other processes due to OS scheduling. The fewer packets of work these are broken up into, the less likely this will happen.  
+GPU work can be broken up by calling Flush.  This can sometimes be useful to get the GPU started processing that work earlier in the frame.
+
+	float m_flPreSubmitGpuMs - Time spent rendering the scene (gpu work submitted between WaitGetPoses and second Submit)
+	float m_flPostSubmitGpuMs - Additional time spent rendering by application (e.g. companion window)
+	float m_flTotalRenderGpuMs - Time between work submitted immediately after present (ideally vsync) until the end of compositor submitted work
+	float m_flCompositorRenderGpuMs - Time spend performing distortion correction, rendering chaperone, overlays, etc.
+	float m_flCompositorRenderCpuMs - Time spent on cpu submitting the above work for this frame
+	float m_flCompositorIdleCpuMs - Time spent waiting for running start (application could have used this much more time)
+
+Miscellaneous measured intervals
+
+	float m_flClientFrameIntervalMs - Time between calls to WaitGetPoses
+	float m_flPresentCallCpuMs Time blocked on call to present (usually 0.0, but can go long)
+	float m_flWaitForPresentCpuMs - Time spent spin-waiting for frame index to change (not near-zero indicates wait object failure)
+	float m_flSubmitFrameMs - Time spent in IVRCompositor::Submit (not near-zero indicates driver issue)
+
+These are all relative to this frame's SystemTimeInSeconds
+
+	float m_flWaitGetPosesCalledMs
+	float m_flNewPosesReadyMs
+	float m_flNewFrameReadyMs - Second call to IVRCompositor::Submit
+	float m_flCompositorUpdateStartMs
+	float m_flCompositorUpdateEndMs
+	float m_flCompositorRenderStartMs
+
+Other
+
+	vr::TrackedDevicePose_t m_HmdPose - Pose used by app to render this frame
+
+	uint32_t m_nNumVSyncsReadyForUse
+	uint32_t m_nNumVSyncsToFirstView
 
 
-Always set 'size' to sizeof(Compositor_FrameTiming) for proper versioning and avoid memory corruption.  In C# use:
+**m_nReprojectionFlags** - A bit flag field that contains the possible options of:
 
-	(uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(Compositor_FrameTiming));
-
-### Properties ###
-
-**frameStart** - Time reference for each frame.  This won't necessarily be evenly spaced.
-
-**frameVSync** - Time from frameStart until the next VSync.  Using (current.frameStart + current.frameVSync) - (previous.frameStart + previous.frameVSync) should be a reliable way to measure frame intervals.
-
-**droppedFrames** - Number of droppedFrames as reported by DXGI's GetFrameStatistics since the previous frame.  This is a delta of PresentRefreshCount since the last time we called it.  It is stored unsigned, but has been known to go negative, so should be cast to an int before using.
-
-**frameIndex** - Incremented each frame.  Can be used to call [GetFrameTiming](https://github.com/ValveSoftware/openvr/wiki/IVRCompositor::GetFrameTiming) at a lower frequency than it's being updated to iterate through the history until you see a frame you recognize.
-
-**pose** - Hmd pose used to render this frame.
-
-    struct Compositor_FrameTiming
-    {
-        uint32_t size; // sizeof(Compositor_FrameTiming)
-        double frameStart;
-        float frameVSync; // seconds from frame start
-        uint32_t droppedFrames;
-        uint32_t frameIndex;
-        vr::TrackedDevicePose_t pose;
-    };
-
----
-
-**m_nSize** - Set to sizeof( Compositor_FrameTiming )
-
-**m_nNumFramePresents** - number of times this frame was presented
-
-**m_nNumMisPresented** - number of times this frame was presented on a vsync other than it was originally predicted to
-
-**m_nNumDroppedFrames** - number of additional times previous frame was scanned out
-
-**m_flSystemTimeInSeconds** - Absolute time reference for comparing frames.  This aligns with the vsync that running start is relative to.
-
-These times may include work from other processes due to OS scheduling. The fewer packets of work these are broken up into, the less likely this will happen. GPU work can be broken up by calling Flush. This can sometimes be useful to get the GPU started processing that work earlier in the frame.
- 
-**m_flPreSubmitGpuMs** - time spent rendering the scene (gpu work submitted between WaitGetPoses and second Submit)
-
-**m_flPostSubmitGpuMs** - additional time spent rendering by application (e.g. companion window)
-
-**m_flTotalRenderGpuMs** - time between work submitted immediately after present (ideally vsync) until the end of compositor submitted work
-
-**m_flCompositorRenderGpuMs** - time spend performing distortion correction, rendering chaperone, overlays, etc.
-
-**m_flCompositorRenderCpuMs** - time spent on cpu submitting the above work for this frame
-
-**m_flCompositorIdleCpuMs** - time spent waiting for running start (application could have used this much more time)
-
-Miscellaneous measured intervals.
-
-**m_flClientFrameIntervalMs** - time between calls to WaitGetPoses
-
-**m_flPresentCallCpuMs** - time blocked on call to present (usually 0.0, but can go long)
-
-**m_flWaitForPresentCpuMs** - time spent spin-waiting for frame index to change (not near-zero indicates wait object failure)
-
-**m_flSubmitFrameMs** - time spent in IVRCompositor::Submit (not near-zero indicates driver issue)
-
-The following are all relative to this frame's SystemTimeInSeconds
-
-**m_flNewFrameReadyMs** - second call to IVRCompositor::Submit
-
-**m_HmdPose** - pose used by app to render this frame
-
+	VRCompositor_ReprojectionReason_Cpu = 0x01
+	VRCompositor_ReprojectionReason_Gpu = 0x02
+	VRCompositor_ReprojectionAsync = 0x04 - Indicates the async reprojection mode is active, but does not indicate if reprojection actually happened or not. Use the ReprojectionReason flags above to check if reprojection was actually applied (i.e. scene texture was reused). NumFramePresents > 1 also indicates the scene texture was reused, and also the number of times that it was presented in total.
+	VRCompositor_ReprojectionMotion = 0x08 - This flag indicates whether or not motion smoothing was triggered for this frame
+	VRCompositor_PredictionMask = 0xF0 - The runtime may predict more than one frame (up to four) ahead if it detects the application is taking too long to render. These two bits will contain the count of additional frames (normally zero). Use the VR_COMPOSITOR_ADDITIONAL_PREDICTED_FRAMES macro to read from the latest frame timing entry.
+	VRCompositor_ThrottleMask = 0xF00 - Number of frames the compositor is throttling the application. Use the VR_COMPOSITOR_NUMBER_OF_THROTTLED_FRAMES macro to read from the latest frame timing entry.
