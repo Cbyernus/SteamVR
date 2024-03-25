@@ -63,3 +63,44 @@ Other
 	VRCompositor_ReprojectionMotion = 0x08 - This flag indicates whether or not motion smoothing was triggered for this frame
 	VRCompositor_PredictionMask = 0xF0 - The runtime may predict more than one frame (up to four) ahead if it detects the application is taking too long to render. These two bits will contain the count of additional frames (normally zero). Use the VR_COMPOSITOR_ADDITIONAL_PREDICTED_FRAMES macro to read from the latest frame timing entry.
 	VRCompositor_ThrottleMask = 0xF00 - Number of frames the compositor is throttling the application. Use the VR_COMPOSITOR_NUMBER_OF_THROTTLED_FRAMES macro to read from the latest frame timing entry.
+
+## Example usage
+`Compositor_FrameTiming` can be used for calculating the current framerate of the application.
+```c#
+Compositor_FrameTiming currentFrame = new Compositor_FrameTiming();
+Compositor_FrameTiming previousFrame = new Compositor_FrameTiming();
+currentFrame.m_nSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(Compositor_FrameTiming));
+previousFrame.m_nSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(Compositor_FrameTiming));
+OpenVR.Compositor.GetFrameTiming(ref currentFrame, 0);
+OpenVR.Compositor.GetFrameTiming(ref previousFrame, 1);
+
+uint currentFrameIndex = currentFrame.m_nFrameIndex;
+uint amountOfFramesSinceLast = currentFrameIndex - LastFrameSampleIndex;
+
+double gpuFrametimeMs = 0;
+double cpuFrametimeMs = 0;
+double totalFrametimeMs = 0;
+
+for (uint i = 0; i < amountOfFramesSinceLast; i++)
+{
+    OpenVR.Compositor.GetFrameTiming(ref currentFrame, i);
+    OpenVR.Compositor.GetFrameTiming(ref previousFrame, i + 1);
+
+    gpuFrametimeMs += currentFrame.m_flTotalRenderGpuMs;
+    cpuFrametimeMs += currentFrame.m_flNewFrameReadyMs - currentFrame.m_flNewPosesReadyMs + currentFrame.m_flCompositorRenderCpuMs;
+    totalFrametimeMs += (currentFrame.m_flSystemTimeInSeconds - previousFrame.m_flSystemTimeInSeconds) * 1000f;
+}
+
+gpuFrametimeMs /= amountOfFramesSinceLast;
+cpuFrametimeMs /= amountOfFramesSinceLast;
+totalFrametimeMs /= amountOfFramesSinceLast;
+
+LastFrameSampleIndex = currentFrameIndex;
+
+Information.GpuFrametime = (float) gpuFrametimeMs;
+Information.CpuFrametime = (float) cpuFrametimeMs;
+Information.TotalFrametime = (float) totalFrametimeMs;
+Information.Framerate = Mathf.Max(0, Mathf.Min(targetRefreshRate, (int)(1f / totalFrametimeMs * 1000f)));
+Information.MaxFrametime = targetRefreshRateMs;
+Information.MaxFramerate = targetRefreshRate;
+```
