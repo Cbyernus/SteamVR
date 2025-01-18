@@ -6,13 +6,17 @@
 
 ## 介紹
 
-SteamVR™追蹤系統中的每個被追蹤對像都包含一個文件，該文件描述其感測器幾何形狀以及有關設備的其他重要數據。該文件是使用 JSON 文件格式編寫的。儘管許多檔案使用 JSON 格式，但儲存在追蹤物件中的檔案對於物件的開發和效能至關重要，因此被稱為「JSON 檔案」。 JSON 檔案以最少的感測器位置和方向開始其生命週期，但在整個設計和整合過程中不斷增強，包括 IMU 資料、鏡頭畸變資料以及 SteamVR™ 使用的其他元資料。最後，校準例程將原始感測器幾何值細化為特定物件上的精確感測器位置，並重寫 JSON 文件，從而為每個追蹤物件產生唯一的 JSON 檔案。
+SteamVR™追蹤系統中的每個被追蹤對像都包含一個文件，該文件描述其感測器幾何形狀以及有關設備的其他重要數據。該文件是使用 JSON 文件格式編寫的。
+儘管許多檔案使用 JSON 格式，但儲存在追蹤物件中的檔案對於物件的開發和效能至關重要，因此被稱為「JSON 檔案」。 JSON 檔案以最少的感測器位置和方向開始其生命週期，但在整個設計和整合過程中不斷增強，包括 IMU 資料、鏡頭畸變資料以及 SteamVR™ 使用的其他元資料。
+最後，校準例程將原始感測器幾何值細化為特定物件上的精確感測器位置，並重寫 JSON 文件，從而為每個追蹤物件產生唯一的 JSON 檔案。
 
 本文檔描述了可能儲存在 JSON 檔案中的所有變數、它們的含義以及如何指定它們。本文檔引用自其他描述設計過程中各個步驟的文件。若要了解每個變數何時、為何以及如何新增至 JSON 檔案中，請遵循物件設計和整合概述中概述的流程。
 
 ## JSON格式
 
-JSON 代表 JavaScript 物件表示法，是一種輕量級資料交換格式。資料交換格式是格式化資料以在不同運算平台（有時是人類讀者）之間共享的方法。有關 JSON 格式的完整說明，請造訪 www.json.org 。由於 JSON 檔案表示 JSON 對象，因此它以大括號 { 開頭，並以大括號 } 結束。 JSON 檔案中儲存的不同成員成對存儲，並使用逗號分隔。每對都由一個字串標識，該字串與其值之間用冒號分隔，「名稱」：值。下面描述了追蹤物件 JSON 檔案的有效成員，並在文件末尾提供了完整的 JSON 檔案作為範例。
+JSON 代表 JavaScript 物件表示法，是一種輕量級資料交換格式。資料交換格式是格式化資料以在不同運算平台（有時是人類讀者）之間共享的方法。有關 JSON 格式的完整說明，請造訪 www.json.org 。
+由於 JSON 檔案表示 JSON 對象，因此它以大括號 { 開頭，並以大括號 } 結束。 JSON 檔案中儲存的不同成員成對存儲，並使用逗號分隔。每對都由一個字串標識，該字串與其值之間用冒號分隔，「名稱」：值。
+下面描述了追蹤物件 JSON 檔案的有效成員，並在文件末尾提供了完整的 JSON 檔案作為範例。
 
 提示：像 Notepad++ 這樣的免費原始碼編輯器可以理解 JSON 格式，並提供語法突出顯示和程式碼折疊等便利功能。
 
@@ -80,12 +84,10 @@ USB 產品識別號碼。每個製造商都應該為每個型號建立一個 PID
 **“lighthouse_config”**
 
 包含三個成員數組的物件。每個陣列索引對應於被追蹤物件上的一個感測器。
-指定 modelPoints、modelNormals 和 channelMap 中的值定義了
-感測器、其方向及其電氣連接（連接埠號）。當 SteamVR™ 接收追蹤資料時
-從特定連接埠上的感測器，它可以使用 lighthouse_config 中的資料將該訊號與
-位於被追蹤物體上的特定物理感測器。 SteamVR™ 也會讀取所描述的感測器位置
-在 lighthouse_config 中為裝置建立精確的感測器幾何形狀。 SteamVR™解決傳入
-根據已知的感測器幾何形狀追蹤數據，以確定物體的當前姿態。
+指定 modelPoints、modelNormals 和 channelMap 中的值定義了感測器、其方向及其電氣連接（連接埠號）。
+當 SteamVR™ 接收追蹤資料時從特定連接埠上的感測器，它可以使用 lighthouse_config 中的資料將該訊號與位於被追蹤物體上的特定物理感測器。 
+SteamVR™ 也會讀取所描述的感測器位置在 lighthouse_config 中為裝置建立精確的感測器幾何形狀。 
+SteamVR™解決傳入根據已知的感測器幾何形狀追蹤數據，以確定物體的當前姿態。
 
 ![image](https://user-images.githubusercontent.com/3059423/181827611-c08d4311-909b-4071-b5a9-802791bf8398.png)
 
@@ -125,11 +127,11 @@ _“modelNormals”_
 
 _“modelPoints”_
 
-An array of [x, y, z] coordinates that specify the location of the center of the optical sensor’s photosensitive area
-in the object’s coordinate system. Coordinate values are expressed in meters.
+[x, y, z] 座標數組，指定光學感測器感光區域中心位置
+在物體的座標系中。座標值以米表示。
 
-If we assigned the following dimensions to the sensor locations on the side of the HMD, we would need to
-represent those dimensions in the modelPoints array as shown below.
+如果我們將以下尺寸分配給 HMD 側面的感測器位置，我們需要
+在 modelPoints 陣列中表示這些維度，如下所示。
 
 ![image](https://user-images.githubusercontent.com/3059423/181828159-306c3041-bf33-4a86-8f2a-74f364ed2338.png)
 
@@ -146,49 +148,42 @@ represent those dimensions in the modelPoints array as shown below.
 
 _“channelMap”_
 
-An array of port numbers. There is an element in the array for each sensor on the object. The value in the array
-element corresponds to the electrical channel connected to the sensor. When SteamVR™ receives tracking
-data from a channel, it can use this array to map that data to a sensor location specified in modelPoints.
+連接埠號碼數組。物件上的每個感測器在數組中都有一個元素。數組中的值
+元件對應連接到感測器的電通道。當 SteamVR™ 收到追蹤時
+如果來自通道的數據，它可以使用此數組將該資料對應到 modelPoints 中指定的感測器位置。
 
-If the five sensors shown on the side of the HMD in this example were connected to the electrical channels as
-indicated below, we would need the channelMap array [3, 5, 7, 11, 13]. The sensor channel number is
-determined by the sensor’s electrical connection to the object’s FPGA.
+如果本範例中 HMD 側面顯示的五個感測器連接到電氣通道，如下所示
+如下圖所示，我們需要channelMap陣列[3,5,7,11,13]。感測器通道數為
+由感測器與物件 FPGA 的電氣連接確定。
 
 ![image](https://user-images.githubusercontent.com/3059423/181828261-c138c653-2775-4b0e-8852-e2a00b1b6c53.png)
 
-**Note**: _The channel numbers are zero based, and cover the range 0 - 31. Altium’s multichannel
-schematic feature forces numbering to start at 1. Be careful when copying channel numbers from the
-net names in Altium. Net SENSOR_X1 is most likely connected to FPGA channel number 0. Subtract
-1 from the reference designator to get the correct channel number._
+**注意**：_通道編號從零開始，涵蓋範圍 0 - 31。
+原理圖功能強制編號從 1 開始。
+Altium 中的網路名稱。 Net SENSOR_X1 最有可能連接到 FPGA 頻道號碼 0。
+1 從參考指示符取得正確的頻道號碼。
 
 **“head”**
 
-An object with members that orient the tracked object’s coordinate system to the real world. The head member
-has two different meanings, depending on the value of device_class.
+一個對象，其成員將追蹤對象的座標系定向到現實世界。團長成員
+有兩種不同的意義，取決於 device_class 的值。
 
 _HMD Use Case_
 
-When the object is acting as an HMD, the head variable orients SteamVR™’s coordinate system to the tracked
-object. The origin of SteamVR™ is a point between an average user’s pupils, oriented with +Y pointing up, +X
-pointing to the user’s right, and -Z pointing out along the line of sight. If the model has a coordinate system that
-does not match this, then changing the head member is required.
+當追蹤設備充當 HMD 時， head 變數將 SteamVR™ 的座標系定向到追蹤的位置目的。 SteamVR™ 的原點是一般使用者瞳孔之間的點，方向為 +Y 向上，+X
+指向使用者的右側，-Z 沿著視線方向指向。如果模型有一個座標系與此不符，則需要更換頭部部件。
 
 ![image](https://user-images.githubusercontent.com/3059423/181828580-a70ae58a-49c7-411c-aa64-80c50b37b3e5.png)
 
-For example, consider the HMD object below, with its coordinate system.
+例如，考慮下面的 HMD 物件及其座標系。
 
 ![image](https://user-images.githubusercontent.com/3059423/181828618-95fe6d31-35a1-4dc3-846c-488a29e61f64.png)
 
-The “plus_x” value answers the question, “The head’s +X axis is pointing in which direction within the HMD’s
-CAD coordinate system?” The head’s +X axis points in the direction of the HMD’s -X axis. Therefore, the value
-for “plus_x” is [-1, 0, 0].
+“plus_x”值回答了這個問題：“頭部的+X軸在HMD的CAD坐標系中指向哪個方向？”頭部的+X軸指向HMD的-X軸。因此，“plus_x”的值為[-1, 0, 0]。
 
-Likewise, the +Z axis of the head’s coordinate system points in the direction of the -Z axis of the HMD’s
-coordinate system. This requires a “plus_z” value of [0, 0, -1] to match the orientations.
+同樣，頭部坐標系的+Z軸指向HMD坐標系的-Z軸。這需要“plus_z”值為[0, 0, -1]來對齊方向。
 
-The head’s origin is centered between the pupils, but the HMD’s origin is between the HMD’s lenses. When
-worn, the origin of the head is behind the origin of the HMD by 20 mm along the -Z axis. Matching the origins
-requires a value of [0.0, 0.0, -0.020] for the “position” coordinates.
+頭部的原點位於兩個瞳孔之間，而HMD的原點位於HMD鏡頭之間。佩戴時，頭部的原點在-H軸上比HMD的原點向後20毫米。要對齊原點，"位置"坐標需要的值為[0.0, 0.0, -0.020]。
 
 例子：
 ```
@@ -201,11 +196,7 @@ requires a value of [0.0, 0.0, -0.020] for the “position” coordinates.
 
 _Controller_
 
-When the object is acting as a controller, the head variable orients the render model shown in SteamVR™ to
-the tracked object. The render model is created in the SteamVR™ coordinate system as described in **The**
-**Render Model**. One method for determining the head variable is to export the render model as an STL file,
-import that STL file into the 3D CAD space of the object. Then, measure the plus_x and plus_z normals and
-origin of the render model from the origin of the object.
+當物體作為控制器時，頭部變量將SteamVR™中顯示的渲染模型定向至被追蹤的物體。渲染模型是在SteamVR™坐標系中創建的，如渲染模型中所述。確定頭部變量的一種方法是將渲染模型導出為STL文件，然後將該STL文件導入物體的3D CAD空間中。接著，從物體的原點測量渲染模型的plus_x和plus_z法向量及原點位置。
 
 例子：
 
@@ -219,58 +210,44 @@ origin of the render model from the origin of the object.
 
 _“plus_x”_
 
-HMD: A unit vector [x, y, z] representing the direction of the head’s +X axis in the object’s coordinate system.
+HMD：一個單位向量 [x, y, z]，表示頭部的+X軸在物體坐標系中的方向。
 
-Controller: A unit vector [x, y, z] that aligns the render model in SteamVR™ to the object’s coordinate system.
+控制器：一個單位向量 [x, y, z]，使SteamVR™中的渲染模型與物體的坐標系對齊。
 
 _“plus_z”_
 
-HMD: A unit vector [x, y, z] representing the direction of the head’s +Z axis in the object’s coordinate system.
+HMD：單位向量[x,y,z]，表示物體座標系中頭部+Z軸的方向。
 
-Controller: A unit vector [x, y, z] that aligns the render model in SteamVR™ to the object’s coordinate system.
+控制器：一個單位向量 [x, y, z]，將 SteamVR™ 中的渲染模型與物件的座標系對齊。
 
 _“position”_
 
-HMD: A coordinate [x, y, z] located at the midpoint between the average user’s physical pupil locations. This is
-typically determined by extending a vector out from the lens surface along the primary optical axis, until it
-crosses the plane of the average user’s pupil depth.
+HMD：座標 [x, y, z] 位於一般使用者物理瞳孔位置之間的中點。
+這是通常透過沿著主光軸從透鏡表面延伸向量來確定，直到它
+穿過普通用戶瞳孔深度的平面。
 
-Controller: A coordinate [x, y, z] that positions the render model in SteamVR™ in the object’s coordinate
-system.
+控制器：座標 [x, y, z]，將 SteamVR™ 中的渲染模型定位在物件的座標中系統。
 
-**Note**: _A “plus_y” member is not required, because a right-handed coordinate system is assumed._
+**注意**：_不需要「plus_y」成員，因為假定使用右手座標系。
 
 **"imu"**
 
-An object containing calibration and orientation data about the IMU. The plus_x, plus_z, and position members
-map the IMU coordinate system into the object’s coordinate system. The acc and gyro members hold
-accelerometer and gyroscope calibration data. For an example, consider the following IMU, placed on a PCB in
-an HMD object.
+包含有關 IMU 的校準和方向資料的物件。 plus_x、plus_z 和position 構件將 IMU 座標系映射到物體的座標系。 
+ACC 和陀螺儀成員持有加速度計和陀螺儀校準資料。
+例如，考慮以下 IMU，放置在 PCB 上
+一個 HMD 物件。
 
 ![image](https://user-images.githubusercontent.com/3059423/181829693-b7846937-f4d4-4f92-a483-e525c91587e7.png)
 
-The datasheet specifies the coordinate system of the IMU. However, that coordinate system is not aligned with
-the coordinate system of the HMD. In fact, all three axes axes need adjustment. The IMU’s +X axis points in the
-HMD’s +Y direction, requiring a plus_x value of [0, 1, 0]. The IMU’s +Z axis points in the HMD’s -Z direction,
-requiring a plus_z value of [0, 0, -1]. The IMU’s Y axis is also different from the HMD, but specifying the X and Z
-axes constrains the Y axis.
+數據表指定了IMU的坐標系。然而，該坐標系並未與HMD的坐標系對齊。事實上，所有三個軸都需要調整。IMU的+X軸指向HMD的+Y方向，因此需要plus_x值為[0, 1, 0]。IMU的+Z軸指向HMD的-Z方向，因此需要plus_z值為[0, 0, -1]。IMU的Y軸也不同於HMD，但指定X軸和Z軸會約束Y軸的方向。
 
 ![image](https://user-images.githubusercontent.com/3059423/181829741-d705b84f-66f5-41d5-956c-8d2692e64f45.png)
 
-Not only are the axes of the IMU different, but the IMU is not located at the origin of the HMD’s coordinate
-system. The IMU is located in the X/Y plane, meaning that the Z offset is 0 mm, but the X offset is -40 mm and
-the Y offset is +10 mm. Therefore, the required position value is [-0.040, 0.010, 0.0].
+不僅IMU的軸不同，IMU也不位於HMD坐標系的原點。IMU位於X/Y平面上，這意味著Z偏移為0毫米，但X偏移為-40毫米，Y偏移為+10毫米。因此，所需的位置信息為[-0.040, 0.010, 0.0]。
 
-The accelerometer and gyroscope have offsets inherent in the device. Accelerometer offsets, for example, may
-start as low as 0.025g. However, they increase during the assembly process, and throughout the life of the part,
-to as high as 0.150g or more. Initial gyroscope offsets are typically 3°/s - 5°/s. The accelerometer and
-gyroscope offsets change over temperature. Accounting for that, SteamVR™ has internal calibration
-mechanisms that constantly trim out the error during use. To ensure that SteamVR™ can converge on the
-actual offsets as quickly as possible, the IMU member of the JSON file holds initial calibration data for offsets
-present at the time of manufacturing. Determining the correct values for these fields is easily accomplished using the software utility described in IMU Calibration. The **IMU calibration** tool outputs a snippet of JSON to
-copy and paste into the IMU member of the JSON file.
+加速度計和陀螺儀具有設備固有的偏移。例如，加速度計的偏移可能最低為0.025g。然而，這些偏移在組裝過程中會增加，並且在部件的整個使用壽命中可能增至0.150g或更多。初始的陀螺儀偏移通常為3°/s至5°/s。加速度計和陀螺儀的偏移會隨著溫度變化。考慮到這一點，SteamVR™擁有內部校準機制，能夠在使用過程中不斷消除這些誤差。為了確保SteamVR™能夠儘快收斂到實際的偏移值，JSON文件中的IMU成員保存了製造時的初始校準數據。確定這些字段的正確值可以使用IMU校準中描述的軟件工具輕鬆完成。IMU校準工具會輸出一段JSON片段，以便複製並粘貼到JSON文件的IMU成員中。
 
-IMU Calibrator Output:
+IMU校準器輸出：
 ```
 Calibrating to gravity sphere, radius 9.8066
 0.05265 accelerometer fit error (6 sample vectors x 8 subsamples per vector)
@@ -293,60 +270,54 @@ Example:
  }
 ```
 
-_“plus_x”_
+"plus_x"
+一個單位向量 [x, y, z]，表示IMU的+X軸在物體坐標系中的方向。
 
-A unit vector [x, y, z] representing the direction of the IMU’s +X axis in the object’s coordinate system.
+"plus_z"
+一個單位向量 [x, y, z]，表示IMU的+Z軸在物體坐標系中的方向。
 
-_“plus_z”_
+"position"
+一個坐標 [x, y, z]，指定IMU封裝的中心在物體坐標系中的位置。
 
-A unit vector [x, y, z] representing the direction of the IMU’s +Z axis in the object’s coordinate system.
+注意：不需要“plus_y”成員，因為假定使用的是右手坐標系。
 
-_“position”_
+"render_model"
+"render_model"成員通常包含IMU的渲染模型數據，這些數據用於在虛擬環境中正確顯示IMU的外觀和位置。這可以包括模型的幾何形狀、材質和其他視覺屬性。
 
-A coordinate [x, y, z] specifying the center of the IMU’s package in the object’s coordinate system.
-
-**Note**: _A “plus_y” member is not required, because a right-handed coordinate system is assumed._
-
-**"render_model"**
-
-Holds a string value that specifies the name of the subfolder within the SteamVR™ “rendermodels” folder that
-holds the default rendermodel for the object.
-
-Example:
+例子：
 
 `"render_model" : "ref_controller"`
 
 **“display_edid”**
 
-Description
+描述
 
 Example:
 `"display_edid" : [ "", "" ]`
 
 **“direct_mode_edid_vid”**
 
-The integer display EDID vendor ID. This number must be whitelisted by NVIDIA to enable your display to
-operate in direct mode. After that, this value tells SteamVR™ which display to use when displaying VR to the
-HMD. Note that any text prefixes are omitted.
+整數顯示 EDID 供應商 ID。該號碼必須被 NVIDIA 列入白名單，以便您的顯示器能夠
+以直接模式運轉。之後，該值告訴 SteamVR™ 在向使用者顯示 VR 時使用哪個顯示器
+頭顯。請注意，省略任何文字前綴。
 
-Example:
+例子：
 
 `"direct_mode_edid_vid" : xxxxx`
 
 **“direct_mode_edid_pid”**
 
-The integer display EDID product ID. This number must be whitelisted by NVIDIA to enable your display to
-operate in direct mode. After that, this value tells SteamVR™ which display to use when displaying VR to the
-HMD. Note that any text prefixes are omitted.
+整數顯示EDID產品ID。該號碼必須被 NVIDIA 列入白名單，以便您的顯示器能夠
+以直接模式運轉。之後，該值告訴 SteamVR™ 在向使用者顯示 VR 時使用哪個顯示器
+頭顯。請注意，省略任何文字前綴。
 
-Example:
+例子：
 
 `"direct_mode_edid_vid" : xxxxx`
 
 *"device"*
 
-Description
-
+描述
 Example:
 
 ```
@@ -363,17 +334,12 @@ Example:
 
 _“eye_target_height_in_pixels”_
 
-This value indicates the vertical resolution of each eye’s display in the HMD. When operating out of direct
-mode, SteamVR uses this value along with eye_target_width_in_pixels to determine which display to associate
-with the tracked HMD device.
+該值表示 HMD 中每隻眼睛顯示的垂直解析度。在直連模式下，SteamVR 使用該值以及 eye_target_width_in_pixels 來決定要關聯的顯示器與被追蹤的 HMD 設備。
 
 _“eye_target_width_in_pixels”_
 
-This value indicates the horizontal resolution of each eye’s display in the HMD. Since HMDs split a single
-display output feed into two physical displays, this value should be one half of the width of the display as it
-appears in your operating system’s display settings. In this example, the HMD’s resolution is 1920x1080 split
-between both eyes. When operating out of direct mode, SteamVR uses this value along with
-eye_target_width_in_pixels to determine which display to associate with the tracked HMD device.
+該值表示 HMD 中每隻眼睛顯示的水平解析度。由於 HMD 分割了一個顯示輸出饋送到兩個實體顯示器，該值應該是顯示器寬度的一半，因為它出現在作業系統的顯示設定中。在此範例中，HMD 的分辨率為 1920x1080 分割雙眼之間。
+當脫離直接模式運作時，SteamVR 使用該值以及eye_target_width_in_pixels 決定哪個顯示器與追蹤的 HMD 裝置關聯。
 
 _“first_eye”_
 
