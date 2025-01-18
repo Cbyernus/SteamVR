@@ -1,4 +1,4 @@
-_Note: This page is a transplant of the JSON file documentation that was originally available to lighthouse hardware vendors. It covers the process to create the JSON file that describes hardware configuration and calibration to the lighthouse driver._
+注意：此頁面最初是提供給 Lighthouse 硬體供應商的 JSON 檔案的移植。
 
 # The JSON File
 
