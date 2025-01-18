@@ -1,34 +1,22 @@
 注意：此頁面最初是提供給 Lighthouse 硬體供應商的 JSON 檔案的移植。
 
-# The JSON File
+# JSON文件
 
-### SteamVR™ Tracking
+### SteamVR™ 追蹤器
 
-## Introduction
+## 介紹
 
-Each tracked object in the SteamVR™ Tracking system contains a file that describes its sensor geometry and other
-important data about the device. This file is written using the JSON file format. Although many files use the JSON
-format, the file stored in the tracked object is so integral to the development and performance of the object that it
-receives the title “**The** JSON File.” The JSON file begins its life with a minimum of sensor positions and orientations, but
-is augmented throughout the design and integration process to include IMU data, lens distortion data, and other
-metadata used by SteamVR™. Finally, calibration routines refine the original sensor geometry values to the exact
-sensor locations on a specific object and rewrite the JSON file, resulting in a unique JSON file for every tracked object.
+SteamVR™追蹤系統中的每個被追蹤對像都包含一個文件，該文件描述其感測器幾何形狀以及有關設備的其他重要數據。該文件是使用 JSON 文件格式編寫的。儘管許多檔案使用 JSON 格式，但儲存在追蹤物件中的檔案對於物件的開發和效能至關重要，因此被稱為「JSON 檔案」。 JSON 檔案以最少的感測器位置和方向開始其生命週期，但在整個設計和整合過程中不斷增強，包括 IMU 資料、鏡頭畸變資料以及 SteamVR™ 使用的其他元資料。最後，校準例程將原始感測器幾何值細化為特定物件上的精確感測器位置，並重寫 JSON 文件，從而為每個追蹤物件產生唯一的 JSON 檔案。
 
-This document describes all of the variables that may be stored in the JSON file, what they mean, and how to specify
-them. This document is referenced from other documents that describe various steps in the design process. To
-understand when, why, and how each variable is added to the JSON file, follow the process outlined in the Object Design and Integration Overview​.
+本文檔描述了可能儲存在 JSON 檔案中的所有變數、它們的含義以及如何指定它們。本文檔引用自其他描述設計過程中各個步驟的文件。若要了解每個變數何時、為何以及如何新增至 JSON 檔案中，請遵循物件設計和整合概述中概述的流程。
 
-## JSON Format
+## JSON格式
 
-JSON stands for JavaScript Object Notation, and refers to a lightweight data-interchange format. Data-interchange
-formats are means of formatting data to share between different computing platforms and, sometimes, human readers.
-A complete description of the JSON format is available at [www.json.org](www.json.org). Because the JSON file represents a JSON
-object, it opens with a brace { and closes with a brace }. The different members stored in the JSON file are stored as
-pairs, which are delimited using commas. Each pair is identified by a string that is separated from its value by a colon,
-“name” : value. Valid members of the tracked object JSON file are described below, and a complete JSON file is
-presented at the end of the document as an example.
+JSON 代表 JavaScript 物件表示法，是一種輕量級資料交換格式。資料交換格式是格式化資料以在不同運算平台（有時是人類讀者）之間共享的方法。有關 JSON 格式的完整說明，請造訪 www.json.org。由於 JSON 檔案表示 JSON 對象，因此它以大括號 { 開頭，並以大括號 } 結束。 JSON 檔案中儲存的不同成員成對存儲，並使用逗號分隔。每對都由一個字串標識，該字串與其值之間用冒號分隔，「名稱」：值。下面描述了追蹤物件 JSON 檔案的有效成員，並在文件末尾提供了完整的 JSON 檔案作為範例。
 
-**Tip**: _Free source code editors like Notepad++ understand the JSON format and provide convenience features like syntax highlighting and code folding._
+提示：像 Notepad++ 這樣的免費原始碼編輯器可以理解 JSON 格式，並提供語法突出顯示和程式碼折疊等便利功能。
+
+JSON 會員
 
 ## JSON Members
 
