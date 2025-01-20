@@ -342,45 +342,45 @@ _“eye_target_width_in_pixels”_
 
 _“first_eye”_
 
-Description
+描述
 
 _“last_eye”_
 
-Description
+描述
 
 _“num_windows”_
 
-Description
+描述
 
 _“persistence”_
 
-Description
+描述
 
 _“physical_aspect_x_over_y”_
 
-Description
+描述
 
 **“lens_separation”**
 
-Description
+描述
 
-Example:
+例子:
 
 `"lens_separation" : 0.06230000033974648`
 
 **“tracking_to_eye_transform”**
 
-The lens calibration information is stored in the HMD JSON file in the block “tracking_to_eye_transform”. This
-block is a two-element array where the two elements are the descriptions for the left and right eyes respectively.
-For each eye’s description there are several sub-blocks, described below.
+鏡頭校準資訊儲存在 HMD JSON 檔案中的「tracking_to_eye_transform」區塊中。這
+block是一個二元素數組，其中兩個元素分別是左眼和右眼的描述。
+對於每隻眼睛的描述，有幾個子塊，如下所述。
 
-We assume here that the lens is circularly symmetric and is kept in a fixed position parallel to the display panel.
-We will assume a pixel coordinate system with (0,0) in the top left corner of the display, the +X axis extending to
-the right, and the +Y axis extending down. Let (w,h) be the horizontal and vertical resolution of the display. Note
-that this coordinate system is independent for each eye, not a single coordinate system extending across both
-eyes.
+我們在這裡假設透鏡是圓形對稱的並且保持在與顯示面板平行的固定位置。
+我們假設像素座標系的左上角為 (0,0)，+X 軸延伸至
+右側，+Y 軸向下延伸。令 (w,h) 為顯示器的水平和垂直解析度。筆記
+這個座標係對於每隻眼睛都是獨立的，而不是跨越兩隻眼睛的單一座標系
+眼睛。
 
-Example: (Replace ellipsis with values described in each member below.)
+範例：（將省略號替換為下面每個成員中所述的值。）
 ```
 "tracking_to_eye_transform" : [
  {
@@ -406,17 +406,17 @@ Example: (Replace ellipsis with values described in each member below.)
 
 _“intrinsics”_
 
-The “intrinsics” block is a 3x3 matrix describing the linear projection that the lens implements after distortion is
-corrected. Five values are populated based on the focal length and the center of projection. These values can
-be calculated as follows.
+「本徵」區塊是一個 3x3 矩陣，描述了鏡頭在畸變後實現的線性投影
+已更正。根據焦距和投影中心填入五個值。這些值可以
+計算如下。
 
-Let f be the focal length of the HMD lens, measured in pixels. Let (cx
- ,cy ) be the location on the panel (in pixel
-coordinates) that the HMD lens is centered over. The “intrinsics” block 3x3 matrix is then:
+令 f 為 HMD 鏡頭的焦距，以像素為單位。令 (cx
+ ,cy ）是面板上的位置（以像素為單位）
+HMD 鏡頭居中的座標）。 「內在」區塊 3x3 矩陣為：
 
 ![image](https://user-images.githubusercontent.com/3059423/181830628-6b147b9c-c06b-495f-b3d4-cebbc04cfe04.png)
 
-Example:
+例子：
 ```
 "intrinsics" : [
  [ 1.250, 0.0, 0.0 ],
@@ -427,42 +427,43 @@ Example:
 
 _“distortion”, “distortion_blue”, “distortion_red”_
 
-The “distortion” block is information describing any non-linear distortion in the HMD lens. This includes the lens
-centering information and a polynomial describing the lens distortion. For each eye, there are actually three
-distortion blocks, “distortion”, “distortion_red”, and “distortion_blue”, which provide the distortion information for
-each of the green, red, and blue color channels respectively.
+「畸變」區塊是描述 HMD 鏡頭中任何非線性畸變的資訊。這包括鏡頭
+居中資訊和描述鏡頭失真的多項式。每隻眼睛其實有三隻
+失真塊，“失真”，“失真_紅色”和“失真_藍色”，它們提供失真訊息
+分別為綠色、紅色和藍色通道。
 
-Let (cx , cy ) be the location on the panel (in pixel coordinates) that the HMD lens is centered over, as mentioned
-above. The "center_x" and "center_y" values in the distortion block can be calculated as:
+令 (cx , cy ) 為面板上 HMD 鏡頭居中的位置（以像素座標表示），如上所述
+多於。畸變塊中的“center_x”和“center_y”值可以計算為：
 
 ![image](https://user-images.githubusercontent.com/3059423/181830730-eda4fccc-1ae4-4fa7-b9ee-ac6950982a58.png)
 
-Note that the denominator in both cases is (w/2).
+請注意，這兩種情況的分母都是 (w/2)。
 
-The “type” field specifies the mathematical form of the distortion function, and the “coeffs” field specifies
-coefficients for use in that function. Let P be a pixel location on the HMD display panel, and let R be the distance
-in pixels between P and the lens center location P. Let f be the focal length of the HMD lens in pixels, as
-mentioned above. Let be the angle at which pixel P appears through the lens. For a lens with no distortion,
-the relationship between these terms would be:
+「type」欄位指定失真函數的數學形式，「coeffs」欄位指定
+該函數中使用的係數。令 P 為 HMD 顯示面板上的像素位置，令 R 為距離
+以 P 和鏡頭中心位置 P 之間的像素為單位。
+上面提到過。設 為像素 P 通過鏡頭出現的角度。對於沒有畸變的鏡頭，
+這些術語之間的關係是：
 
 ![image](https://user-images.githubusercontent.com/3059423/181830789-b5c3cb63-7291-457c-96af-ea64aed36b1c.png)
 
-The most common form of distortion function is a function of R (so, radially symmetric) that is applied as a
-multiplicative factor. In order to keep the values in a limited range the input to the function is also normalized,
-currently by dividing by (w/2). For a distortion function D this gives:
+畸變函數最常見的形式是 R 的函數（因此，徑向對稱），用作
+乘法因子。為了將值保持在有限範圍內，函數的輸入也被標準化，
+目前除以 (w/2)。對於畸變函數 D，給出：
 
 ![image](https://user-images.githubusercontent.com/3059423/181830832-1df34bf8-4950-4959-a5a2-fb9d52c444e7.png)
 
-We support several different distortion function types and it is fairly simple to add new types. Two common
-examples are: cubic polynomials in the (normalized) radius squared, and rational cubic polynomials in the
-(normalized) radius squared:
+我們支援幾種不同的失真函數類型，並且新增類型相當簡單。兩種常見的
+例子有：（歸一化）半徑平方中的三次多項式，以及
+（標準化）半徑平方：
 
 ![image](https://user-images.githubusercontent.com/3059423/181830868-786d1349-7e8c-4d27-9220-80d2f050c2e0.png)
 
-For the first example the “type” field is DISTORT_POLY3, and for the second it is DISTORT_DPOLY3. In both
-cases the first three elements of the “coeffs” field are populated with C0 ,C1 ,C2
- and the remaining five elements
-are set to 0.0 (the length of the “coeffs” array is currently fixed at eight elements).
+對於第一個範例，「type」欄位是 DISTORT_POLY3，對於第二個範例，它是 DISTORT_DPOLY3。在兩者中
+在這種情況下，「coeffs」欄位的前三個元素填入 C0 、C1 、C2
+ 和其餘五個元素
+設定為 0.0（“coeffs”數組的長度目前固定為八個元素）。
+
 
 例子：
 ```
@@ -476,13 +477,13 @@ are set to 0.0 (the length of the “coeffs” array is currently fixed at eight
 
 _“extrinsics”_
 
-The “extrinsics” block is a 3x4 matrix describing the rotation and translation of the lens+panel system relative to
-the user. For most normal usage this should simply express the relationship between the lens centers due to a
-default stereo separation (IPD). If we let S be the default stereo separation in meters, then this matrix is:
+「extrinsics」區塊是一個 3x4 矩陣，描述鏡頭+面板系統相對於
+用戶。對於大多數正常使用，這應該簡單地表達由於以下原因導致的鏡頭中心之間的關係：
+預設立體聲分離 (IPD)。如果我們讓 S 為預設的立體聲間隔（以公尺為單位），則該矩陣為：
 
 ![image](https://user-images.githubusercontent.com/3059423/181830947-ad855aab-faff-48cf-ba17-cb9bf5e2db7b.png)
 
-With the upper-right value being positive for the left eye and negative for the right eye.
+右上方的值對於左眼為正值，對於右眼為負值。
 
 例子：
 ```
@@ -495,7 +496,7 @@ With the upper-right value being positive for the left eye and negative for the 
 
 _“grow_for_undistort”_
 
-The “grow_for_undistort” is not a critical parameter and can (for now) be set to 0.6.
+「grow_for_unactor」不是關鍵參數，可以（目前）設定為 0.6。
 
 例子：
 
@@ -503,7 +504,7 @@ The “grow_for_undistort” is not a critical parameter and can (for now) be se
 
 _“undistort_r2_cutoff”_
 
-The “undistort_r2_cutoff” field is not a critical parameter and can (for now) be set to 1.5.
+「unactor_r2_cutoff」欄位不是關鍵參數，可以（目前）設定為 1.5。
 
 例子：
 
@@ -513,7 +514,7 @@ _"undistort_r2_cutoff" : 1.50_
 
 A string value “Lighthouse_HMD”
 
-This value is always “Lighthouse_HMD,” even when the device_class is set to controller.
+即使 device_class 設定為controller，該值也始終為「Lighthouse_HMD」。
 
 例子：
 
